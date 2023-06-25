@@ -48,14 +48,16 @@ import TimelineRow from "components/Tables/TimelineRow";
 import React, { useState } from "react";
 // react icons
 import { IoCheckmarkDoneCircleSharp } from "react-icons/io5";
-import { dashboardTableData, timelineData } from "variables/general";
+import {TbCurrencyNaira} from "react-icons/tb";
+import { timelineData } from "variables/general2";
+import {dashboardTableData as dashboardTableData2} from "variables/general2";
 
 
 export default function Dashboard() {
   const value = "$100.000";
   // Chakra Color Mode
   const { colorMode, toggleColorMode } = useColorMode();
-  const iconTeal = useColorModeValue("teal.300", "teal.300");
+  const iconTeal = useColorModeValue("#5A8100", "#5A8100");
   const iconBoxInside = useColorModeValue("white", "white");
   const textColor = useColorModeValue("gray.700", "white");
   const [series, setSeries] = useState([
@@ -86,11 +88,11 @@ export default function Dashboard() {
                   fontWeight="bold"
                   pb=".1rem"
                 >
-                  Total Agents
+                  Total Sales (NGN) (FEB)
                 </StatLabel>
                 <Flex>
                   <StatNumber fontSize="lg" color={textColor}>
-                    53,000
+                    N553,000
                   </StatNumber>
                   {/* <StatHelpText
                     alignSelf="flex-end"
@@ -106,7 +108,7 @@ export default function Dashboard() {
                 </Flex>
               </Stat>
               <IconBox as="box" h={"45px"} w={"45px"} bg={iconTeal}>
-                <PersonIcon h={"24px"} w={"24px"} color={iconBoxInside} />
+                <TbCurrencyNaira h={"24px"} w={"24px"} color={iconBoxInside} />
               </IconBox>
             </Flex>
           </CardBody>
@@ -121,11 +123,11 @@ export default function Dashboard() {
                   fontWeight="bold"
                   pb=".1rem"
                 >
-                  Active Agents
+                   Total Purchases (NGN) (Feb 2023)
                 </StatLabel>
                 <Flex>
                   <StatNumber fontSize="lg" color={textColor}>
-                    2,300
+                    N500, 000
                   </StatNumber>
                   {/* <StatHelpText
                     alignSelf="flex-end"
@@ -141,7 +143,7 @@ export default function Dashboard() {
                 </Flex>
               </Stat>
               <IconBox as="box" h={"45px"} w={"45px"} bg={iconTeal}>
-                <PersonIcon h={"24px"} w={"24px"} color={iconBoxInside} />
+                <TbCurrencyNaira h={"24px"} w={"24px"} color={iconBoxInside} />
               </IconBox>
             </Flex>
           </CardBody>
@@ -156,11 +158,11 @@ export default function Dashboard() {
                   fontWeight="bold"
                   pb=".1rem"
                 >
-                  Inactive Agents
+                  Suppliers
                 </StatLabel>
                 <Flex>
                   <StatNumber fontSize="lg" color={textColor}>
-                    3,020
+                    45
                   </StatNumber>
                   {/* <StatHelpText
                     alignSelf="flex-end"
@@ -191,11 +193,11 @@ export default function Dashboard() {
                   fontWeight="bold"
                   pb=".1rem"
                 >
-                  Total Txn Vol.
+                  Customers
                 </StatLabel>
                 <Flex>
                   <StatNumber fontSize="lg" color={textColor} fontWeight="bold">
-                    173,000
+                    173
                   </StatNumber>
                   {/* <StatHelpText
                     alignSelf="flex-end"
@@ -211,7 +213,7 @@ export default function Dashboard() {
                 </Flex>
               </Stat>
               <IconBox as="box" h={"45px"} w={"45px"} bg={iconTeal}>
-                <CartIcon h={"24px"} w={"24px"} color={iconBoxInside} />
+                <PersonIcon h={"24px"} w={"24px"} color={iconBoxInside} />
               </IconBox>
             </Flex>
           </CardBody>
@@ -240,7 +242,7 @@ export default function Dashboard() {
                   fontWeight="bold"
                   mb="6px"
                 >
-                  Active Users
+                  Sales graph (this week)
                 </Text>
                 <Text fontSize="md" fontWeight="medium" color="gray.400">
                   <Text as="span" color="green.400" fontWeight="bold">
@@ -262,7 +264,7 @@ export default function Dashboard() {
                       <WalletIcon h={"15px"} w={"15px"} color={iconBoxInside} />
                     </IconBox>
                     <Text fontSize="sm" color="gray.400" fontWeight="semibold">
-                      Users
+                      Purchases
                     </Text>
                   </Flex>
                   <Text
@@ -272,10 +274,10 @@ export default function Dashboard() {
                     mb="6px"
                     my="6px"
                   >
-                    32,984
+                    324
                   </Text>
                   <Progress
-                    colorScheme="teal"
+                    colorScheme="5A8100"
                     borderRadius="12px"
                     h="5px"
                     value={20}
@@ -293,7 +295,7 @@ export default function Dashboard() {
                       <RocketIcon h={"15px"} w={"15px"} color={iconBoxInside} />
                     </IconBox>
                     <Text fontSize="sm" color="gray.400" fontWeight="semibold">
-                      Clicks
+                      T.U.S
                     </Text>
                   </Flex>
                   <Text
@@ -303,10 +305,10 @@ export default function Dashboard() {
                     mb="6px"
                     my="6px"
                   >
-                    2.42m
+                    435
                   </Text>
                   <Progress
-                    colorScheme="teal"
+                    colorScheme="5A8100"
                     borderRadius="12px"
                     h="5px"
                     value={90}
@@ -324,7 +326,7 @@ export default function Dashboard() {
                       <CartIcon h={"15px"} w={"15px"} color={iconBoxInside} />
                     </IconBox>
                     <Text fontSize="sm" color="gray.400" fontWeight="semibold">
-                      Sales
+                      Sold
                     </Text>
                   </Flex>
                   <Text
@@ -334,10 +336,10 @@ export default function Dashboard() {
                     mb="6px"
                     my="6px"
                   >
-                    2,400$
+                    N45.6k
                   </Text>
                   <Progress
-                    colorScheme="teal"
+                    colorScheme="5A8100"
                     borderRadius="12px"
                     h="5px"
                     value={30}
@@ -368,7 +370,7 @@ export default function Dashboard() {
                     320
                   </Text>
                   <Progress
-                    colorScheme="teal"
+                    colorScheme="5A8100"
                     borderRadius="12px"
                     h="5px"
                     value={50}
@@ -382,13 +384,13 @@ export default function Dashboard() {
           <CardHeader mb="20px" pl="22px">
             <Flex direction="column" alignSelf="flex-start">
               <Text fontSize="lg" color={textColor} fontWeight="bold" mb="6px">
-                Sales Overview
+                Sales to Purchase Ratio (2023)
               </Text>
               <Text fontSize="md" fontWeight="medium" color="gray.400">
                 <Text as="span" color="green.400" fontWeight="bold">
                   (+5%) more
                 </Text>{" "}
-                in 2021
+                than last year
               </Text>
             </Flex>
           </CardHeader>
@@ -411,21 +413,21 @@ export default function Dashboard() {
                 fontWeight="bold"
                 pb=".5rem"
               >
-                Projects
+                Departments Overview
               </Text>
               <Flex align="center">
                 <Icon
                   as={IoCheckmarkDoneCircleSharp}
-                  color="teal.300"
+                  color="#5A8100"
                   w={4}
                   h={4}
                   pe="3px"
                 />
                 <Text fontSize="sm" color="gray.400" fontWeight="normal">
                   <Text fontWeight="bold" as="span">
-                    30 done
+                    30 
                   </Text>{" "}
-                  this month.
+                  Overall
                 </Text>
               </Flex>
             </Flex>
@@ -434,15 +436,15 @@ export default function Dashboard() {
             <Thead>
               <Tr my=".8rem" ps="0px">
                 <Th ps="0px" color="gray.400">
-                  Companies
+                  Department
                 </Th>
                 <Th color="gray.400">Members</Th>
-                <Th color="gray.400">Budget</Th>
-                <Th color="gray.400">Completion</Th>
+                <Th color="gray.400">Number</Th>
+                <Th color="gray.400">% of Organisation</Th>
               </Tr>
             </Thead>
             <Tbody>
-              {dashboardTableData.map((row) => {
+              {dashboardTableData2.map((row) => {
                 return (
                   <DashboardTableRow
                     name={row.name}
@@ -465,13 +467,13 @@ export default function Dashboard() {
                 fontWeight="bold"
                 pb=".5rem"
               >
-                Orders overview
+                Monthly overview
               </Text>
               <Text fontSize="sm" color="gray.400" fontWeight="normal">
-                <Text fontWeight="bold" as="span" color="teal.300">
-                  +30%
+                <Text fontWeight="bold" as="span" color="#5A8100">
+                  February
                 </Text>{" "}
-                this month.
+                2023
               </Text>
             </Flex>
           </CardHeader>

@@ -123,7 +123,7 @@ export default function Dashboard(props) {
     <ChakraProvider theme={theme} resetCss={false}>
       <Sidebar
         routes={routes}
-        logoText={"SpoutPay"}
+        logoText={"Samlex"}
         display="none"
         sidebarVariant={sidebarVariant}
         {...rest}

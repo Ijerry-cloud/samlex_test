@@ -2,20 +2,27 @@ import React from "react";
 // Chakra imports
 import {
   Box,
+  Container,
+  Center,
   Flex,
   Button,
   FormControl,
   FormLabel,
   Heading,
   Input,
-  Avatar,
+  InputGroup,
+  InputLeftElement,
+  Image,
   Link,
   Switch,
   HStack,
   Text,
   useColorModeValue,
+  Icon,
+  Select,
 } from "@chakra-ui/react";
-import avatar4 from "assets/img/apple-icon.bmp";
+import { LockIcon, EmailIcon } from '@chakra-ui/icons'
+import avatar4 from "assets/img/samlex.png";
 // Assets
 import signInImage from "assets/img/monitoring.png";
 import { useSelector, useDispatch } from 'react-redux';
@@ -28,8 +35,16 @@ import { LOGIN_URL } from 'config/serverUrls';
 import toast from 'react-hot-toast';
 import { handleApiError, handleApiSuccess } from 'modules/utilities/responseHandlers';
 import { login } from 'modules/auth/redux/authSlice';
+import LogoImg from "assets/img/samlex2.png";
+
+import BgSignUp from "assets/img/BgSignUp.png";
+import { FaApple, FaFacebook, FaGoogle } from "react-icons/fa";
+import { MdFilterList, MdViewList } from "react-icons/md";
+import { IoMdAddCircle } from "react-icons/io";
 
 function SignIn() {
+  const bgColor = useColorModeValue("white", "gray.700");
+  const bgIcons = useColorModeValue("#8abb18", "rgba(255, 255, 255, 0.5)");
   // Chakra color mode
   const titleColor = useColorModeValue("teal.300", "teal.200");
   const textColor = useColorModeValue("gray.400", "white");
@@ -37,7 +52,7 @@ function SignIn() {
   const state = useSelector((state) => state)
   const dispatch = useDispatch();
   const history = useHistory();
-  
+
   const [values, setValues] = React.useState({});
   const [errors, setErrors] = React.useState({});
 
@@ -47,131 +62,133 @@ function SignIn() {
     uerrors.password = values?.password ? "" : FIELD_REQUIRED;
 
     return uerrors;
-}
+  }
 
   const handleChange = (evt) => {
-    setValues({...values, [evt.target.name]: evt.target.value});
+    setValues({ ...values, [evt.target.name]: evt.target.value });
   }
 
   const mutation = useMutation(postData, {
     onSuccess: (response) => {
-        const userObj = response?.data;
-        toast.success("You Signed in Successfully");
-        dispatch(login(userObj));
-        
-        // // navigate to the dashboard
-        // history.push(APP_HOME_PAGE);
+      const userObj = response?.data;
+      toast.success("You Signed in Successfully");
+      dispatch(login(userObj));
+
+      // // navigate to the dashboard
+      // history.push(APP_HOME_PAGE);
     },
     onError: (error) => {
-        handleApiError(error);
+      handleApiError(error);
     }
-});
+  });
 
   function handleSubmit() {
-    
+
     let checkErrors = validate();
     let areAllFieldsFalse = checkObject(checkErrors);
 
     if (!areAllFieldsFalse) {
-        // if there are errors
-        // set to state and terminate
-        setErrors(checkErrors);
-        return;
+      // if there are errors
+      // set to state and terminate
+      setErrors(checkErrors);
+      return;
     }
 
 
     const data = {
-        email : values?.email,
-        password: values?.password
+      email: values?.email,
+      password: values?.password
     };
 
     mutation.mutate({
-        url: LOGIN_URL,
-        payload_data: data
+      url: LOGIN_URL,
+      payload_data: data
     })
 
     return
-}
+  }
 
 
   return (
-    <Flex position="relative" mb="40px" bgColor={'#fff'}>
-      <Flex
-        h={{ sm: "initial", md: "75vh", lg: "85vh" }}
-        w="100%"
-        maxW="1044px"
-        mx="auto"
-        justifyContent="space-between"
-        mb="30px"
-        pt={{ sm: "100px", md: "0px" }}
-      >
-        <Flex
-          alignItems="center"
-          justifyContent="start"
-          style={{ userSelect: "none" }}
-          w={{ base: "100%", md: "50%", lg: "42%" }}
-        >
+    <Box>
+      <Box
+        w='100%' h='100vh' p={4} color='white' backgroundImage="url('/samlex_office.jpg')"
+        backgroundPosition="center"
+        backgroundRepeat="no-repeat"
+        backgroundSize="cover"
+        filter="blur(3px)">
+      </Box>
+      <Center
+        position="absolute"
+        left="0px"
+        top="0px"
+        w="100vw"
+        h="100vh"
+        zIndex="1"
+        direction="column"
+        alignSelf="center"
+        justifySelf="center"
+        overflow="hidden">
+        <Flex alignItems="center" justifyContent="center">
           <Flex
             direction="column"
-            w="100%"
-            background="transparent"
-            p="48px"
-            mt={{ md: "150px", lg: "80px" }}
+            w="505px"
+            h="65vh"
+            background="#00000033"
+            borderRadius="15px"
+            p="35px"
+            mx={{ base: "100px" }}
+            boxShadow="0 20px 27px 0 rgb(0 0 0)"
           >
-            <HStack>
-              <Avatar
-                me={{ md: "22px" }}
-                src={avatar4}
-                w="100%"
-                h="auto"
-                borderRadius="15px"
+            <Container maxW='md' centerContent>
+              <Image
+                src={LogoImg}
+                w="125px"
+                h="78px"
+              // borderRadius="15px"
               />
-            </HStack>
-            <Heading color={titleColor} fontSize="32px" mb="10px">
-              Fraud Monitoring System
-            </Heading>
-            <Text
-              mb="36px"
-              ms="4px"
-              color={textColor}
-              fontWeight="bold"
-              fontSize="14px"
-            >
-              Enter your email and password to sign in
-            </Text>
+            </Container>
             <FormControl>
-              <FormLabel ms="4px" fontSize="sm" fontWeight="normal">
+              <FormLabel ms="4px" fontSize="md" fontWeight="normal" color="white">
                 Email
               </FormLabel>
-              <Input
-                borderRadius="15px"
-                mb="24px"
-                fontSize="sm"
-                type="text"
-                placeholder="Your email adress"
-                size="lg"
-                name="email"
-                onChange={handleChange}
-                isInvalid={isError(errors?.email)}
-                errorBorderColor='red.300'
-              />
-              <FormLabel ms="4px" fontSize="sm" fontWeight="normal">
+              <InputGroup mb="24px" ms="4px">
+                <InputLeftElement alignItems="center" mt='3px' pointerEvents='none'>
+                  <EmailIcon color='black' />
+                </InputLeftElement>
+                <Input
+                  variant='filled'
+                  fontSize="md"
+                  borderRadius="15px"
+                  type="text"
+                  placeholder="Enter your email address"
+                  _placeholder={{ opacity: 0.7, color: 'inherit' }}
+
+                  size="lg"
+                />
+              </InputGroup>
+
+              <FormLabel ms="4px" fontSize="md" fontWeight="normal" color="white">
                 Password
               </FormLabel>
-              <Input
-                borderRadius="15px"
-                mb="36px"
-                fontSize="sm"
-                type="password"
-                name="password"
-                placeholder="Your password"
-                size="lg"
-                onChange={handleChange}
-                isInvalid={isError(errors?.email)}
-                errorBorderColor='red.300'
-              />
-              <FormControl display="flex" alignItems="center">
-                <Switch id="remember-login" colorScheme="teal" me="10px" />
+              <InputGroup mb="24px" ms="4px">
+                <InputLeftElement alignItems="center" mt='3px' pointerEvents='none'>
+                  <LockIcon color='black' />
+                </InputLeftElement>
+                <Input
+                  variant='filled'
+                  fontSize="md"
+
+                  borderRadius="15px"
+                  type="number"
+                  placeholder="Enter your password"
+                  _placeholder={{ opacity: 0.7, color: 'inherit' }}
+                  size="lg"
+                />
+              </InputGroup>
+
+              <FormControl display="flex" alignItems="center" ms="4px">
+                <Switch id="remember-login" colorScheme="teal" ms="10px" />
                 <FormLabel
                   htmlFor="remember-login"
                   mb="0"
@@ -182,62 +199,30 @@ function SignIn() {
                 </FormLabel>
               </FormControl>
               <Button
-                isLoading={mutation?.isLoading}
-                onClick={handleSubmit}
-                fontSize="10px"
                 type="submit"
-                bg="teal.300"
+                bg="#ffb400"
+                mt="14px"
+                fontSize="md"
+                color="white"
+                fontWeight="bold"
                 w="100%"
                 h="45"
-                mb="20px"
-                color="white"
-                mt="20px"
                 _hover={{
-                  bg: "teal.200",
+                  bg: "#8abb18",
                 }}
                 _active={{
-                  bg: "teal.400",
+                  bg: "#354c00",
                 }}
               >
-                SIGN IN
+                Login
               </Button>
             </FormControl>
-            <Flex
-              flexDirection="column"
-              justifyContent="center"
-              alignItems="center"
-              maxW="100%"
-              mt="0px"
-            >
-              <Text color={textColor} fontWeight="medium">
-                Don't have an account?
-                <Link color={titleColor} as="span" ms="5px" fontWeight="bold">
-                  Sign Up
-                </Link>
-              </Text>
-            </Flex>
           </Flex>
         </Flex>
-        <Box
-          display={{ base: "none", md: "block" }}
-          overflowX="hidden"
-          h="100%"
-          w="40vw"
-          position="absolute"
-          right="0px"
-        >
-          <Box
-            bgImage={signInImage}
-            w="100%"
-            h="100%"
-            bgSize="cover"
-            bgPosition="50%"
-            position="absolute"
-            borderBottomLeftRadius="20px"
-          ></Box>
-        </Box>
-      </Flex>
-    </Flex>
+      </Center>
+    </Box>
+
+
   );
 }
 

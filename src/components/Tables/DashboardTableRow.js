@@ -1,8 +1,11 @@
 import {
   Avatar,
   AvatarGroup,
+  Button,
+  Center,
   Flex,
   Icon,
+  IconButton,
   Progress,
   Td,
   Text,
@@ -10,68 +13,85 @@ import {
   useColorModeValue,
 } from "@chakra-ui/react";
 import React from "react";
+import { EmailIcon, DeleteIcon, EditIcon, DownloadIcon } from '@chakra-ui/icons'
 
-export function DashboardTableRow3(props) {
-  const { Merchant_ID, Daily_Limit, Single_limit, Duplicate_txn, Above_bal, Total } = props;
+export function DashboardTableRow4(props) {
+  const { Date, name, units_purchased, unit_price, total_price } = props;
   const textColor = useColorModeValue("gray.700", "white");
   return (
-    <Tr>
+    <Tr my=".8rem" ps="0px">
       <Td minWidth={{ sm: "150px" }} pl="0px">
-        <Flex align="center" py=".8rem" minWidth="100%" flexWrap="nowrap">
+        <Flex align="center" py=".3rem" minWidth="100%" flexWrap="nowrap">
           <Text
-            fontSize="md"
+            fontSize="sm"
             color={textColor}
             fontWeight="bold"
             minWidth="100%"
           >
-            {Merchant_ID}
+            {Date}
           </Text>
         </Flex>
       </Td>
 
       <Td>
-        <Text fontSize="md" color={textColor} fontWeight="bold" pb=".5rem">
-          {Daily_Limit}
+        <Text fontSize="sm" color={textColor} fontWeight="bold" pb=".3rem">
+          {name}
         </Text>
       </Td>
 
       <Td>
-        <Text fontSize="md" color={textColor} fontWeight="bold" pb=".5rem">
-          {Single_limit}
+        <Text fontSize="sm" color={textColor} fontWeight="bold" pb=".3rem">
+          {units_purchased}
         </Text>
       </Td>
 
       <Td>
-        <Text fontSize="md" color={textColor} fontWeight="bold" pb=".5rem">
-          {Duplicate_txn}
+        <Text fontSize="sm" color={textColor} fontWeight="bold" pb=".3rem">
+          {unit_price}
         </Text>
       </Td>
 
       <Td>
-        <Text fontSize="md" color={textColor} fontWeight="bold" pb=".5rem">
-          {Above_bal}
+        <Text fontSize="sm" color={textColor} fontWeight="bold" pb=".3rem">
+          {total_price}
         </Text>
       </Td>
 
       <Td>
-        <Text fontSize="md" color={textColor} fontWeight="bold" pb=".5rem">
-          {Total}
-        </Text>
+        <Center>
+        <IconButton
+          backgroundColor='blue'
+          color='white'
+          borderRadius='0px'
+          aria-label='edit sale'
+          icon={<EditIcon />}
+          mx='1px'
+        />
+        <IconButton
+          backgroundColor='red'
+          color='white'
+          borderRadius='0px'
+          aria-label='delete sale'
+          icon={<DeleteIcon />}
+          mx='1px'
+        />
+        </Center>
+
       </Td>
 
     </Tr>
   );
 }
 
-export function DashboardTableRow2(props) {
-  const { name, AirtelVTU, GloVTU, MtnVTU, EtisalatVTU, ToSameAccount, Total } = props;
+export function DashboardTableRow3(props) {
+  const { name, phone_no, email_address, total_purchased } = props;
   const textColor = useColorModeValue("gray.700", "white");
   return (
-    <Tr>
+    <Tr my=".8rem" ps="0px">
       <Td minWidth={{ sm: "150px" }} pl="0px">
-        <Flex align="center" py=".8rem" minWidth="100%" flexWrap="nowrap">
+        <Flex align="center" py=".3rem" minWidth="100%" flexWrap="nowrap">
           <Text
-            fontSize="md"
+            fontSize="sm"
             color={textColor}
             fontWeight="bold"
             minWidth="100%"
@@ -82,86 +102,129 @@ export function DashboardTableRow2(props) {
       </Td>
 
       <Td>
-        <Text fontSize="md" color={textColor} fontWeight="bold" pb=".5rem">
-          {AirtelVTU}
+        <Text fontSize="sm" color={textColor} fontWeight="bold" pb=".3rem">
+          {phone_no}
         </Text>
       </Td>
 
       <Td>
-        <Text fontSize="md" color={textColor} fontWeight="bold" pb=".5rem">
-          {GloVTU}
+        <Text fontSize="sm" color={textColor} fontWeight="bold" pb=".3rem">
+          {email_address}
         </Text>
       </Td>
 
       <Td>
-        <Text fontSize="md" color={textColor} fontWeight="bold" pb=".5rem">
-          {MtnVTU}
+        <Text fontSize="sm" color={textColor} fontWeight="bold" pb=".3rem">
+          {total_purchased}
         </Text>
       </Td>
 
       <Td>
-        <Text fontSize="md" color={textColor} fontWeight="bold" pb=".5rem">
-          {EtisalatVTU}
-        </Text>
-      </Td>
+        <Center>
+        <IconButton
+          backgroundColor='blue'
+          color='white'
+          borderRadius='0px'
+          aria-label='edit customer'
+          icon={<EditIcon />}
+          mx='1px'
+        />
+        <IconButton
+          backgroundColor='red'
+          color='white'
+          borderRadius='0px'
+          aria-label='delete customer'
+          icon={<DeleteIcon />}
+          mx='1px'
+        />
+        <IconButton
+          backgroundColor='#5a8100'
+          color='white'
+          borderRadius='0px'
+          aria-label='email customer'
+          icon={<EmailIcon />}
+          mx='1px'
+        />
+        </Center>
 
-      <Td>
-        <Text fontSize="md" color={textColor} fontWeight="bold" pb=".5rem">
-          {ToSameAccount}
-        </Text>
-      </Td>
-
-      <Td>
-        <Text fontSize="md" color={textColor} fontWeight="bold" pb=".5rem">
-          {Total}
-        </Text>
       </Td>
 
     </Tr>
   );
 }
 
-export function DashboardTableRow4(props) {
-  const { Merchant_ID, Max_Limit, Charge_back, Above_Limit, Total} = props;
+export function DashboardTableRow2(props) {
+  const { Date, name, units_sold, unit_price, total_price } = props;
   const textColor = useColorModeValue("gray.700", "white");
   return (
-    <Tr>
+    <Tr my=".8rem" ps="0px">
       <Td minWidth={{ sm: "150px" }} pl="0px">
-        <Flex align="center" py=".8rem" minWidth="100%" flexWrap="nowrap">
+        <Flex align="center" py=".3rem" minWidth="100%" flexWrap="nowrap">
           <Text
-            fontSize="md"
+            fontSize="sm"
             color={textColor}
             fontWeight="bold"
             minWidth="100%"
           >
-            {Merchant_ID}
+            {Date}
           </Text>
         </Flex>
       </Td>
 
       <Td>
-        <Text fontSize="md" color={textColor} fontWeight="bold" pb=".5rem">
-          {Max_Limit}
+        <Text fontSize="sm" color={textColor} fontWeight="bold" pb=".3rem">
+          {name}
         </Text>
       </Td>
 
       <Td>
-        <Text fontSize="md" color={textColor} fontWeight="bold" pb=".5rem">
-          {Charge_back}
+        <Text fontSize="sm" color={textColor} fontWeight="bold" pb=".3rem">
+          {units_sold}
         </Text>
       </Td>
 
       <Td>
-        <Text fontSize="md" color={textColor} fontWeight="bold" pb=".5rem">
-          {Above_Limit}
+        <Text fontSize="sm" color={textColor} fontWeight="bold" pb=".3rem">
+          {unit_price}
         </Text>
       </Td>
 
       <Td>
-        <Text fontSize="md" color={textColor} fontWeight="bold" pb=".5rem">
-          {Total}
+        <Text fontSize="sm" color={textColor} fontWeight="bold" pb=".3rem">
+          {total_price}
         </Text>
       </Td>
+
+      <Td>
+        <Center>
+        <IconButton
+          backgroundColor='blue'
+          color='white'
+          borderRadius='0px'
+          aria-label='edit sale'
+          icon={<EditIcon />}
+          mx='1px'
+        />
+        <IconButton
+          backgroundColor='red'
+          color='white'
+          borderRadius='0px'
+          aria-label='delete sale'
+          icon={<DeleteIcon />}
+          mx='1px'
+        />
+        <IconButton
+          backgroundColor='#ffb400'
+          color='white'
+          borderRadius='0px'
+          aria-label='download sale'
+          icon={<DownloadIcon />}
+          mx='1px'
+        />
+        </Center>
+
+      </Td>
+
     </Tr>
   );
 }

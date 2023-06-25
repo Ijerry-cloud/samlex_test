@@ -1,37 +1,28 @@
 // import
 import Dashboard from "views/Dashboard/Dashboard.js";
-import Tables from "views/Dashboard/Tables.js";
-import Billing from "views/Dashboard/Billing.js";
-import RTLPage from "views/RTL/RTLPage.js";
 import Profile from "views/Dashboard/Profile.js";
 import SignIn from "views/Pages/SignIn.js";
 import SignUp from "views/Pages/SignUp.js";
-import BankTable from "views/Dashboard/BankTable.js";
-import MerchantTable from "views/Dashboard/MerchantTable.js";
-import BankSummaryTable from "views/Dashboard/BankSummaryTable";
-import MerchantSummaryTable from "views/Dashboard/MerchantSummaryTable";
-import FraudDashboard from "views/Dashboard/FraudDashbaord.js";
-import BankSummaryChartPage from "views/Dashboard/BankSummaryChartPage";  
-import TransferSummary from "views/Dashboard/TransferSummaryChartPage";
-import AirtimeSummary from "views/Dashboard/AirtimeSummaryChartPage";
-import WithdrawalSummary from "views/Dashboard/WithdrawalSummaryChartPage";
+import AddItem from "views/Pages/Sales/AddItem.js";
+import FilterItems from "views/Pages/Sales/FilterItems.js";
+import ListItems from "views/Dashboard/ListItemsPage";
+import ListCustomers from "views/Dashboard/ListCustomers";
+import AddPurchases from "views/Pages/Purchases/AddPurchases.js";
+import ListPurchases from "views/Dashboard/ListPurchases.js";
+import FilterPurchases from "views/Pages/Purchases/FilterPurchases.js";
+
 
 import {
   HomeIcon,
-  StatsIcon,
-  CreditIcon,
   PersonIcon,
   DocumentIcon,
   RocketIcon,
-  SupportIcon,
 } from "components/Icons/Icons";
 
-import { GiBank } from "react-icons/gi";
-import { BsPersonLinesFill } from "react-icons/bs";
-import { MdOutlineSummarize } from "react-icons/md";
-import { TbSum } from "react-icons/tb";
+import { MdOutlineSummarize, MdAddCircle, MdViewList, MdFilterList, MdPersonAdd} from "react-icons/md";
 import UserMgt from "views/Management/UserMgt";
 import Settings from "views/Management/Settings";
+import { List } from "@chakra-ui/react";
 
 var dashRoutes = [
   {
@@ -44,58 +35,87 @@ var dashRoutes = [
     isVisible: true
   },
   {
-    path: "/banks",
-    name: "Banks",
-    icon: <GiBank color="inherit" />,
-    component: BankTable,
+    path: "/customers",
+    name: "Customers",
+    icon: <HomeIcon color="inherit" />,
+    component: ListCustomers,
     layout: "/admin",
     isProtected: true,
     isVisible: true
   },
   {
-    path: "/merchants",
-    name: "Merchants",
-    icon: <BsPersonLinesFill color="inherit" />,
-    component: MerchantTable,
-    layout: "/admin",
+    name: "Sales",
+    category: "sales",
+    collapse: true,
+    state: "pageCollapse",
     isProtected: true,
-    isVisible: true
+    isVisible: true,
+    views: [
+      {
+        path: "/add-item",
+        name: "Add Item",
+        icon: <MdAddCircle color="inherit" />,
+        component: AddItem,
+        layout: "/admin",
+        isProtected: true,
+        isVisible: true,
+      },
+      {
+        path: "/list-items",
+        name: "List Items",
+        icon: <MdViewList color="inherit" />,
+        component: ListItems,
+        layout: "/admin",
+        isProtected: true,
+        isVisible: true,
+      },
+      {
+        path: "/filter-items",
+        name: "Filter Items",
+        icon: <MdFilterList color="inherit" />,
+        component: FilterItems,
+        layout: "/admin",
+        isProtected: true,
+        isVisible: true,
+      },
+    ],
   },
   {
-    path: "/bankSummary",
-    name: "Bank Summary",
-    icon: <TbSum color="inherit" />,
-    component: BankSummaryTable,
-    layout: "/admin",
+    name: "Purchases",
+    category: "purchases",
+    collapse: true,
+    state: "pageCollapse",
     isProtected: true,
-    isVisible: true
-  },
-  {
-    path: "/merchantSummary",
-    name: "Merchant Summary",
-    icon: <MdOutlineSummarize color="inherit" />,
-    component: MerchantSummaryTable,
-    layout: "/admin",
-    isProtected: true,
-    isVisible: true
-  },
-  {
-    path: "/fraud",
-    name: "Fraud Monitoring",
-    icon: <MdOutlineSummarize color="inherit" />,
-    component: FraudDashboard,
-    layout: "/admin",
-    isProtected: true,
-    isVisible: true
-  },
-  {
-    path: "/bankSummary2/:id",
-    name: "BankSummaryChart",
-    icon: <MdOutlineSummarize color="inherit" />,
-    component: BankSummaryChartPage,
-    layout: "/admin",
-    isProtected: true,
-    isVisible: false
+    isVisible: true,
+    views: [
+      {
+        path: "/add-Purchases",
+        name: "Add Purchases",
+        icon: <MdAddCircle color="inherit" />,
+        component: AddPurchases,
+        layout: "/admin",
+        isProtected: true,
+        isVisible: true,
+      },
+      {
+        path: "/list-Purchases",
+        name: "List Purchases",
+        icon: <MdViewList color="inherit" />,
+        component: ListPurchases,
+        layout: "/admin",
+        isProtected: true,
+        isVisible: true,
+      },
+      {
+        path: "/filter-Purchases",
+        name: "Filter Purchases",
+        icon: <MdFilterList color="inherit" />,
+        component: FilterPurchases,
+        layout: "/admin",
+        isProtected: true,
+        isVisible: true,
+      },
+    ],
   },
   {
     path: "/settings",
@@ -111,33 +131,6 @@ var dashRoutes = [
     name: "User Management",
     icon: <MdOutlineSummarize color="inherit" />,
     component: UserMgt,
-    layout: "/admin",
-    isProtected: true,
-    isVisible: false
-  },
-  {
-    path: "/transferSummary",
-    name: " Transfer Summary",
-    icon: <MdOutlineSummarize color="inherit" />,
-    component: TransferSummary,
-    layout: "/admin",
-    isProtected: true,
-    isVisible: false
-  },
-  {
-    path: "/airtimeSummary",
-    name: " Airtime Summary",
-    icon: <MdOutlineSummarize color="inherit" />,
-    component: AirtimeSummary,
-    layout: "/admin",
-    isProtected: true,
-    isVisible: false
-  },
-  {
-    path: "/withdrawalSummary",
-    name: " Withdrawal Summary",
-    icon: <MdOutlineSummarize color="inherit" />,
-    component: WithdrawalSummary,
     layout: "/admin",
     isProtected: true,
     isVisible: false

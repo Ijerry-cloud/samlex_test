@@ -24,9 +24,9 @@ import avatar3 from "assets/img/avatars/avatar3.png";
 import avatar4 from "assets/img/avatars/avatar4.png";
 import avatar5 from "assets/img/avatars/avatar5.png";
 import avatar6 from "assets/img/avatars/avatar6.png";
-import ImageArchitect1 from "assets/img/ImageArchitect1.png";
-import ImageArchitect2 from "assets/img/ImageArchitect2.png";
-import ImageArchitect3 from "assets/img/ImageArchitect3.png";
+import image from "assets/img/image.jpg";
+import consultancyImage from "assets/img/consultancyImage.jpg";
+import black_owned_tech from "assets/img/black_owned_tech.jpg";
 import ProfileBgImage from "assets/img/ProfileBackground.png";
 import {
   FaCube,
@@ -115,14 +115,14 @@ function Profile() {
                   fontWeight="bold"
                   ms={{ sm: "8px", md: "0px" }}
                 >
-                  Esthera Jackson
+                  Pilolo pilolo
                 </Text>
                 <Text
                   fontSize={{ sm: "sm", md: "md" }}
                   color={emailColor}
                   fontWeight="semibold"
                 >
-                  esthera@simmmple.com
+                  pilolo@samlex.com
                 </Text>
               </Flex>
             </Flex>
@@ -196,7 +196,7 @@ function Profile() {
                 ACCOUNT
               </Text>
               <Flex align="center" mb="20px">
-                <Switch colorScheme="teal" me="10px" />
+                <Switch colorScheme="#5A8100" me="10px" />
                 <Text
                   noOfLines={1}
                   fontSize="md"
@@ -207,7 +207,7 @@ function Profile() {
                 </Text>
               </Flex>
               <Flex align="center" mb="20px">
-                <Switch colorScheme="teal" me="10px" />
+                <Switch colorScheme="#5A8100" me="10px" />
                 <Text
                   noOfLines={1}
                   fontSize="md"
@@ -218,7 +218,7 @@ function Profile() {
                 </Text>
               </Flex>
               <Flex align="center" mb="20px">
-                <Switch colorScheme="teal" me="10px" />
+                <Switch colorScheme="#5A8100" me="10px" />
                 <Text
                   noOfLines={1}
                   fontSize="md"
@@ -237,7 +237,7 @@ function Profile() {
                 APPLICATION
               </Text>
               <Flex align="center" mb="20px">
-                <Switch colorScheme="teal" me="10px" />
+                <Switch colorScheme="#5A8100" me="10px" />
                 <Text
                   noOfLines={1}
                   fontSize="md"
@@ -248,7 +248,7 @@ function Profile() {
                 </Text>
               </Flex>
               <Flex align="center" mb="20px">
-                <Switch colorScheme="teal" me="10px" />
+                <Switch colorScheme="#5A8100" me="10px" />
                 <Text
                   noOfLines={1}
                   fontSize="md"
@@ -259,7 +259,7 @@ function Profile() {
                 </Text>
               </Flex>
               <Flex align="center" mb="20px">
-                <Switch colorScheme="teal" me="10px" />
+                <Switch colorScheme="#5A8100" me="10px" />
                 <Text
                   noOfLines={1}
                   fontSize="md"
@@ -281,10 +281,8 @@ function Profile() {
           <CardBody px="5px">
             <Flex direction="column">
               <Text fontSize="md" color="gray.500" fontWeight="400" mb="30px">
-                Hi, I’m Esthera Jackson, Decisions: If you can’t decide, the
-                answer is no. If two equally difficult paths, choose the one
-                more painful in the short term (pain avoidance is creating an
-                illusion of equality).
+                Hi, I’m Pilolus Piolo, Decisions: I'm part of the samlex organization employed in 2020 
+                and under the sales and lead department. 
               </Text>
               <Flex align="center" mb="18px">
                 <Text
@@ -296,7 +294,7 @@ function Profile() {
                   Full Name:{" "}
                 </Text>
                 <Text fontSize="md" color="gray.500" fontWeight="400">
-                  Esthera Jackson
+                Pilolus Piolo
                 </Text>
               </Flex>
               <Flex align="center" mb="18px">
@@ -309,7 +307,7 @@ function Profile() {
                   Mobile:{" "}
                 </Text>
                 <Text fontSize="md" color="gray.500" fontWeight="400">
-                  (44) 123 1234 123
+                  (+234) 123 1234 12
                 </Text>
               </Flex>
               <Flex align="center" mb="18px">
@@ -322,7 +320,7 @@ function Profile() {
                   Email:{" "}
                 </Text>
                 <Text fontSize="md" color="gray.500" fontWeight="400">
-                  esthera@simmmple.com
+                  pilolo@samlex.com
                 </Text>
               </Flex>
               <Flex align="center" mb="18px">
@@ -332,10 +330,10 @@ function Profile() {
                   fontWeight="bold"
                   me="10px"
                 >
-                  Location:{" "}
+                  Department:{" "}
                 </Text>
                 <Text fontSize="md" color="gray.500" fontWeight="400">
-                  United States
+                  Sales
                 </Text>
               </Flex>
               <Flex align="center" mb="18px">
@@ -350,28 +348,28 @@ function Profile() {
                 <Flex>
                   <Link
                     href="#"
-                    color="teal.300"
+                    color="#5A8100"
                     fontSize="lg"
                     me="10px"
-                    _hover={{ color: "teal.300" }}
+                    _hover={{ color: "#5A8100" }}
                   >
                     <Icon as={FaFacebook} />
                   </Link>
                   <Link
                     href="#"
-                    color="teal.300"
+                    color="#5A8100"
                     fontSize="lg"
                     me="10px"
-                    _hover={{ color: "teal.300" }}
+                    _hover={{ color: "#5A8100" }}
                   >
                     <Icon as={FaInstagram} />
                   </Link>
                   <Link
                     href="#"
-                    color="teal.300"
+                    color="#5A8100"
                     fontSize="lg"
                     me="10px"
-                    _hover={{ color: "teal.300" }}
+                    _hover={{ color: "#5A8100" }}
                   >
                     <Icon as={FaTwitter} />
                   </Link>
@@ -383,7 +381,7 @@ function Profile() {
         <Card p="16px">
           <CardHeader p="12px 5px" mb="12px">
             <Text fontSize="lg" color={textColor} fontWeight="bold">
-              Conversations
+              Also under Sales
             </Text>
           </CardHeader>
           <CardBody px="5px">
@@ -402,7 +400,7 @@ function Profile() {
                       Sophie B.{" "}
                     </Text>
                     <Text fontSize="xs" color="gray.500" fontWeight="400">
-                      Hi! I need more information...
+                      Sales Director (Atali branch)
                     </Text>
                   </Flex>
                 </Flex>
@@ -410,10 +408,10 @@ function Profile() {
                   <Text
                     fontSize="sm"
                     fontWeight="600"
-                    color="teal.300"
+                    color="#5A8100"
                     alignSelf="center"
                   >
-                    REPLY
+                    MORE
                   </Text>
                 </Button>
               </Flex>
@@ -431,7 +429,7 @@ function Profile() {
                       Sophie B.{" "}
                     </Text>
                     <Text fontSize="xs" color="gray.500" fontWeight="400">
-                      Awesome work, can you change...
+                      Sales Director (Awka branch)
                     </Text>
                   </Flex>
                 </Flex>
@@ -439,10 +437,10 @@ function Profile() {
                   <Text
                     fontSize="sm"
                     fontWeight="600"
-                    color="teal.300"
+                    color="#5A8100"
                     alignSelf="center"
                   >
-                    REPLY
+                    MORE
                   </Text>
                 </Button>
               </Flex>
@@ -460,7 +458,7 @@ function Profile() {
                       Sophie B.{" "}
                     </Text>
                     <Text fontSize="xs" color="gray.500" fontWeight="400">
-                      Have a great afternoon...
+                    Sales personnel (Atali branch)
                     </Text>
                   </Flex>
                 </Flex>
@@ -468,68 +466,10 @@ function Profile() {
                   <Text
                     fontSize="sm"
                     fontWeight="600"
-                    color="teal.300"
+                    color="#5A8100"
                     alignSelf="center"
                   >
-                    REPLY
-                  </Text>
-                </Button>
-              </Flex>
-              <Flex justifyContent="space-between" mb="21px">
-                <Flex align="center">
-                  <Avatar
-                    src={avatar5}
-                    w="50px"
-                    h="50px"
-                    borderRadius="15px"
-                    me="10px"
-                  />
-                  <Flex direction="column">
-                    <Text fontSize="sm" color={textColor} fontWeight="bold">
-                      Sophie B.{" "}
-                    </Text>
-                    <Text fontSize="xs" color="gray.500" fontWeight="400">
-                      About files I can...
-                    </Text>
-                  </Flex>
-                </Flex>
-                <Button p="0px" bg="transparent" variant="no-hover">
-                  <Text
-                    fontSize="sm"
-                    fontWeight="600"
-                    color="teal.300"
-                    alignSelf="center"
-                  >
-                    REPLY
-                  </Text>
-                </Button>
-              </Flex>
-              <Flex justifyContent="space-between" mb="21px">
-                <Flex align="center">
-                  <Avatar
-                    src={avatar6}
-                    w="50px"
-                    h="50px"
-                    borderRadius="15px"
-                    me="10px"
-                  />
-                  <Flex direction="column">
-                    <Text fontSize="sm" color={textColor} fontWeight="bold">
-                      Sophie B.{" "}
-                    </Text>
-                    <Text fontSize="xs" color="gray.500" fontWeight="400">
-                      About files I can...
-                    </Text>
-                  </Flex>
-                </Flex>
-                <Button p="0px" bg="transparent" variant="no-hover">
-                  <Text
-                    fontSize="sm"
-                    fontWeight="600"
-                    color="teal.300"
-                    alignSelf="center"
-                  >
-                    REPLY
+                    MORE
                   </Text>
                 </Button>
               </Flex>
@@ -541,10 +481,10 @@ function Profile() {
         <CardHeader p="12px 5px" mb="12px">
           <Flex direction="column">
             <Text fontSize="lg" color={textColor} fontWeight="bold">
-              Projects
+              Departments
             </Text>
             <Text fontSize="sm" color="gray.500" fontWeight="400">
-              Architects design houses
+              Awka Branch
             </Text>
           </Flex>
         </CardHeader>
@@ -556,7 +496,7 @@ function Profile() {
           >
             <Flex direction="column">
               <Box mb="20px" position="relative" borderRadius="15px">
-                <Image src={ImageArchitect1} borderRadius="15px" />
+                <Image src={consultancyImage} borderRadius="15px" />
                 <Box
                   w="100%"
                   h="100%"
@@ -568,7 +508,7 @@ function Profile() {
               </Box>
               <Flex direction="column">
                 <Text fontSize="md" color="gray.500" fontWeight="600" mb="10px">
-                  Project #1
+                  Department #1
                 </Text>
                 <Text
                   fontSize="xl"
@@ -576,22 +516,21 @@ function Profile() {
                   fontWeight="bold"
                   mb="10px"
                 >
-                  Modern
+                  Consultants
                 </Text>
                 <Text fontSize="md" color="gray.500" fontWeight="400" mb="20px">
-                  As Uber works through a huge amount of internal management
-                  turmoil.
+                  Tasked with offereing advice and insights to the organization
                 </Text>
                 <Flex justifyContent="space-between">
                   <Button
                     variant="outline"
-                    colorScheme="teal"
+                    colorScheme="#5A8100"
                     minW="110px"
                     h="36px"
                     fontSize="xs"
                     px="1.5rem"
                   >
-                    VIEW PROJECT
+                    VIEW MEMBERS
                   </Button>
                   <AvatarGroup size="xs">
                     <Avatar name="Ryan Florence" src={avatar6} />
@@ -604,7 +543,7 @@ function Profile() {
             </Flex>
             <Flex direction="column">
               <Box mb="20px" position="relative" borderRadius="15px">
-                <Image src={ImageArchitect2} borderRadius="15px" />
+                <Image src={black_owned_tech} borderRadius="15px" />
                 <Box
                   w="100%"
                   h="100%"
@@ -616,7 +555,7 @@ function Profile() {
               </Box>
               <Flex direction="column">
                 <Text fontSize="md" color="gray.500" fontWeight="600" mb="10px">
-                  Project #2
+                Department #2
                 </Text>
                 <Text
                   fontSize="xl"
@@ -624,22 +563,21 @@ function Profile() {
                   fontWeight="bold"
                   mb="10px"
                 >
-                  Scandinavian
+                  Marketers
                 </Text>
                 <Text fontSize="md" color="gray.500" fontWeight="400" mb="20px">
-                  Music is something that every person has his or her own
-                  specific opinion about.
+                  They advertise the company's premium products and seek to make sales
                 </Text>
                 <Flex justifyContent="space-between">
                   <Button
                     variant="outline"
-                    colorScheme="teal"
+                    colorScheme="#5A8100"
                     minW="110px"
                     h="36px"
                     fontSize="xs"
                     px="1.5rem"
                   >
-                    VIEW PROJECT
+                    VIEW MEMBERS
                   </Button>
                   <AvatarGroup size="xs">
                     <Avatar name="Ryan Florence" src={avatar6} />
@@ -652,7 +590,7 @@ function Profile() {
             </Flex>
             <Flex direction="column">
               <Box mb="20px" position="relative" borderRadius="15px">
-                <Image src={ImageArchitect3} borderRadius="15px" />
+                <Image src={image} borderRadius="15px" />
                 <Box
                   w="100%"
                   h="100%"
@@ -664,7 +602,7 @@ function Profile() {
               </Box>
               <Flex direction="column">
                 <Text fontSize="md" color="gray.500" fontWeight="600" mb="10px">
-                  Project #3
+                  Department #3
                 </Text>
                 <Text
                   fontSize="xl"
@@ -672,22 +610,21 @@ function Profile() {
                   fontWeight="bold"
                   mb="10px"
                 >
-                  Minimalist
+                  Customer Care 
                 </Text>
                 <Text fontSize="md" color="gray.500" fontWeight="400" mb="20px">
-                  Different people have different taste, especially various
-                  types of music.
+                  Concerned with customer satisfaction and ensuring that products work as advertised
                 </Text>
                 <Flex justifyContent="space-between">
                   <Button
                     variant="outline"
-                    colorScheme="teal"
+                    colorScheme="#5A8100"
                     minW="110px"
                     h="36px"
                     fontSize="xs"
                     px="1.5rem"
                   >
-                    VIEW PROJECT
+                    VIEW MEMBERS
                   </Button>
                   <AvatarGroup size="xs">
                     <Avatar name="Ryan Florence" src={avatar6} />
@@ -713,7 +650,7 @@ function Profile() {
               >
                 <Icon as={FaPlus} fontSize="lg" mb="12px" />
                 <Text fontSize="lg" fontWeight="bold">
-                  Create a New Project
+                  Create a New Department
                 </Text>
               </Flex>
             </Button>

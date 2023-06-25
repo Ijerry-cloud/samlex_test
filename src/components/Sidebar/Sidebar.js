@@ -10,7 +10,7 @@ import {
   DrawerContent,
   DrawerOverlay,
   Flex,
-  Avatar,
+  Image,
   Link,
   Stack,
   Text,
@@ -24,7 +24,7 @@ import { SidebarHelp } from "components/Sidebar/SidebarHelp";
 import PropTypes from "prop-types";
 import React from "react";
 import { NavLink, useLocation } from "react-router-dom";
-import avatar4 from "../../assets/img/apple-icon.bmp";
+import avatar4 from "../../assets/img/samlex.png";
 
 // FUNCTIONS
 
@@ -73,14 +73,14 @@ function Sidebar(props) {
               color={activeColor}
               fontWeight="bold"
               mb={{
-                xl: "12px",
+                xl: "6x",
               }}
               mx="auto"
               ps={{
                 sm: "10px",
-                xl: "16px",
+                xl: "6px",
               }}
-              py="12px"
+              py="6x"
             >
               {document.documentElement.dir === "rtl"
                 ? prop.rtlName
@@ -101,7 +101,7 @@ function Sidebar(props) {
               bg={activeBg}
               transition={variantChange}
               mb={{
-                xl: "12px",
+                xl: "6px",
               }}
               mx={{
                 xl: "auto",
@@ -110,7 +110,7 @@ function Sidebar(props) {
                 sm: "10px",
                 xl: "16px",
               }}
-              py="12px"
+              py="6px"
               borderRadius="15px"
               _hover="none"
               w="100%"
@@ -128,7 +128,7 @@ function Sidebar(props) {
                   <Icon>{prop.icon}</Icon>
                 ) : (
                   <IconBox
-                    bg="teal.300"
+                    bg="#5A8100"
                     color="white"
                     h="30px"
                     w="30px"
@@ -152,12 +152,12 @@ function Sidebar(props) {
               alignItems="center"
               bg="transparent"
               mb={{
-                xl: "12px",
+                xl: "6px",
               }}
               mx={{
                 xl: "auto",
               }}
-              py="12px"
+              py="6px"
               ps={{
                 sm: "10px",
                 xl: "16px",
@@ -180,7 +180,7 @@ function Sidebar(props) {
                 ) : (
                   <IconBox
                     bg={inactiveBg}
-                    color="teal.300"
+                    color="#5A8100"
                     h="30px"
                     w="30px"
                     me="12px"
@@ -228,11 +228,11 @@ function Sidebar(props) {
         alignItems="center"
         fontSize="11px"
       >
-        <Avatar
+        <Image 
           me={{ md: "22px" }}
           src={avatar4}
           w="125px"
-          h="38px"
+          h="78px"
           // borderRadius="15px"
         />
         <Text fontSize="sm" mt="3px">
@@ -266,7 +266,7 @@ function Sidebar(props) {
         >
           <Box>{brand}</Box>
           <Stack direction="column" mb="40px">
-            <Box>{links}</Box>
+            <Box overflowY="scroll" maxHeight="80vh">{links}</Box>
           </Stack>
         </Box>
       </Box>
@@ -360,7 +360,7 @@ export function SidebarResponsive(props) {
                   <Icon>{prop.icon}</Icon>
                 ) : (
                   <IconBox
-                    bg="teal.300"
+                    bg="#5A8100"
                     color="white"
                     h="30px"
                     w="30px"
@@ -411,7 +411,7 @@ export function SidebarResponsive(props) {
                 ) : (
                   <IconBox
                     bg={inactiveBg}
-                    color="teal.300"
+                    color="#5A8100"
                     h="30px"
                     w="30px"
                     me="12px"
@@ -478,7 +478,7 @@ export function SidebarResponsive(props) {
         w="18px"
         h="18px"
         ref={btnRef}
-        colorScheme="teal"
+        colorScheme="5A8100"
         onClick={onOpen}
       />
       <Drawer

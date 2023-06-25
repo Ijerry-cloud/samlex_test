@@ -33,181 +33,452 @@ import { SiDropbox } from "react-icons/si";
 import { SlCalender } from "react-icons/sl";
 import { TbCurrencyNaira } from "react-icons/tb";
 
-export const dashboardTableData = [
-  {
-    logo: AdobexdLogo,
-    name: "Purity UI Version",
-    members: [avatar1, avatar2, avatar3, avatar4, avatar5],
-    budget: "$14,000",
-    progression: 60,
-  },
-  {
-    logo: AtlassianLogo,
-    name: "Add Progress Track",
-    members: [avatar3, avatar2],
-    budget: "$3,000",
-    progression: 10,
-  },
-  {
-    logo: SlackLogo,
-    name: "Fix Platform Errors",
-    members: [avatar10, avatar4],
-    budget: "Not set",
-    progression: 100,
-  },
-  {
-    logo: SpotifyLogo,
-    name: "Launch our Mobile App",
-    members: [avatar2, avatar3, avatar7, avatar8],
-    budget: "$32,000",
-    progression: 100,
-  },
-  {
-    logo: JiraLogo,
-    name: "Add the New Pricing Page",
-    members: [avatar10, avatar3, avatar7, avatar2, avatar8],
-    budget: "$400",
-    progression: 25,
-  },
-  {
-    logo: InvisionLogo,
-    name: "Redesign New Online Shop",
-    members: [avatar9, avatar3, avatar2],
-    budget: "$7,600",
-    progression: 40,
-  },
-];
-
-export const dashboardTableData2 = [
-  {
-    name: "Ahmad",
-    AirtelVTU: "12",
-    GloVTU: "43",
-    MtnVTU: "65",
-    EtisalatVTU: "3",
-    ToSameAccount: "99",
-    Total: "100"
-  },
-  {
-    name: "Veron",
-    AirtelVTU: "11",
-    GloVTU: "23",
-    MtnVTU: "43",
-    EtisalatVTU: "9",
-    ToSameAccount: "5",
-    Total: "98"
-  },
-  {
-    name: "Mark",
-    AirtelVTU: "13",
-    GloVTU: "32",
-    MtnVTU: "32",
-    EtisalatVTU: "14",
-    ToSameAccount: "97",
-    Total: "97"
-  },
-  {
-    name: "Allan",
-    AirtelVTU: "12",
-    GloVTU: "14",
-    MtnVTU: "54",
-    EtisalatVTU: "2",
-    ToSameAccount: "3",
-    Total: "82"
-  },
-  {
-    name: "Festus",
-    AirtelVTU: "22",
-    GloVTU: "14",
-    MtnVTU: "21",
-    EtisalatVTU: "9",
-    ToSameAccount: "5",
-    Total: "83"
-  },
-  
-];
-
 export const dashboardTableData3 = [
   {
-    Merchant_ID: "3464325",
-    Daily_Limit: "12",
-    Single_limit: "43",
-    Duplicate_txn: "65",
-    Above_bal: "3",
-    Total: "100"
+    Date: "23rd Feb 2023",
+    name: "LG Microwave",
+    units_purchased: "23",
+    unit_price: "N30000",
+    total_price: "N340000"
   },
   {
-    Merchant_ID: "6532676",
-    Daily_Limit: "11",
-    Single_limit: "23",
-    Duplicate_txn: "43",
-    Above_bal: "9",
-    Total: "98"
+    Date: "23rd Feb 2023",
+    name: "LG Microwave",
+    units_purchased: "23",
+    unit_price: "N30000",
+    total_price: "N340000"
   },
   {
-    Merchant_ID: "6326855",
-    Daily_Limit: "13",
-    Single_limit: "32",
-    Duplicate_txn: "32",
-    Above_bal: "14",
-    Total: "97"
+    Date: "23rd Feb 2023",
+    name: "LG Microwave",
+    units_purchased: "23",
+    unit_price: "N30000",
+    total_price: "N340000"
   },
   {
-    Merchant_ID: "9753557",
-    Daily_Limit: "12",
-    Single_limit: "14",
-    Duplicate_txn: "54",
-    Above_bal: "2",
-    Total: "82"
+    Date: "23rd Feb 2023",
+    name: "LG Microwave",
+    units_purchased: "23",
+    unit_price: "N30000",
+    total_price: "N340000"
   },
   {
-    Merchant_ID: "4327443",
-    Daily_Limit: "22",
-    Single_limit: "14",
-    Duplicate_txn: "21",
-    Above_bal: "9",
-    Total: "83"
-  },
-  
+    Date: "23rd Feb 2023",
+    name: "LG Microwave",
+    units_purchased: "23",
+    unit_price: "N30000",
+    total_price: "N340000"
+  }
 ];
 
 export const dashboardTableData4 = [
   {
-    Merchant_ID: "3464325",
-    Max_Limit: "12",
-    Charge_back: "43",
-    Above_Limit: "65",
-    Total: "10,000,780"
+    name: "Okechukwu Cosmas",
+    phone_no: "09034343223",
+    email_address: "okesepm@gmail.com",
+    total_purchased: "N340000"
   },
   {
-    Merchant_ID: "6532676",
-    Max_Limit: "11",
-    Charge_back: "23",
-    Above_Limit: "43",
-    Total: "980,000"
+    name: "AA brymo",
+    phone_no: "09056456434",
+    email_address: "essyson@yahoo.com",
+    total_purchased: "N340000"
   },
   {
-    Merchant_ID: "6326855",
-    Max_Limit: "13",
-    Charge_back: "32",
-    Above_Limit: "32",
-    Total: "970,450"
+    name: "Global links and inc.",
+    phone_no: "07067678554",
+    email_address: "linkedd@gmail.com",
+    total_purchased: "N340000"
   },
   {
-    Merchant_ID: "9753557",
-    Max_Limit: "12",
-    Charge_back: "14",
-    Above_Limit: "54",
-    Total: "820,980"
+    name: "Okechukwu Cosmas",
+    phone_no: "09034343223",
+    email_address: "okesepm@gmail.com",
+    total_purchased: "N340000"
   },
   {
-    Merchant_ID: "4327443",
-    Max_Limit: "22",
-    Charge_back: "14",
-    Above_Limit: "21",
-    Total: "810,000"
+    name: "AA brymo",
+    phone_no: "09056456434",
+    email_address: "essyson@yahoo.com",
+    total_purchased: "N340000"
   },
-  
+  {
+    name: "Global links and inc.",
+    phone_no: "07067678554",
+    email_address: "linkedd@gmail.com",
+    total_purchased: "N340000"
+  },
+  {
+    name: "Okechukwu Cosmas",
+    phone_no: "09034343223",
+    email_address: "okesepm@gmail.com",
+    total_purchased: "N340000"
+  },
+  {
+    name: "AA brymo",
+    phone_no: "09056456434",
+    email_address: "essyson@yahoo.com",
+    total_purchased: "N340000"
+  },
+  {
+    name: "Global links and inc.",
+    phone_no: "07067678554",
+    email_address: "linkedd@gmail.com",
+    total_purchased: "N340000"
+  },
+  {
+    name: "Okechukwu Cosmas",
+    phone_no: "09034343223",
+    email_address: "okesepm@gmail.com",
+    total_purchased: "N340000"
+  },
+  {
+    name: "AA brymo",
+    phone_no: "09056456434",
+    email_address: "essyson@yahoo.com",
+    total_purchased: "N340000"
+  },
+  {
+    name: "Global links and inc.",
+    phone_no: "07067678554",
+    email_address: "linkedd@gmail.com",
+    total_purchased: "N340000"
+  },
+  {
+    name: "Okechukwu Cosmas",
+    phone_no: "09034343223",
+    email_address: "okesepm@gmail.com",
+    total_purchased: "N340000"
+  },
+  {
+    name: "AA brymo",
+    phone_no: "09056456434",
+    email_address: "essyson@yahoo.com",
+    total_purchased: "N340000"
+  },
+  {
+    name: "Global links and inc.",
+    phone_no: "07067678554",
+    email_address: "linkedd@gmail.com",
+    total_purchased: "N340000"
+  },
+  {
+    name: "Okechukwu Cosmas",
+    phone_no: "09034343223",
+    email_address: "okesepm@gmail.com",
+    total_purchased: "N340000"
+  },
+  {
+    name: "AA brymo",
+    phone_no: "09056456434",
+    email_address: "essyson@yahoo.com",
+    total_purchased: "N340000"
+  },
+  {
+    name: "Global links and inc.",
+    phone_no: "07067678554",
+    email_address: "linkedd@gmail.com",
+    total_purchased: "N340000"
+  },
+  {
+    name: "Okechukwu Cosmas",
+    phone_no: "09034343223",
+    email_address: "okesepm@gmail.com",
+    total_purchased: "N340000"
+  },
+  {
+    name: "AA brymo",
+    phone_no: "09056456434",
+    email_address: "essyson@yahoo.com",
+    total_purchased: "N340000"
+  },
+  {
+    name: "Global links and inc.",
+    phone_no: "07067678554",
+    email_address: "linkedd@gmail.com",
+    total_purchased: "N340000"
+  },
+  {
+    name: "Okechukwu Cosmas",
+    phone_no: "09034343223",
+    email_address: "okesepm@gmail.com",
+    total_purchased: "N340000"
+  },
+  {
+    name: "AA brymo",
+    phone_no: "09056456434",
+    email_address: "essyson@yahoo.com",
+    total_purchased: "N340000"
+  },
+  {
+    name: "Global links and inc.",
+    phone_no: "07067678554",
+    email_address: "linkedd@gmail.com",
+    total_purchased: "N340000"
+  },
+  {
+    name: "Okechukwu Cosmas",
+    phone_no: "09034343223",
+    email_address: "okesepm@gmail.com",
+    total_purchased: "N340000"
+  },
+  {
+    name: "AA brymo",
+    phone_no: "09056456434",
+    email_address: "essyson@yahoo.com",
+    total_purchased: "N340000"
+  },
+  {
+    name: "Global links and inc.",
+    phone_no: "07067678554",
+    email_address: "linkedd@gmail.com",
+    total_purchased: "N340000"
+  },
+  {
+    name: "Okechukwu Cosmas",
+    phone_no: "09034343223",
+    email_address: "okesepm@gmail.com",
+    total_purchased: "N340000"
+  },
+  {
+    name: "AA brymo",
+    phone_no: "09056456434",
+    email_address: "essyson@yahoo.com",
+    total_purchased: "N340000"
+  },
+  {
+    name: "Global links and inc.",
+    phone_no: "07067678554",
+    email_address: "linkedd@gmail.com",
+    total_purchased: "N340000"
+  }
+];
+
+export const dashboardTableData5 = [
+  {
+    Date: "23rd Feb 2023",
+    name: "LG Microwave",
+    units_sold: "23",
+    unit_price: "N30000",
+    total_price: "N340000"
+  },
+  {
+    Date: "23rd Feb 2023",
+    name: "LG Microwave",
+    units_sold: "23",
+    unit_price: "N30000",
+    total_price: "N340000"
+  },
+  {
+    Date: "23rd Feb 2023",
+    name: "LG Microwave",
+    units_sold: "23",
+    unit_price: "N30000",
+    total_price: "N340000"
+  },
+  {
+    Date: "23rd Feb 2023",
+    name: "LG Microwave",
+    units_sold: "23",
+    unit_price: "N30000",
+    total_price: "N340000"
+  },
+  {
+    Date: "23rd Feb 2023",
+    name: "LG Microwave",
+    units_sold: "23",
+    unit_price: "N30000",
+    total_price: "N340000"
+  },
+  {
+    Date: "23rd Feb 2023",
+    name: "LG Microwave",
+    units_sold: "23",
+    unit_price: "N30000",
+    total_price: "N340000"
+  },
+  {
+    Date: "23rd Feb 2023",
+    name: "LG Microwave",
+    units_sold: "23",
+    unit_price: "N30000",
+    total_price: "N340000"
+  },
+  {
+    Date: "23rd Feb 2023",
+    name: "LG Microwave",
+    units_sold: "23",
+    unit_price: "N30000",
+    total_price: "N340000"
+  },
+  {
+    Date: "23rd Feb 2023",
+    name: "LG Microwave",
+    units_sold: "23",
+    unit_price: "N30000",
+    total_price: "N340000"
+  },
+  {
+    Date: "23rd Feb 2023",
+    name: "LG Microwave",
+    units_sold: "23",
+    unit_price: "N30000",
+    total_price: "N340000"
+  },
+  {
+    Date: "23rd Feb 2023",
+    name: "LG Microwave",
+    units_sold: "23",
+    unit_price: "N30000",
+    total_price: "N340000"
+  },
+  {
+    Date: "23rd Feb 2023",
+    name: "LG Microwave",
+    units_sold: "23",
+    unit_price: "N30000",
+    total_price: "N340000"
+  },
+  {
+    Date: "23rd Feb 2023",
+    name: "LG Microwave",
+    units_sold: "23",
+    unit_price: "N30000",
+    total_price: "N340000"
+  },
+  {
+    Date: "23rd Feb 2023",
+    name: "LG Microwave",
+    units_sold: "23",
+    unit_price: "N30000",
+    total_price: "N340000"
+  },
+  {
+    Date: "23rd Feb 2023",
+    name: "LG Microwave",
+    units_sold: "23",
+    unit_price: "N30000",
+    total_price: "N340000"
+  },
+  {
+    Date: "23rd Feb 2023",
+    name: "LG Microwave",
+    units_sold: "23",
+    unit_price: "N30000",
+    total_price: "N340000"
+  },
+  {
+    Date: "23rd Feb 2023",
+    name: "LG Microwave",
+    units_sold: "23",
+    unit_price: "N30000",
+    total_price: "N340000"
+  },
+  {
+    Date: "23rd Feb 2023",
+    name: "LG Microwave",
+    units_sold: "23",
+    unit_price: "N30000",
+    total_price: "N340000"
+  },
+  {
+    Date: "23rd Feb 2023",
+    name: "LG Microwave",
+    units_sold: "23",
+    unit_price: "N30000",
+    total_price: "N340000"
+  },
+  {
+    Date: "23rd Feb 2023",
+    name: "LG Microwave",
+    units_sold: "23",
+    unit_price: "N30000",
+    total_price: "N340000"
+  },
+  {
+    Date: "23rd Feb 2023",
+    name: "LG Microwave",
+    units_sold: "23",
+    unit_price: "N30000",
+    total_price: "N340000"
+  },
+  {
+    Date: "23rd Feb 2023",
+    name: "LG Microwave",
+    units_sold: "23",
+    unit_price: "N30000",
+    total_price: "N340000"
+  },
+  {
+    Date: "23rd Feb 2023",
+    name: "LG Microwave",
+    units_sold: "23",
+    unit_price: "N30000",
+    total_price: "N340000"
+  },
+  {
+    Date: "23rd Feb 2023",
+    name: "LG Microwave",
+    units_sold: "23",
+    unit_price: "N30000",
+    total_price: "N340000"
+  },
+  {
+    Date: "23rd Feb 2023",
+    name: "LG Microwave",
+    units_sold: "23",
+    unit_price: "N30000",
+    total_price: "N340000"
+  },
+  {
+    Date: "23rd Feb 2023",
+    name: "LG Microwave",
+    units_sold: "23",
+    unit_price: "N30000",
+    total_price: "N340000"
+  },
+  {
+    Date: "23rd Feb 2023",
+    name: "LG Microwave",
+    units_sold: "23",
+    unit_price: "N30000",
+    total_price: "N340000"
+  },
+  {
+    Date: "23rd Feb 2023",
+    name: "LG Microwave",
+    units_sold: "23",
+    unit_price: "N30000",
+    total_price: "N340000"
+  },
+  {
+    Date: "23rd Feb 2023",
+    name: "LG Microwave",
+    units_sold: "23",
+    unit_price: "N30000",
+    total_price: "N340000"
+  },
+  {
+    Date: "23rd Feb 2023",
+    name: "LG Microwave",
+    units_sold: "23",
+    unit_price: "N30000",
+    total_price: "N340000"
+  },
+  {
+    Date: "23rd Feb 2023",
+    name: "LG Microwave",
+    units_sold: "23",
+    unit_price: "N30000",
+    total_price: "N340000"
+  },
+  {
+    Date: "23rd Feb 2023",
+    name: "LG Microwave",
+    units_sold: "23",
+    unit_price: "N30000",
+    total_price: "N340000"
+  },
 ];
 
 export const suspectedAirtimeData = [
