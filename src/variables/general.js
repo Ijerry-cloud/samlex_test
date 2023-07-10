@@ -35,223 +35,118 @@ import { TbCurrencyNaira } from "react-icons/tb";
 
 export const dashboardTableData3 = [
   {
-    Date: "23rd Feb 2023",
-    name: "LG Microwave",
-    units_purchased: "23",
-    unit_price: "N30000",
-    total_price: "N340000"
+    name: "10000 WATTS CENTURY STABILIZER",
+    category: "Stabilizer",
+    tax_pct: "23",
+    quantity: "32",
+    wholesale: "N39000",
+    retail: "N340500"
   },
   {
-    Date: "23rd Feb 2023",
-    name: "LG Microwave",
-    units_purchased: "23",
-    unit_price: "N30000",
-    total_price: "N340000"
+    name: "10KG CYLINDER ",
+    category: "cylinder",
+    tax_pct: "23",
+    quantity: "32",
+    wholesale: "N30900",
+    retail: "N345000"
+  },  
+  {
+    name: "18 INCHES RECHARGEABLE ACCESS",
+    category: "fan",
+    tax_pct: "23",
+    quantity: "32",
+    wholesale: "N30600",
+    retail: "N340000"
+  },  
+  {
+    name: "20 L CENTURY OVEN ",
+    category: "oven",
+    tax_pct: "23",
+    quantity: "32",
+    wholesale: "N30500",
+    retail: "N340000"
   },
   {
-    Date: "23rd Feb 2023",
-    name: "LG Microwave",
-    units_purchased: "23",
-    unit_price: "N30000",
-    total_price: "N340000"
+    name: "BAJAJI CEILING FAN EURO 1200MM ",
+    category: "oven",
+    tax_pct: "23",
+    quantity: "32",
+    wholesale: "N30500",
+    retail: "N340000"
   },
-  {
-    Date: "23rd Feb 2023",
-    name: "LG Microwave",
-    units_purchased: "23",
-    unit_price: "N30000",
-    total_price: "N340000"
-  },
-  {
-    Date: "23rd Feb 2023",
-    name: "LG Microwave",
-    units_purchased: "23",
-    unit_price: "N30000",
-    total_price: "N340000"
-  }
 ];
 
 export const dashboardTableData4 = [
   {
-    name: "Okechukwu Cosmas",
+    first_name: "Okechukwu Cosmas",
+    last_name: "okekechukwu",
     phone_no: "09034343223",
     email_address: "okesepm@gmail.com",
     total_purchased: "N340000"
   },
   {
-    name: "AA brymo",
+    first_name: "AA brymo",
+    last_name: "okekechukwu",
     phone_no: "09056456434",
     email_address: "essyson@yahoo.com",
     total_purchased: "N340000"
   },
   {
-    name: "Global links and inc.",
+    first_name: "Global links and inc.",
+    last_name: "okekechukwu",
     phone_no: "07067678554",
     email_address: "linkedd@gmail.com",
     total_purchased: "N340000"
   },
   {
-    name: "Okechukwu Cosmas",
+    first_name: "Okechukwu Cosmas",
+    last_name: "okekechukwu",
     phone_no: "09034343223",
     email_address: "okesepm@gmail.com",
     total_purchased: "N340000"
   },
   {
-    name: "AA brymo",
+    first_name: "AA brymo",
+    last_name: "okekechukwu",
     phone_no: "09056456434",
     email_address: "essyson@yahoo.com",
     total_purchased: "N340000"
   },
   {
-    name: "Global links and inc.",
+    first_name: "Global links and inc.",
+    last_name: "okekechukwu",
     phone_no: "07067678554",
     email_address: "linkedd@gmail.com",
     total_purchased: "N340000"
   },
   {
-    name: "Okechukwu Cosmas",
+    first_name: "Okechukwu Cosmas",
+    last_name: "okekechukwu",
     phone_no: "09034343223",
     email_address: "okesepm@gmail.com",
     total_purchased: "N340000"
   },
   {
-    name: "AA brymo",
+    first_name: "AA brymo",
+    last_name: "okekechukwu",
     phone_no: "09056456434",
     email_address: "essyson@yahoo.com",
     total_purchased: "N340000"
   },
   {
-    name: "Global links and inc.",
+    first_name: "Global links and inc.",
+    last_name: "okekechukwu",
     phone_no: "07067678554",
     email_address: "linkedd@gmail.com",
     total_purchased: "N340000"
   },
   {
-    name: "Okechukwu Cosmas",
+    first_name: "Okechukwu Cosmas",
+    last_name: "okekechukwu",
     phone_no: "09034343223",
     email_address: "okesepm@gmail.com",
     total_purchased: "N340000"
   },
-  {
-    name: "AA brymo",
-    phone_no: "09056456434",
-    email_address: "essyson@yahoo.com",
-    total_purchased: "N340000"
-  },
-  {
-    name: "Global links and inc.",
-    phone_no: "07067678554",
-    email_address: "linkedd@gmail.com",
-    total_purchased: "N340000"
-  },
-  {
-    name: "Okechukwu Cosmas",
-    phone_no: "09034343223",
-    email_address: "okesepm@gmail.com",
-    total_purchased: "N340000"
-  },
-  {
-    name: "AA brymo",
-    phone_no: "09056456434",
-    email_address: "essyson@yahoo.com",
-    total_purchased: "N340000"
-  },
-  {
-    name: "Global links and inc.",
-    phone_no: "07067678554",
-    email_address: "linkedd@gmail.com",
-    total_purchased: "N340000"
-  },
-  {
-    name: "Okechukwu Cosmas",
-    phone_no: "09034343223",
-    email_address: "okesepm@gmail.com",
-    total_purchased: "N340000"
-  },
-  {
-    name: "AA brymo",
-    phone_no: "09056456434",
-    email_address: "essyson@yahoo.com",
-    total_purchased: "N340000"
-  },
-  {
-    name: "Global links and inc.",
-    phone_no: "07067678554",
-    email_address: "linkedd@gmail.com",
-    total_purchased: "N340000"
-  },
-  {
-    name: "Okechukwu Cosmas",
-    phone_no: "09034343223",
-    email_address: "okesepm@gmail.com",
-    total_purchased: "N340000"
-  },
-  {
-    name: "AA brymo",
-    phone_no: "09056456434",
-    email_address: "essyson@yahoo.com",
-    total_purchased: "N340000"
-  },
-  {
-    name: "Global links and inc.",
-    phone_no: "07067678554",
-    email_address: "linkedd@gmail.com",
-    total_purchased: "N340000"
-  },
-  {
-    name: "Okechukwu Cosmas",
-    phone_no: "09034343223",
-    email_address: "okesepm@gmail.com",
-    total_purchased: "N340000"
-  },
-  {
-    name: "AA brymo",
-    phone_no: "09056456434",
-    email_address: "essyson@yahoo.com",
-    total_purchased: "N340000"
-  },
-  {
-    name: "Global links and inc.",
-    phone_no: "07067678554",
-    email_address: "linkedd@gmail.com",
-    total_purchased: "N340000"
-  },
-  {
-    name: "Okechukwu Cosmas",
-    phone_no: "09034343223",
-    email_address: "okesepm@gmail.com",
-    total_purchased: "N340000"
-  },
-  {
-    name: "AA brymo",
-    phone_no: "09056456434",
-    email_address: "essyson@yahoo.com",
-    total_purchased: "N340000"
-  },
-  {
-    name: "Global links and inc.",
-    phone_no: "07067678554",
-    email_address: "linkedd@gmail.com",
-    total_purchased: "N340000"
-  },
-  {
-    name: "Okechukwu Cosmas",
-    phone_no: "09034343223",
-    email_address: "okesepm@gmail.com",
-    total_purchased: "N340000"
-  },
-  {
-    name: "AA brymo",
-    phone_no: "09056456434",
-    email_address: "essyson@yahoo.com",
-    total_purchased: "N340000"
-  },
-  {
-    name: "Global links and inc.",
-    phone_no: "07067678554",
-    email_address: "linkedd@gmail.com",
-    total_purchased: "N340000"
-  }
 ];
 
 export const dashboardTableData5 = [

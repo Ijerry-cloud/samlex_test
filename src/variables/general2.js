@@ -16,7 +16,7 @@ import {
   SpotifyLogo,
 } from "components/Icons/Icons.js";
 import {AiTwotoneAccountBook} from "react-icons/ai";
-import {RiAdminLine} from "react-icons/ri";
+import {RiAdminLine, RiStackLine} from "react-icons/ri";
 import {MdPointOfSale} from "react-icons/md";
 import {FaCalendarAlt,   
   FaArrowDown,
@@ -90,6 +90,33 @@ export const dashboardTableData = [
     members: [avatar2, avatar3, avatar7, avatar8],
     budget: "4",
     progression: 34,
+  },
+];
+
+export const dashboardTableData2 = [
+  {
+    logo: RiStackLine,
+    name: "Ebuka Pilolo",
+    quantity: "54",
+    date: "29th March 2023"
+  },
+  {
+    logo: RiStackLine,
+    name: "Jerry Ihediwa",
+    quantity: "5",
+    date: "29th June 2023"
+  },
+  {
+    logo: RiStackLine,
+    name: "Aloysius Emeka",
+    quantity: "1",
+    date: "2nd April 2022"
+  },
+  {
+    logo: RiStackLine,
+    name: "Kamzy Otito",
+    quantity: "4",
+    date: "20th February 2023"
   },
 ];
 

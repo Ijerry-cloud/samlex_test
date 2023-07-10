@@ -47,6 +47,7 @@ import { AsyncSelect } from "chakra-react-select";
 import { useParams, useHistory } from 'react-router-dom';
 import { useToast } from '@chakra-ui/react';
 import avatar4 from "assets/img/samlex2.png";
+import { useRef } from "react";
 
 
 const Step1 = ({ customer, itemOptions, customerOptions, selectedOptions,
@@ -372,22 +373,23 @@ function AddItem() {
     const bgColor = useColorModeValue("white", "gray.700");
     const [selectedOptions, setSelectedOptions] = useState();
     const [customer, setCustomer] = useState();
-    const [paidCash, setPaidCash] = useState(0);
-    const [discount, setDiscount] = useState(0);
+    const [paidCash, setPaidCash] = useState();
+    const [discount, setDiscount] = useState();
     const toast = useToast();
     const [step, setStep] = useState(1);
     const [progress, setProgress] = useState(50);
     const [values, setValues] = useState({});
     const history = useHistory();
+    const printableRef = useRef();
 
     const sumParameter = (arr, parameter) => {
         return arr.reduce((total, obj) => total + obj[parameter], 0);
     };
 
     const sumTotal = (arr) => {
-            return arr.reduce((total, obj) => {
+        return arr.reduce((total, obj) => {
             var itemTotal = obj.price * obj.quantity;
-            return ( total + itemTotal );
+            return (total + itemTotal);
         }, 0)
 
     };
@@ -400,7 +402,6 @@ function AddItem() {
     };
 
     var handleChange = (selectedOption) => {
-        console.log(selectedOption);
         setSelectedOptions(selectedOption);
     };
 
@@ -421,10 +422,86 @@ function AddItem() {
         });
     }
 
+
+
+    const handleSubmit = () => {
+        if (!customer) {
+            toast({
+                title: 'Missing Information.',
+                description: "Please fill in the customer name.",
+                status: 'warning',
+                duration: 3000,
+                isClosable: true,
+            });
+            return;
+        }
+
+        if (!selectedOptions || selectedOptions.length <= 0) {
+            toast({
+                title: 'Missing Information.',
+                description: "select at least one sales item",
+                status: 'warning',
+                duration: 3000,
+                isClosable: true,
+            });
+            return;
+        }
+
+        if (!paidCash || paidCash <= 0) {
+            toast({
+                title: 'Missing Information.',
+                description: "Enter an amount tendered (greater than 0)",
+                status: 'warning',
+                duration: 3000,
+                isClosable: true,
+            });
+            return;
+        }
+
+        if (!discount) {
+            toast({
+                title: 'Missing Information.',
+                description: "Enter a discount(0 for none)",
+                status: 'warning',
+                duration: 3000,
+                isClosable: true,
+            });
+            return;
+        }
+
+        toast({
+            title: 'Success',
+            description: "Sales added",
+            status: 'success',
+            duration: 1000,
+            isClosable: true,
+        });
+
+        setTimeout(() => {
+            const content = printableRef.current;
+            const originalContents = document.body.innerHTML;
+
+            document.body.innerHTML = content.innerHTML;
+            window.print();
+            document.body.innerHTML = originalContents;
+            location.reload();
+        }, 2000);
+        return;
+    };
+
+    const getComponentStyles = () => {
+        // Retrieve the styles for the printable component
+        const styles = window.getComttputedStyle(printableRef.current);
+        return styles.cssText;
+    };
+
+
+
     return (
         <Flex direction="column" alignSelf="center" justifySelf="center" overflow="hidden">
             <Flex alignItems="center" justifyContent="center" mb="60px" mt="80px">
                 <Flex
+                    ref={printableRef}
                     direction="column"
                     w="100%"
                     background="transparent"
@@ -449,8 +526,8 @@ function AddItem() {
                             handleItemValueChange={handleItemValueChange} sumParameter={sumParameter}
                             paidCash={paidCash} setPaidCash={setPaidCash} discount={discount} setDiscount={setDiscount}
                             sumTotal={sumTotal} /> :
-                        <Step2 paidCash={paidCash} discount={discount} sumParameter={sumParameter} 
-                        selectedOptions={selectedOptions} sumTotal={sumTotal} />
+                        <Step2 paidCash={paidCash} discount={discount} sumParameter={sumParameter}
+                            selectedOptions={selectedOptions} sumTotal={sumTotal} />
                     }
                     <ButtonGroup mt="5%" w="100%">
                         <Flex w="100%" justifyContent="space-between">
@@ -488,8 +565,8 @@ function AddItem() {
                                     w="7rem"
                                     colorScheme="red"
                                     variant="solid"
-                                // isLoading={mutation?.isLoading}
-                                // onClick={handleSubmit}
+                                    // isLoading={mutation?.isLoading}
+                                    onClick={handleSubmit}
                                 >
                                     Submit
                                 </Button>

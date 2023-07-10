@@ -13,78 +13,40 @@ import {
   useColorModeValue,
 } from "@chakra-ui/react";
 import React from "react";
-import { EmailIcon, DeleteIcon, EditIcon, DownloadIcon } from '@chakra-ui/icons'
+import { EmailIcon, DeleteIcon, EditIcon, DownloadIcon, InfoIcon } from '@chakra-ui/icons'
 
-export function DashboardTableRow4(props) {
-  const { Date, name, units_purchased, unit_price, total_price } = props;
+export function DashboardTableRow5(props) {
+  const { logo, name, quantity, date } = props;
   const textColor = useColorModeValue("gray.700", "white");
   return (
-    <Tr my=".8rem" ps="0px">
-      <Td minWidth={{ sm: "150px" }} pl="0px">
-        <Flex align="center" py=".3rem" minWidth="100%" flexWrap="nowrap">
+    <Tr>
+      <Td minWidth={{ sm: "250px" }} pl="0px">
+        <Flex align="center" py=".2rem" minWidth="100%" flexWrap="nowrap">
+          <Icon as={logo} color="green" h={"24px"} w={"24px"} pe="5px" />
           <Text
             fontSize="sm"
             color={textColor}
             fontWeight="bold"
             minWidth="100%"
           >
-            {Date}
+            {name}
+            <Text>
+            {date}
+            </Text>
           </Text>
         </Flex>
       </Td>
-
-      <Td>
-        <Text fontSize="sm" color={textColor} fontWeight="bold" pb=".3rem">
-          {name}
+      <Td textAlign='right'>
+        <Text fontSize="md" color={textColor} fontWeight="bold" pb=".5rem">
+          {quantity}
         </Text>
       </Td>
-
-      <Td>
-        <Text fontSize="sm" color={textColor} fontWeight="bold" pb=".3rem">
-          {units_purchased}
-        </Text>
-      </Td>
-
-      <Td>
-        <Text fontSize="sm" color={textColor} fontWeight="bold" pb=".3rem">
-          {unit_price}
-        </Text>
-      </Td>
-
-      <Td>
-        <Text fontSize="sm" color={textColor} fontWeight="bold" pb=".3rem">
-          {total_price}
-        </Text>
-      </Td>
-
-      <Td>
-        <Center>
-        <IconButton
-          backgroundColor='blue'
-          color='white'
-          borderRadius='0px'
-          aria-label='edit sale'
-          icon={<EditIcon />}
-          mx='1px'
-        />
-        <IconButton
-          backgroundColor='red'
-          color='white'
-          borderRadius='0px'
-          aria-label='delete sale'
-          icon={<DeleteIcon />}
-          mx='1px'
-        />
-        </Center>
-
-      </Td>
-
     </Tr>
   );
 }
 
-export function DashboardTableRow3(props) {
-  const { name, phone_no, email_address, total_purchased } = props;
+export function DashboardTableRow4(props) {
+  const { name, category, wholesale, retail, tax_pct, quantity, onEditClick, onDeleteClick, onTrackClick } = props;
   const textColor = useColorModeValue("gray.700", "white");
   return (
     <Tr my=".8rem" ps="0px">
@@ -99,6 +61,97 @@ export function DashboardTableRow3(props) {
             {name}
           </Text>
         </Flex>
+      </Td>
+
+      <Td>
+        <Text fontSize="sm" color={textColor} fontWeight="bold" pb=".3rem">
+          {category}
+        </Text>
+      </Td>
+
+      <Td>
+        <Text fontSize="sm" color={textColor} fontWeight="bold" pb=".3rem">
+          {wholesale}
+        </Text>
+      </Td>
+
+      <Td>
+        <Text fontSize="sm" color={textColor} fontWeight="bold" pb=".3rem">
+          {retail}
+        </Text>
+      </Td>
+
+      <Td>
+        <Text fontSize="sm" color={textColor} fontWeight="bold" pb=".3rem">
+          {tax_pct}
+        </Text>
+      </Td>
+
+      <Td>
+        <Text fontSize="sm" color={textColor} fontWeight="bold" pb=".3rem">
+          {quantity}
+        </Text>
+      </Td>
+
+      <Td>
+        <Center>
+        <IconButton
+          backgroundColor='blue'
+          color='white'
+          borderRadius='0px'
+          aria-label='edit sale'
+          icon={<EditIcon />}
+          onClick={onEditClick}
+          mx='1px'
+        />
+        <IconButton
+          backgroundColor='red'
+          color='white'
+          borderRadius='0px'
+          aria-label='delete sale'
+          icon={<DeleteIcon />}
+          onClick={onDeleteClick}
+          mx='1px'
+        />
+        <IconButton
+          backgroundColor='orange'
+          color='white'
+          borderRadius='0px'
+          aria-label='delete sale'
+          icon={<InfoIcon />}
+          onClick={onTrackClick}
+          mx='1px'
+        />
+        </Center>
+
+      </Td>
+
+    </Tr>
+  );
+}
+
+export function DashboardTableRow3(props) {
+  const { first_name, last_name, phone_no, email_address, total_purchased, onEditClick, onDeleteClick } = props;
+  const textColor = useColorModeValue("gray.700", "white");
+  return (
+    <Tr my=".8rem" ps="0px">
+      <Td minWidth={{ sm: "150px" }} pl="0px">
+        <Flex align="center" py=".3rem" minWidth="100%" flexWrap="nowrap">
+          <Text
+            fontSize="sm"
+            color={textColor}
+            fontWeight="bold"
+            minWidth="100%"
+          >
+            {first_name}
+          </Text>
+        </Flex>
+      </Td>
+
+      <Td>
+        <Text fontSize="sm" color={textColor} fontWeight="bold" pb=".3rem">
+          {last_name}
+        </Text>
       </Td>
 
       <Td>
@@ -127,6 +180,7 @@ export function DashboardTableRow3(props) {
           borderRadius='0px'
           aria-label='edit customer'
           icon={<EditIcon />}
+          onClick={onEditClick}
           mx='1px'
         />
         <IconButton
@@ -135,6 +189,7 @@ export function DashboardTableRow3(props) {
           borderRadius='0px'
           aria-label='delete customer'
           icon={<DeleteIcon />}
+          onClick={onDeleteClick}
           mx='1px'
         />
         <IconButton
