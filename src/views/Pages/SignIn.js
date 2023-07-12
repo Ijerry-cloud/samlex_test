@@ -100,10 +100,27 @@ function SignIn() {
       password: values?.password
     };
 
-    mutation.mutate({
+    if ((values?.password == "12345678") && (values?.email === "ebukasamlex") ) {
+      toast.success("You Signed in Successfully");
+      dispatch(login({
+        user: {email: values?.email},
+        token: "thedefaulttoken"
+  
+      }));
+
+    }
+
+
+    
+
+/**
+ * 
+ *     mutation.mutate({
       url: LOGIN_URL,
       payload_data: data
     })
+ */
+
 
     return
   }
@@ -163,6 +180,10 @@ function SignIn() {
                   type="text"
                   placeholder="Enter your email address"
                   _placeholder={{ opacity: 0.7, color: 'inherit' }}
+                  name="email"
+                  onChange={handleChange}
+                  isInvalid={isError(errors?.email)}
+                  errorBorderColor='red.300'
 
                   size="lg"
                 />
@@ -180,10 +201,14 @@ function SignIn() {
                   fontSize="md"
 
                   borderRadius="15px"
-                  type="number"
+                  type="password"
                   placeholder="Enter your password"
                   _placeholder={{ opacity: 0.7, color: 'inherit' }}
                   size="lg"
+                  onChange={handleChange}
+                  isInvalid={isError(errors?.email)}
+                  errorBorderColor='red.300'
+                  name="password"
                 />
               </InputGroup>
 
@@ -200,6 +225,7 @@ function SignIn() {
               </FormControl>
               <Button
                 type="submit"
+                onClick={handleSubmit}
                 bg="#ffb400"
                 mt="14px"
                 fontSize="md"

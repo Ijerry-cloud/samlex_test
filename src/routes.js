@@ -53,7 +53,7 @@ var dashRoutes = [
     views: [
       {
         path: "/add-item",
-        name: "Add Item",
+        name: "Add Sales",
         icon: <MdAddCircle color="inherit" />,
         component: AddItem,
         layout: "/admin",
@@ -62,7 +62,7 @@ var dashRoutes = [
       },
       {
         path: "/list-items",
-        name: "List Items",
+        name: "View Transactions",
         icon: <MdViewList color="inherit" />,
         component: ListItems,
         layout: "/admin",
@@ -71,7 +71,7 @@ var dashRoutes = [
       },
       {
         path: "/filter-items",
-        name: "Filter Items",
+        name: "Filter Transactions",
         icon: <MdFilterList color="inherit" />,
         component: FilterItems,
         layout: "/admin",
