@@ -40,63 +40,6 @@ import { dashboardTableData5 } from "variables/general";
 import { SalesOverviewData } from "variables/general2";
 
 
-const fields = [
-    {
-        id: 1,
-        fieldName: 'merchant name',
-        fieldType: 'text',
-        isSelected: false,
-        fieldQueryName: 'merchant_name',
-        fieldValue: '',
-    },
-    {
-        id: 2,
-        fieldName: 'merchant id',
-        fieldType: 'text',
-        isSelected: false,
-        fieldQueryName: 'merchant_id',
-        fieldValue: '',
-    },
-    {
-        id: 3,
-        fieldName: 'range',
-        fieldType: 'select',
-        isSelected: false,
-        fieldQueryName: 'range',
-        children: [
-            {
-                id: 1,
-                name: 'today',
-                value: 'today'
-            },
-            {
-                id: 2,
-                name: 'last 30 days',
-                value: 'l30'
-            },
-            {
-                id: 3,
-                name: 'all time',
-                value: 'all_time'
-            },
-            {
-                id: 4,
-                name: 'all',
-                value: 'all'
-            },
-        ],
-        fieldValue: '',
-    },
-    {
-        id: 4,
-        fieldName: 'created at',
-        fieldType: 'date',
-        isSelected: false,
-        fieldQueryName: 'created',
-        fieldValue: '',
-    }
-]
-
 export default function Dashboard() {
     const value = "$100.000";
     // paginate state 
@@ -110,23 +53,6 @@ export default function Dashboard() {
     const iconTeal = useColorModeValue("#ffb400", "#ffb400");
     const iconBoxInside = useColorModeValue("white", "white");
     const textColor = useColorModeValue("gray.700", "white");
-
-    const [filters, setFilters] = useState(fields);
-
-    const onItemSelected = (selectedField) => {
-
-        const newFilter = filters.map(field => {
-            // 👇️ if id equals 2, update country property
-            if (field.id === selectedField.id) {
-                return { ...field, isSelected: !field.isSelected };
-            }
-
-            // 👇️ otherwise return object as is
-            return field;
-        });
-
-        setFilters(newFilter);
-    }
 
     // Invoke when user click to request another page.
     const handlePageClick = (event) => {

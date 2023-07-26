@@ -7,6 +7,7 @@ import AddItem from "views/Pages/Sales/AddItem.js";
 import FilterItems from "views/Pages/Sales/FilterItems.js";
 import ListItems from "views/Dashboard/ListItemsPage";
 import ListCustomers from "views/Dashboard/ListCustomers";
+import ListSuppliers from "views/Dashboard/ListSuppliers";
 import AddPurchases from "views/Pages/Purchases/AddPurchases.js";
 import ListPurchases from "views/Dashboard/ListPurchases.js";
 import FilterPurchases from "views/Pages/Purchases/FilterPurchases.js";
@@ -39,6 +40,15 @@ var dashRoutes = [
     name: "Customers",
     icon: <HomeIcon color="inherit" />,
     component: ListCustomers,
+    layout: "/admin",
+    isProtected: true,
+    isVisible: true
+  },
+  {
+    path: "/suppliers",
+    name: "Suppliers",
+    icon: <HomeIcon color="inherit" />,
+    component: ListSuppliers,
     layout: "/admin",
     isProtected: true,
     isVisible: true
