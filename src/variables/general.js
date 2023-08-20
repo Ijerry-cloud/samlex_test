@@ -33,6 +33,68 @@ import { SiDropbox } from "react-icons/si";
 import { SlCalender } from "react-icons/sl";
 import { TbCurrencyNaira } from "react-icons/tb";
 
+export const dashboardTableData = [
+  {
+    customer: "Anene Linda",
+    subtotal: "N33200",
+    total: "N340000",
+    tax: 1000,
+    profit: 656,
+  },
+  {
+    customer: "Anene Linda",
+    subtotal: "N30000",
+    total: "N3000",
+    tax: 1000,
+    profit: 38000,
+  },
+  {
+    customer: "Anene Linda",
+    subtotal: "N36700",
+    total: "N3408000",
+    tax: 1000,
+    profit: 38000,
+  },
+  {
+    customer: "Anene Linda",
+    subtotal: "N378000",
+    total: "N340000",
+    tax: 1000,
+    profit: 38000,
+  },
+];
+
+export const dashboardTableData2 = [
+  {
+    date: "5th Feb 2023",
+    subtotal: "N33200",
+    total: "N340000",
+    tax: 1000,
+    profit: 656,
+  },
+  {
+    date: "1st Feb 2023",
+    subtotal: "N30000",
+    total: "N3000",
+    tax: 1000,
+    profit: 38000,
+  },
+  {
+    date: "22nd Feb 2023",
+    subtotal: "N36700",
+    total: "N3408000",
+    tax: 1000,
+    profit: 38000,
+  },
+  {
+    date: "3rd Feb 2023",
+    subtotal: "N378000",
+    total: "N340000",
+    tax: 1000,
+    profit: 38000,
+  },
+];
+
 export const dashboardTableData3 = [
   {
     name: "10000 WATTS CENTURY STABILIZER",
@@ -151,230 +213,215 @@ export const dashboardTableData4 = [
 
 export const dashboardTableData5 = [
   {
+    sale_id: "3103201989",
     Date: "23rd Feb 2023",
     name: "LG Microwave",
     units_sold: "23",
     unit_price: "N30000",
-    total_price: "N340000"
+    total_price: "N340000",
+    sold_by: "pilolus pilolo",
+    sold_to: "Hassan Wassdri",
+    discount: 1000,
+    amount_tendered: 38000,
+    values: [
+    {
+      label: 'Cooker',
+      price: 30000,
+      quantity: 3,
+    },
+    {
+      label: 'Head Set',
+      price: 30000,
+      quantity: 3,
+    }
+    ]  
+
+
   },
   {
+    sale_id: "3103201989",
     Date: "23rd Feb 2023",
     name: "LG Microwave",
     units_sold: "23",
     unit_price: "N30000",
-    total_price: "N340000"
+    total_price: "N340000",
+    sold_by: "pilolus pilolo",
+    sold_to: "Hassan Wassdri",
+    discount: 1000,
+    amount_tendered: 38000,
+    values: [
+      {
+        label: 'Gas Cylinder',
+        price: 30000,
+        quantity: 3,
+      },
+    {
+      label: 'Cooker',
+      price: 30000,
+      quantity: 3,
+    },
+    {
+      label: 'Head Set',
+      price: 30000,
+      quantity: 3,
+    }
+    ]  
+
   },
   {
+    sale_id: "3103201989",
     Date: "23rd Feb 2023",
     name: "LG Microwave",
     units_sold: "23",
     unit_price: "N30000",
-    total_price: "N340000"
+    total_price: "N340000",
+    sold_by: "pilolus pilolo",
+    sold_to: "Hassan Wassdri",
+    discount: 1000,
+    amount_tendered: 38040,
+    values: [
+      {
+        label: 'Gas Cylinder',
+        price: 30500,
+        quantity: 3,
+      },
+    {
+      label: 'Cooker',
+      price: 3000,
+      quantity: 3,
+    },
+    {
+      label: 'Head Set',
+      price: 30000,
+      quantity: 3,
+    }
+    ]  
+
   },
   {
+    sale_id: "3103201989",
     Date: "23rd Feb 2023",
     name: "LG Microwave",
     units_sold: "23",
     unit_price: "N30000",
-    total_price: "N340000"
-  },
-  {
-    Date: "23rd Feb 2023",
-    name: "LG Microwave",
-    units_sold: "23",
-    unit_price: "N30000",
-    total_price: "N340000"
-  },
-  {
-    Date: "23rd Feb 2023",
-    name: "LG Microwave",
-    units_sold: "23",
-    unit_price: "N30000",
-    total_price: "N340000"
-  },
-  {
-    Date: "23rd Feb 2023",
-    name: "LG Microwave",
-    units_sold: "23",
-    unit_price: "N30000",
-    total_price: "N340000"
-  },
-  {
-    Date: "23rd Feb 2023",
-    name: "LG Microwave",
-    units_sold: "23",
-    unit_price: "N30000",
-    total_price: "N340000"
-  },
-  {
-    Date: "23rd Feb 2023",
-    name: "LG Microwave",
-    units_sold: "23",
-    unit_price: "N30000",
-    total_price: "N340000"
-  },
-  {
-    Date: "23rd Feb 2023",
-    name: "LG Microwave",
-    units_sold: "23",
-    unit_price: "N30000",
-    total_price: "N340000"
-  },
-  {
-    Date: "23rd Feb 2023",
-    name: "LG Microwave",
-    units_sold: "23",
-    unit_price: "N30000",
-    total_price: "N340000"
-  },
-  {
-    Date: "23rd Feb 2023",
-    name: "LG Microwave",
-    units_sold: "23",
-    unit_price: "N30000",
-    total_price: "N340000"
-  },
-  {
-    Date: "23rd Feb 2023",
-    name: "LG Microwave",
-    units_sold: "23",
-    unit_price: "N30000",
-    total_price: "N340000"
-  },
-  {
-    Date: "23rd Feb 2023",
-    name: "LG Microwave",
-    units_sold: "23",
-    unit_price: "N30000",
-    total_price: "N340000"
-  },
-  {
-    Date: "23rd Feb 2023",
-    name: "LG Microwave",
-    units_sold: "23",
-    unit_price: "N30000",
-    total_price: "N340000"
-  },
-  {
-    Date: "23rd Feb 2023",
-    name: "LG Microwave",
-    units_sold: "23",
-    unit_price: "N30000",
-    total_price: "N340000"
-  },
-  {
-    Date: "23rd Feb 2023",
-    name: "LG Microwave",
-    units_sold: "23",
-    unit_price: "N30000",
-    total_price: "N340000"
-  },
-  {
-    Date: "23rd Feb 2023",
-    name: "LG Microwave",
-    units_sold: "23",
-    unit_price: "N30000",
-    total_price: "N340000"
-  },
-  {
-    Date: "23rd Feb 2023",
-    name: "LG Microwave",
-    units_sold: "23",
-    unit_price: "N30000",
-    total_price: "N340000"
-  },
-  {
-    Date: "23rd Feb 2023",
-    name: "LG Microwave",
-    units_sold: "23",
-    unit_price: "N30000",
-    total_price: "N340000"
-  },
-  {
-    Date: "23rd Feb 2023",
-    name: "LG Microwave",
-    units_sold: "23",
-    unit_price: "N30000",
-    total_price: "N340000"
-  },
-  {
-    Date: "23rd Feb 2023",
-    name: "LG Microwave",
-    units_sold: "23",
-    unit_price: "N30000",
-    total_price: "N340000"
-  },
-  {
-    Date: "23rd Feb 2023",
-    name: "LG Microwave",
-    units_sold: "23",
-    unit_price: "N30000",
-    total_price: "N340000"
-  },
-  {
-    Date: "23rd Feb 2023",
-    name: "LG Microwave",
-    units_sold: "23",
-    unit_price: "N30000",
-    total_price: "N340000"
-  },
-  {
-    Date: "23rd Feb 2023",
-    name: "LG Microwave",
-    units_sold: "23",
-    unit_price: "N30000",
-    total_price: "N340000"
-  },
-  {
-    Date: "23rd Feb 2023",
-    name: "LG Microwave",
-    units_sold: "23",
-    unit_price: "N30000",
-    total_price: "N340000"
-  },
-  {
-    Date: "23rd Feb 2023",
-    name: "LG Microwave",
-    units_sold: "23",
-    unit_price: "N30000",
-    total_price: "N340000"
-  },
-  {
-    Date: "23rd Feb 2023",
-    name: "LG Microwave",
-    units_sold: "23",
-    unit_price: "N30000",
-    total_price: "N340000"
-  },
-  {
-    Date: "23rd Feb 2023",
-    name: "LG Microwave",
-    units_sold: "23",
-    unit_price: "N30000",
-    total_price: "N340000"
-  },
-  {
-    Date: "23rd Feb 2023",
-    name: "LG Microwave",
-    units_sold: "23",
-    unit_price: "N30000",
-    total_price: "N340000"
-  },
-  {
-    Date: "23rd Feb 2023",
-    name: "LG Microwave",
-    units_sold: "23",
-    unit_price: "N30000",
-    total_price: "N340000"
-  },
-  {
-    Date: "23rd Feb 2023",
-    name: "LG Microwave",
-    units_sold: "23",
-    unit_price: "N30000",
-    total_price: "N340000"
+    total_price: "N340000",
+    sold_by: "pilolus pilolo",
+    sold_to: "Hassan Wassdri",
+    discount: 1000,
+    amount_tendered: 35000,
+    values: [
+      {
+        label: 'Gas Cylinder',
+        price: 30000,
+        quantity: 3,
+      },
+    {
+      label: 'Cooker',
+      price: 30000,
+      quantity: 3,
+    },
+    {
+      label: 'Head Set',
+      price: 30500,
+      quantity: 3,
+    }
+    ]  
+
   },
 ];
+
+export const dashboardTableData6 = [
+  {
+    item: "GAS SCRUM COOKER HYBRID",
+    quantity_purchased: "150",
+    subtotal: "N33200",
+    total: "N340000",
+    tax: 1000,
+    profit: 656,
+  },
+  {
+    item: "GAS SCRUM COOKER HYBRID",
+    quantity_purchased: "150",
+    subtotal: "N30000",
+    total: "N3000",
+    tax: 1000,
+    profit: 38000,
+  },
+  {
+    item: "GAS SCRUM COOKER HYBRID",
+    quantity_purchased: "150",
+    subtotal: "N36700",
+    total: "N3408000",
+    tax: 1000,
+    profit: 38000,
+  },
+  {
+    item: "GAS SCRUM COOKER HYBRID",
+    quantity_purchased: "150",
+    subtotal: "N378000",
+    total: "N340000",
+    tax: 1000,
+    profit: 38000,
+  },
+];
+
+export const dashboardTableData7 = [
+  {
+    employee: "Anene Linda",
+    subtotal: "N33200",
+    total: "N340000",
+    tax: 1000,
+    profit: 656,
+  },
+  {
+    employee: "Anene Linda",
+    subtotal: "N30000",
+    total: "N3000",
+    tax: 1000,
+    profit: 38000,
+  },
+  {
+    employee: "Anene Linda",
+    subtotal: "N36700",
+    total: "N3408000",
+    tax: 1000,
+    profit: 38000,
+  },
+  {
+    employee: "Anene Linda",
+    subtotal: "N378000",
+    total: "N340000",
+    tax: 1000,
+    profit: 38000,
+  },
+];
+
+export const dashboardTableData8 = [
+  {
+    firstName: "Okechukwu Cosmas",
+    lastName: "okekechukwu",
+    phoneNo: "09034343223",
+    emailAddress: "okesepm@gmail.com",
+  },
+  {
+    firstName: "AA brymo",
+    lastName: "okekechukwu",
+    phoneNo: "09056456434",
+    emailAddress: "essyson@yahoo.com",
+  },
+  {
+    firstName: "Global links and inc.",
+    lastName: "okekechukwu",
+    phoneNo: "07067678554",
+    emailAddress: "linkedd@gmail.com",
+  },
+];
+
+
+
+
+
+
 
 export const suspectedAirtimeData = [
   {

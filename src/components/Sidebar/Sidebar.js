@@ -266,7 +266,7 @@ function Sidebar(props) {
         >
           <Box>{brand}</Box>
           <Stack direction="column" mb="40px">
-            <Box overflowY="scroll" maxHeight="80vh">{links}</Box>
+            <Box overflowY="scroll" maxHeight="75vh">{links}</Box>
           </Stack>
         </Box>
       </Box>

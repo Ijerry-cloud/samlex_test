@@ -24,8 +24,8 @@ import {
   useColorModeValue,
 } from "@chakra-ui/react";
 // assets
-import peopleImage from "assets/img/people-image.png";
-import logoChakra from "assets/svg/logo-white.svg";
+import peopleImage from "assets/img/black_owned_tech.jpg";
+import logosamlex from "assets/img/samlex2.png";
 // Custom components
 import Card from "components/Card/Card.js";
 import CardBody from "components/Card/CardBody.js";
@@ -51,6 +51,13 @@ import { IoCheckmarkDoneCircleSharp } from "react-icons/io5";
 import {TbCurrencyNaira} from "react-icons/tb";
 import { timelineData } from "variables/general2";
 import {dashboardTableData as dashboardTableData2} from "variables/general2";
+import ActiveUsers from "./components/ActiveUsers";
+import BuiltByDevelopers from "./components/BuiltByDevelopers";
+import MiniStatistics from "./components/MiniStatistics";
+import OrdersOverview from "./components/OrdersOverview";
+import Projects from "./components/Projects";
+import SalesOverview from "./components/SalesOverview";
+import WorkWithTheRockets from "./components/WorkWithTheRockets";
 
 
 export default function Dashboard() {
@@ -219,6 +226,33 @@ export default function Dashboard() {
           </CardBody>
         </Card>
       </SimpleGrid>
+      <Grid
+        templateColumns={{ md: "1fr", lg: "1.8fr 1.2fr" }}
+        templateRows={{ md: "1fr auto", lg: "1fr" }}
+        my='26px'
+        gap='24px'>
+        <BuiltByDevelopers
+          title={"Built by Developers"}
+          name={"Purity UI Dashboard"}
+          description={
+            "From colors, cards, typography to complex elements, you will find the full documentation."
+          }
+          image={
+            <Image
+              src={logosamlex}
+              alt='chakra image'
+              minWidth={{ md: "300px", lg: "auto" }}
+            />
+          }
+        />
+        <WorkWithTheRockets
+          backgroundImage={peopleImage}
+          title={"Work with the rockets"}
+          description={
+            "Wealth creation is a revolutionary recent positive-sum game. It is all about who takes the opportunity first."
+          }
+        />
+      </Grid>
       <Grid
         templateColumns={{ sm: "1fr", lg: "1.3fr 1.7fr" }}
         templateRows={{ sm: "repeat(2, 1fr)", lg: "1fr" }}

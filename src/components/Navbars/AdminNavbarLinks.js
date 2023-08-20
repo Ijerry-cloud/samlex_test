@@ -24,6 +24,8 @@ import { NavLink } from "react-router-dom";
 import { logout } from "modules/auth/redux/authSlice";
 import { useDispatch } from "react-redux";
 import { useHistory } from "react-router-dom";
+import SidebarResponsive from "components/Sidebar/SidebarResponsive";
+import routes from "routes.js";
 
 export default function HeaderLinks(props) {
   const { variant, children, fixed, secondary, onOpen, authUser, ...rest } = props;
@@ -44,6 +46,14 @@ export default function HeaderLinks(props) {
 
   const moveToUserMgt = () => {
     history.push('/admin/userMgt');
+  }
+
+  const moveToEmployeeMgt = () => {
+    history.push('/admin/EmployeeMgt');
+  }
+
+  const moveToStoreConfig = () => {
+    history.push('/admin/StoreConfig');
   }
 
   if (secondary) {
@@ -109,9 +119,16 @@ export default function HeaderLinks(props) {
           variant="transparent-with-icon"
           leftIcon={<ProfileIcon color={navbarIcon} w="22px" h="22px" me="0px" />}
         >
-          <Text display={{ sm: "none", md: "flex" }}>{ `Hi, ${authUser?.user?.email}` }</Text>
+          <Text display={{ sm: "none", md: "flex" }}>{`Hi, ${authUser?.user?.email}`}</Text>
         </Button>
       </NavLink>
+      <SidebarResponsive
+        logoText={props.logoText}
+        secondary={props.secondary}
+        routes={routes}
+        // logo={logo}
+        {...rest}
+      />
       <Menu>
         <MenuButton>
           <SettingsIcon
@@ -133,7 +150,13 @@ export default function HeaderLinks(props) {
             <MenuItem borderRadius="8px" mb="10px" onClick={moveToUserMgt}>
               User Management
             </MenuItem>
-            <MenuItem borderRadius="8px" mb="10px" onClick={()=>{dispatch(logout())}}>
+            <MenuItem borderRadius="8px" mb="10px" onClick={moveToEmployeeMgt}>
+              Employee Management
+            </MenuItem>
+            <MenuItem borderRadius="8px" mb="10px" onClick={moveToStoreConfig}>
+              Store Config
+            </MenuItem>
+            <MenuItem borderRadius="8px" mb="10px" onClick={() => { dispatch(logout()) }}>
               Logout
             </MenuItem>
           </Flex>

@@ -54,13 +54,13 @@ import { AsyncSelect } from "chakra-react-select";
 import { FaApple, FaFacebook, FaGoogle } from "react-icons/fa";
 import { MdFilterList, MdViewList } from "react-icons/md";
 import { IoMdAddCircle } from "react-icons/io";
-import { dashboardTableData5 } from "variables/general";
-import { DashboardTableRow6 } from "components/Tables/DashboardTableRow";
+import { dashboardTableData } from "variables/general";
+import { DashboardTableRow8 } from "components/Tables/DashboardTableRow";
 import avatar4 from "assets/img/samlex2.png";
 import MyPaginate from "components/Pagination";
 
 
-function FilterSales() {
+function CustomerSummary() {
 
     const itemOptions = [
         { value: '1HP SPW THERMOCOOL', label: "1HP SPW THERMOCOOL[0.00 in stock]", colorScheme: "blue", quantity: 1, price: '39500.00' },
@@ -105,13 +105,13 @@ function FilterSales() {
     const [itemOffset, setItemOffset] = useState(0);
     const itemsPerPage = 10;
     const endOffset = itemOffset + itemsPerPage;
-    const currentItems = dashboardTableData5.slice(itemOffset, endOffset);
-    const pageCount = Math.ceil(dashboardTableData5.length / itemsPerPage);
+    const currentItems = dashboardTableData.slice(itemOffset, endOffset);
+    const pageCount = Math.ceil(dashboardTableData.length / itemsPerPage);
     const { isOpen, onOpen, onClose } = useDisclosure()
 
     // Invoke when user click to request another page.
     const handlePageClick = (event) => {
-        const newOffset = (event.selected * itemsPerPage) % dashboardTableData5.length;
+        const newOffset = (event.selected * itemsPerPage) % dashboardTableData.length;
         console.log(
             `User requested page number ${event.selected}, which is offset ${newOffset}`
         );
@@ -148,140 +148,6 @@ function FilterSales() {
 
     return (
         <>
-            <Modal isOpen={isOpen} onClose={onClose} size='4xl'>
-                <ModalOverlay />
-                <ModalContent>
-                    <ModalHeader>Transaction Receipt</ModalHeader>
-                    <ModalCloseButton />
-                    <ModalBody>
-                        <Box px={8} color="black">
-                            <VStack spacing={4} align="start" p={4} rounded="md" color="black">
-                                <Flex color='white' w='100%' h='200px' bgColor='black'>
-                                    <Container alignSelf='center' ml='10px' >
-                                        <Image
-                                            me={{ md: "22px" }}
-                                            src={avatar4}
-                                            w="125px"
-                                            h="78px"
-                                            verticalAlign='center'
-                                        // borderRadius="15px"
-                                        />
-                                    </Container>
-                                    <Container alignSelf='center' >
-                                        <Text fontSize="lg" fontWeight="bold">
-                                            SAMLEX ELECTRONICS
-                                        </Text>
-                                        <Text fontSize="lg" fontWeight="bold">
-                                            COMPANY LTD
-                                        </Text>
-                                        <Text>9 AKWA RD BY ABS JUNCTION,ONITSHA, ANAMBRA STATE
-                                        </Text>
-                                    </Container>
-                                    <Spacer />
-                                    <Container alignSelf='center' textAlign='right'>
-                                        <Text>08030964878</Text>
-                                        <Text>07053808284</Text>
-                                    </Container>
-                                </Flex>
-                                <Grid templateColumns='repeat(3, 1fr)' gap={6}>
-                                    <Container alignSelf='center' >
-                                        <Container my='20px' >
-                                            <Text>Billed to:</Text>
-                                            <Text fontSize="lg" fontWeight="bold">
-                                                Company Name
-                                            </Text>
-                                            <Text>Address</Text>
-                                            <Text>City, State, ZIP</Text>
-                                        </Container>
-                                        <Container my='20px'>
-                                            <Text>Invoice Number:</Text>
-                                            <Text fontSize="lg" fontWeight="bold">
-                                                ########
-                                            </Text>
-                                            <Text>Sales Receipt</Text>
-                                            <Text>Date: June 11, 2023</Text>
-                                        </Container>
-                                    </Container>
-
-                                    <Container textAlign='right' alignSelf='center'>
-                                        <Text>Employee ID</Text>
-                                        <Text fontSize="lg" fontWeight="bold">
-                                            Ebuka Pilolo
-                                        </Text>
-                                        <Text>City, State, ZIP</Text>
-                                    </Container>
-                                </Grid>
-                                <Box width='100%' px='10px'>
-                                    <Table variant="unstyled" size='sm'>
-                                        <Thead>
-                                            <Tr backgroundColor="#ffebae" borderBottomWidth="1px" borderColor="black">
-                                                <Th textAlign='center'>Item</Th>
-                                                <Th isNumeric textAlign='right'>Unit Price </Th>
-                                                <Th isNumeric textAlign='right'>Quantity</Th>
-                                                <Th isNumeric textAlign='right'>Amount</Th>
-                                            </Tr>
-                                        </Thead>
-                                        <Tbody>
-                                            {selectedItem?.values?.map((option, index) => {
-                                                return (
-                                                    <Tr key={index} borderBottomWidth="1px" borderColor="black">
-                                                        <Td textAlign='left'>{option.label}</Td>
-                                                        <Td isNumeric textAlign='right' >{option.price}</Td>
-                                                        <Td isNumeric textAlign='right' backgroundColor="#ffebae">{option.quantity}</Td>
-                                                        <Td isNumeric textAlign='right' backgroundColor="#ffebae">{option.quantity * option.price}</Td>
-                                                    </Tr>
-                                                );
-                                            })}
-                                        </Tbody>
-                                        <Tfoot>
-                                            <Tr>
-                                                <Th></Th>
-                                                <Th></Th>
-                                                <Th backgroundColor="#ffebae" fontSize='sm' textTransform='none' fontWeight='normal' textAlign='right'>Sub Total</Th>
-                                                <Th isNumeric backgroundColor="#ffebae" fontSize='sm' textTransform='none' textAlign='right'>{sumTotal(selectedItem?.values)}</Th>
-                                            </Tr>
-                                            <Tr>
-                                                <Th></Th>
-                                                <Th></Th>
-                                                <Th backgroundColor="#ffebae" fontSize='sm' textTransform='none' fontWeight='normal' textAlign='right'>Discount</Th>
-                                                <Th isNumeric backgroundColor="#ffebae" fontSize='sm' textTransform='none' textAlign='right'>{selectedItem?.discount}</Th>
-                                            </Tr>
-                                            <Tr>
-                                                <Th></Th>
-                                                <Th></Th>
-                                                <Th backgroundColor="black" color='white' fontSize='sm' textTransform='none' fontWeight='normal' textAlign='right'>TOTAL</Th>
-                                                <Th backgroundColor="black" color='white' fontSize='sm' textTransform='none' textAlign='right'>{sumTotal(selectedItem?.values) - selectedItem?.discount}</Th>
-                                            </Tr>
-                                            <Tr>
-                                                <Th></Th>
-                                                <Th></Th>
-                                                <Th>CASH {selectedItem?.amount_tendered}</Th>
-                                                <Th>CHANGE DUE {+selectedItem?.amount_tendered + +selectedItem?.discount - sumTotal(selectedItem?.values)}</Th>
-                                            </Tr>
-                                        </Tfoot>
-                                    </Table>
-                                </Box>
-
-                                <Box alignItems='center' justifyContent='center' width='100%'>
-                                    <Text fontSize="lg" textAlign='center'>
-                                        Any other commengts goes here
-                                    </Text>
-                                    <Text fontSize="lg" fontWeight="bold" textAlign='center'>
-                                        Thanks for your Patronage !!
-                                    </Text>
-                                </Box>
-                            </VStack>
-                        </Box>
-                    </ModalBody>
-
-                    <ModalFooter>
-                        <Button colorScheme='blue' mr={3} onClick={onClose}>
-                            Close
-                        </Button>
-                        <Button variant='ghost'>Secondary Action</Button>
-                    </ModalFooter>
-                </ModalContent>
-            </Modal>
             <Flex
                 direction="column"
                 alignSelf="center"
@@ -444,7 +310,7 @@ function FilterSales() {
                                         fontWeight="bold"
                                         pb=".5rem"
                                     >
-                                        ITEM SALES INVETORY (FEB 2023)
+                                        CUSTOMERS SUMMARY TABLE
                                     </Text>
                                 </Flex>
                             </CardHeader>
@@ -452,20 +318,12 @@ function FilterSales() {
                                 <Thead>
                                     <Tr my=".8rem" ps="0px">
                                         <Th ps="0px" color="gray.400">
-                                            Sale ID
+                                            CUSTOMERS
                                         </Th>
-                                        <Th color="gray.400">DATE</Th>
-                                        <Th color="gray.400">Items(QTY)</Th>
-                                        <Th color="gray.400">Sold By</Th>
-
-                                        <Th color="gray.400">Sold To</Th>
                                         <Th color="gray.400">Subtotal</Th>
-                                        <Th color="gray.400">TAX</Th>
                                         <Th color="gray.400">Total</Th>
-                                        <Th color="gray.400">PAYMENT </Th>
-                                        <Center>
-                                            <Th color="gray.400">ACTIONS</Th>
-                                        </Center>
+                                        <Th color="gray.400">TAX </Th>
+                                        <Th color="gray.400">PROFIT </Th>
 
 
                                     </Tr>
@@ -473,18 +331,12 @@ function FilterSales() {
                                 <Tbody>
                                     {currentItems.map((row, key) => {
                                         return (
-                                            <DashboardTableRow6
-                                                sale_id={row.sale_id}
-                                                Date={row.Date}
-                                                units_sold={row.units_sold}
-                                                sold_by={row.sold_by}
-                                                sold_to={row.sold_to}
-                                                total_price={row.total_price}
-                                                amount_tendered={row.amount_tendered}
-                                                handleViewDetails={() => {
-                                                    setSelectedItem(row);
-                                                    onOpen();
-                                                }}
+                                            <DashboardTableRow8
+                                                customer={row.customer}
+                                                subtotal={row.subtotal}
+                                                total={row.total}
+                                                tax={row.tax}
+                                                profit={row.profit}
                                             />
                                         );
                                     })}
@@ -517,82 +369,26 @@ function FilterSales() {
                         >
                             <FormControl>
                                 <FormLabel ms="4px" fontSize="sm" fontWeight="normal">
-                                    Name of Item
+                                    Customer's name
                                 </FormLabel>
                                 <AsyncSelect
                                     isMulti
-                                    name="item_name"
-                                    onChange={handleChange}
+                                    name="customer_name"
+                                    onChange={(customer) => {
+                                        setCustomer(customer);
+                                    }}
                                     placeholder="Start typing name..."
                                     loadOptions={(inputValue, callback) => {
                                         setTimeout(() => {
-                                            const values = itemOptions.filter((option) =>
+                                            const values = customerOptions.filter((option) =>
                                                 option.label.toLowerCase().includes(inputValue.toLowerCase())
                                             );
                                             callback(values);
                                         }, 3000);
                                     }}
-                                    value={selectedOptions}
                                     cacheOptions
+                                    value={customer}
                                 />
-                                <FormLabel ms="4px" fontSize="sm" fontWeight="normal">
-                                    Category
-                                </FormLabel>
-                                <Select variant='filled' placeholder='Select option' mb="24px" name="category" onChange={onChange} value={item?.category || ""}>
-                                    <option value='option1'>Stabilizer</option>
-                                    <option value='option2'>Microwave</option>
-                                    <option value='option3'>Blender</option>
-                                </Select>
-                                <Grid templateColumns='repeat(2, 1fr)' gap={6} my="4px">
-                                    <FormControl >
-                                        <FormLabel ms="4px" fontSize="sm" fontWeight="normal">
-                                            Customer's name
-                                        </FormLabel>
-                                        <AsyncSelect
-                                            isMulti
-                                            name="customer_name"
-                                            onChange={(customer) => {
-                                                setCustomer(customer);
-                                            }}
-                                            placeholder="Start typing name..."
-                                            loadOptions={(inputValue, callback) => {
-                                                setTimeout(() => {
-                                                    const values = customerOptions.filter((option) =>
-                                                        option.label.toLowerCase().includes(inputValue.toLowerCase())
-                                                    );
-                                                    callback(values);
-                                                }, 3000);
-                                            }}
-                                            cacheOptions
-                                            value={customer}
-                                        />
-
-                                    </FormControl>
-                                    <FormControl >
-                                        <FormLabel ms="4px" fontSize="sm" fontWeight="normal">
-                                            Employee's name
-                                        </FormLabel>
-                                        <AsyncSelect
-                                            isMulti
-                                            name="employee_name"
-                                            onChange={(employee) => {
-                                                setEmployee(employee);
-                                            }}
-                                            placeholder="Start typing name..."
-                                            loadOptions={(inputValue, callback) => {
-                                                setTimeout(() => {
-                                                    const values = employeeOptions.filter((option) =>
-                                                        option.label.toLowerCase().includes(inputValue.toLowerCase())
-                                                    );
-                                                    callback(values);
-                                                }, 3000);
-                                            }}
-                                            cacheOptions
-                                            value={employee}
-                                        />
-
-                                    </FormControl>
-                                </Grid>
                                 <HStack spacing="15px" mb="35px" mt="8px" justify="center">
                                     <Box width="100%" mt="4px">
                                         <FormLabel ms="4px" fontSize="md" fontWeight="bold">
@@ -655,4 +451,4 @@ function FilterSales() {
     );
 }
 
-export default FilterSales;
+export default CustomerSummary;

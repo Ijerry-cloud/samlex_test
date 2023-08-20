@@ -11,6 +11,11 @@ import ListSuppliers from "views/Dashboard/ListSuppliers";
 import AddPurchases from "views/Pages/Purchases/AddPurchases.js";
 import ListPurchases from "views/Dashboard/ListPurchases.js";
 import FilterPurchases from "views/Pages/Purchases/FilterPurchases.js";
+import DailyReports from "views/Pages/Reports/DailyReports.js";
+import CustomerSummary from "views/Pages/Reports/CustomerSummary.js";
+import ItemSummary from "views/Pages/Reports/ItemSummary.js";
+import EmployeeSummary from "views/Pages/Reports/EmployeeSummary.js";
+
 
 
 import {
@@ -22,6 +27,8 @@ import {
 
 import { MdOutlineSummarize, MdAddCircle, MdViewList, MdFilterList, MdPersonAdd} from "react-icons/md";
 import UserMgt from "views/Management/UserMgt";
+import EmployeeMgt from "views/Management/EmployeeMgt";
+import StoreConfig from "views/Management/StoreConfig";
 import Settings from "views/Management/Settings";
 import { List } from "@chakra-ui/react";
 
@@ -128,6 +135,53 @@ var dashRoutes = [
     ],
   },
   {
+    name: "Reports",
+    category: "purchases",
+    collapse: true,
+    state: "pageCollapse",
+    isProtected: true,
+    isVisible: true,
+    views: [
+      {
+        path: "/daily-reports",
+        name: "Daily Report",
+        icon: <MdAddCircle color="inherit" />,
+        component: DailyReports,
+        layout: "/admin",
+        isProtected: true,
+        isVisible: true,
+      },
+      {
+        path: "/customer-reports",
+        name: "Customers Summary",
+        icon: <MdAddCircle color="inherit" />,
+        component: CustomerSummary,
+        layout: "/admin",
+        isProtected: true,
+        isVisible: true,
+      },
+      {
+        path: "/item-reports-summary",
+        name: "Items Summary",
+        icon: <MdAddCircle color="inherit" />,
+        component: ItemSummary,
+        layout: "/admin",
+        isProtected: true,
+        isVisible: true,
+      },
+      {
+        path: "/employee-reports-summary",
+        name: "Employee Summary",
+        icon: <MdAddCircle color="inherit" />,
+        component: EmployeeSummary,
+        layout: "/admin",
+        isProtected: true,
+        isVisible: true,
+      },
+      
+    ],
+  },
+  {
     path: "/settings",
     name: "Settings",
     icon: <MdOutlineSummarize color="inherit" />,
@@ -141,6 +195,24 @@ var dashRoutes = [
     name: "User Management",
     icon: <MdOutlineSummarize color="inherit" />,
     component: UserMgt,
+    layout: "/admin",
+    isProtected: true,
+    isVisible: false
+  },
+  {
+    path: "/EmployeeMgt",
+    name: "Employee Management",
+    icon: <MdOutlineSummarize color="inherit" />,
+    component: EmployeeMgt,
+    layout: "/admin",
+    isProtected: true,
+    isVisible: false
+  },
+  {
+    path: "/StoreConfig",
+    name: "Store Config",
+    icon: <MdOutlineSummarize color="inherit" />,
+    component: StoreConfig,
     layout: "/admin",
     isProtected: true,
     isVisible: false
