@@ -14,18 +14,26 @@ import {
 } from "@chakra-ui/react";
 import React from "react";
 import { EmailIcon, DeleteIcon, EditIcon, DownloadIcon, InfoIcon } from '@chakra-ui/icons'
+import avatar7 from "assets/img/avatars/male.jpg";
+import avatar8 from "assets/img/avatars/female.png";
 
 
 export function DashboardTableRow11(props) {
-  const { firstName, lastName, phoneNo, emailAddress, onEditClick, onDeleteClick } = props;
+  const { firstName, lastName, phoneNo, emailAddress, gender, onEditClick, onDeleteClick } = props;
   const textColor = useColorModeValue("gray.700", "white");
   return (
     <Tr my=".8rem" ps="0px">
       <Td minWidth={{ sm: "150px" }} pl="0px">
         <Flex align="center" py=".3rem" minWidth="100%" flexWrap="nowrap">
+          <Avatar
+            src={gender == "female" ? avatar8 : avatar7}
+            w="50px"
+            h="50px"
+            me="10px"
+          />
           <Text
-            fontSize="sm"
-            color={textColor}
+            fontSize="md"
+            color={"white"}
             fontWeight="bold"
             minWidth="100%"
           >
@@ -35,19 +43,19 @@ export function DashboardTableRow11(props) {
       </Td>
 
       <Td>
-        <Text fontSize="sm" color={textColor} fontWeight="bold" pb=".3rem">
+        <Text fontSize="md" color={"gray.500"} fontWeight="bold" pb=".3rem">
           {lastName}
         </Text>
       </Td>
 
       <Td>
-        <Text fontSize="sm" color={textColor} fontWeight="bold" pb=".3rem">
+        <Text fontSize="md" color={"gray.500"} fontWeight="bold" pb=".3rem">
           {phoneNo}
         </Text>
       </Td>
 
       <Td>
-        <Text fontSize="sm" color={textColor} fontWeight="bold" pb=".3rem">
+        <Text fontSize="md" color={"gray.500"} fontWeight="bold" pb=".3rem">
           {emailAddress}
         </Text>
       </Td>
@@ -57,28 +65,25 @@ export function DashboardTableRow11(props) {
           <IconButton
             backgroundColor='blue'
             color='white'
-            borderRadius='0px'
             aria-label='edit customer'
             icon={<EditIcon />}
             onClick={onEditClick}
-            mx='1px'
+            mx='2px'
           />
           <IconButton
             backgroundColor='red'
             color='white'
-            borderRadius='0px'
             aria-label='delete customer'
             icon={<DeleteIcon />}
             onClick={onDeleteClick}
-            mx='1px'
+            mx='2px'
           />
           <IconButton
             backgroundColor='#5a8100'
             color='white'
-            borderRadius='0px'
             aria-label='email customer'
             icon={<EmailIcon />}
-            mx='1px'
+            mx='2px'
           />
         </Center>
 

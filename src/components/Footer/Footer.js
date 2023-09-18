@@ -41,16 +41,7 @@ export default function Footer(props) {
         >
           {document.documentElement.dir === "rtl"
             ? " توقيت الإبداعية"
-            : "Creative Tim "}
-        </Link>
-        &
-        <Link
-          // color={linkTeal}
-          color="teal.400"
-          href="https://www.simmmple.com"
-          target="_blank"
-        >
-          {document.documentElement.dir === "rtl" ? "سيممبل " : " Simmmple"}
+            : "Connect Academy "}
         </Link>
         {document.documentElement.dir === "rtl"
           ? "للحصول على ويب أفضل"
@@ -63,41 +54,19 @@ export default function Footer(props) {
             md: "44px",
           }}
         >
-          <Link color="gray.400" href="https://www.creative-tim.com">
-            {document.documentElement.dir === "rtl"
-              ? "توقيت الإبداعية"
-              : "Creative Tim"}
-          </Link>
-        </ListItem>
-        <ListItem
-          me={{
-            base: "20px",
-            md: "44px",
-          }}
-        >
-          <Link color="gray.400" href="https://www.simmmple.com">
-            {document.documentElement.dir === "rtl" ? "سيممبل" : "Simmmple"}
-          </Link>
-        </ListItem>
-        <ListItem
-          me={{
-            base: "20px",
-            md: "44px",
-          }}
-        >
           <Link
             color="gray.400"
             href="#blog"
-            href="https://creative-tim.com/blog"
+            href="#"
           >
-            {document.documentElement.dir === "rtl" ? "مدونة" : "Blog"}
+            {document.documentElement.dir === "rtl" ? "مدونة" : "Samlex Electronics"}
           </Link>
         </ListItem>
         <ListItem>
           <Link
             color="gray.400"
             href="#license"
-            href="https://www.creative-tim.com/license"
+            href="#"
           >
             {document.documentElement.dir === "rtl" ? "رخصة" : "License"}
           </Link>

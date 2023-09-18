@@ -17,6 +17,9 @@ import {
 } from "@chakra-ui/react";
 
 import { ProfileIcon, SettingsIcon } from "components/Icons/Icons";
+import {MdOutlineLogout, MdPeopleAlt} from "react-icons/md";
+import {GrConfigure} from "react-icons/gr";
+import {FcDataConfiguration} from "react-icons/fc";
 // Custom Components
 import PropTypes from "prop-types";
 import React from "react";
@@ -26,6 +29,8 @@ import { useDispatch } from "react-redux";
 import { useHistory } from "react-router-dom";
 import SidebarResponsive from "components/Sidebar/SidebarResponsive";
 import routes from "routes.js";
+import { ItemContent } from "components/Menu/ItemContent";
+import avatar1 from "assets/img/avatars/avatar1.png";
 
 export default function HeaderLinks(props) {
   const { variant, children, fixed, secondary, onOpen, authUser, ...rest } = props;
@@ -129,7 +134,7 @@ export default function HeaderLinks(props) {
         // logo={logo}
         {...rest}
       />
-      <Menu>
+      <Menu >
         <MenuButton>
           <SettingsIcon
             cursor="pointer"
@@ -142,22 +147,16 @@ export default function HeaderLinks(props) {
             h="18px"
           />
         </MenuButton>
-        <MenuList p="16px 8px">
+        <MenuList p="16px 8px" bgColor="#2a2c40" borderColor="gray.900" boxShadow="rgba(0, 0, 0, 0.1) 0px 0px 0px 1px,rgba(0, 0, 0, 0.2) 0px 5px 10px,rgba(0, 0, 0, 0.4) 0px 15px 40px" color={navbarIcon}>
           <Flex flexDirection="column">
-            <MenuItem borderRadius="8px" mb="10px" onClick={moveToSettings}>
-              Settings
+            <MenuItem borderRadius="8px" mb="10px" onClick={moveToEmployeeMgt} _hover={{ bg: 'gray.700' }} _focus={{ bg: 'gray.700' }}>
+            <MdPeopleAlt me="2px"/> <Text>Employee Management</Text>  
             </MenuItem>
-            <MenuItem borderRadius="8px" mb="10px" onClick={moveToUserMgt}>
-              User Management
+            <MenuItem borderRadius="8px" mb="10px" onClick={moveToStoreConfig} _hover={{ bg: 'gray.700' }} _focus={{ bg: 'gray.700' }}>
+            <FcDataConfiguration me="2px"/> <Text>Store Config</Text>
             </MenuItem>
-            <MenuItem borderRadius="8px" mb="10px" onClick={moveToEmployeeMgt}>
-              Employee Management
-            </MenuItem>
-            <MenuItem borderRadius="8px" mb="10px" onClick={moveToStoreConfig}>
-              Store Config
-            </MenuItem>
-            <MenuItem borderRadius="8px" mb="10px" onClick={() => { dispatch(logout()) }}>
-              Logout
+            <MenuItem borderRadius="8px" mb="10px" onClick={() => { dispatch(logout()) }} _hover={{ bg: 'gray.700' }} _focus={{ bg: 'gray.700' }}>
+            <MdOutlineLogout me="2px"/> <Text>Logout</Text> 
             </MenuItem>
           </Flex>
         </MenuList>

@@ -100,13 +100,12 @@ function SignIn() {
       password: values?.password
     };
 
-    if ((values?.password == "12345678") && (values?.email === "ebukasamlex") ) {
-      toast.success("You Signed in Successfully");
-      dispatch(login({
-        user: {email: values?.email},
-        token: "thedefaulttoken"
-  
-      }));
+    mutation.mutate({
+      url: LOGIN_URL,
+      payload_data: data
+  })
+ 
+      return
 
     }
 
@@ -121,9 +120,6 @@ function SignIn() {
     })
  */
 
-
-    return
-  }
 
 
   return (

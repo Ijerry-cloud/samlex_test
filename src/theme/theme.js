@@ -3,6 +3,7 @@ import { globalStyles } from "./styles";
 import { font } from "./foundations/fonts";
 import { breakpoints } from "./foundations/breakpoints";
 import { buttonStyles } from "./components/button";
+import { selectStyles } from "./components/select";
 import { badgeStyles } from "./components/badge";
 import { linkStyles } from "./components/link";
 import { drawerStyles } from "./components/drawer";
@@ -26,5 +27,6 @@ export default extendTheme(
   CardHeaderComponent, // Card Header component
   MainPanelComponent, // Main Panel component
   PanelContentComponent, // Panel Content component
-  PanelContainerComponent // Panel Container component
+  PanelContainerComponent, // Panel Container component
+  selectStyles
 );

@@ -70,8 +70,17 @@ import { AiOutlineNumber, AiOutlineMacCommand } from 'react-icons/ai';
 import { BsGithub, BsDiscord, BsPerson, BsPersonAdd } from 'react-icons/bs';
 import { dashboardTableData4 } from "variables/general";
 import { SalesOverviewData } from "variables/general2";
+import { fetchData, postData } from 'modules/utilities/util_query';
+import { useQuery, useMutation } from 'react-query';
+import { checkObject, isError } from 'modules/utilities';
+import { handleApiError } from "modules/utilities/responseHandlers";
+import validator from 'validator';
+import { GET_CREATE_SUPPLIERS } from 'config/serverUrls';
 
-const EditModal = ({onEditChange, handleEditSubmit, onClose, currentSupplier}) => (
+
+
+
+const EditModal = ({ onEditChange, handleEditSubmit, onClose, currentSupplier }) => (
     <ModalContent>
         <ModalHeader>Edit Supplier Information</ModalHeader>
         <ModalCloseButton />
@@ -86,7 +95,7 @@ const EditModal = ({onEditChange, handleEditSubmit, onClose, currentSupplier}) =
                             <Box borderRadius="lg">
                                 <Box m={8} color="#0B0E3F">
                                     <VStack spacing={2} maxW="full">
-                                    <FormControl id="company_name">
+                                        <FormControl id="company_name">
                                             <FormLabel>COMPANY NAME:</FormLabel>
                                             <InputGroup borderColor="#E0E1E7">
                                                 <InputLeftElement
@@ -236,7 +245,7 @@ const EditModal = ({onEditChange, handleEditSubmit, onClose, currentSupplier}) =
     </ModalContent>
 );
 
-const AddModal = ({ onChange, handleSubmit, onClose, supplierDetails, setSupplierDetails }) => (
+const AddModal = ({ onChange, handleSubmit, onClose, supplierDetails, setSupplierDetails, values, setValues, handleChange, errors }) => (
     <ModalContent>
         <ModalHeader>Supplier Information</ModalHeader>
         <ModalCloseButton />
@@ -251,14 +260,22 @@ const AddModal = ({ onChange, handleSubmit, onClose, supplierDetails, setSupplie
                             <Box borderRadius="lg">
                                 <Box m={8} color="#0B0E3F">
                                     <VStack spacing={2} maxW="full">
-                                    <FormControl id="company_name">
+                                        <FormControl id="company_name">
                                             <FormLabel>Company Name:</FormLabel>
                                             <InputGroup borderColor="#E0E1E7">
                                                 <InputLeftElement
                                                     pointerEvents="none"
                                                     children={<BsPerson color="gray.800" />}
                                                 />
-                                                <Input name="" type="text" size="sm" onChange={onChange} />
+                                                <Input
+                                                    isInvalid={isError(errors?.company_name)}
+                                                    errorBorderColor='red.300'
+                                                    name={'company_name'}
+                                                    onChange={handleChange}
+                                                    type="text"
+                                                    size="sm"
+                                                    value={values?.company_name || ''}
+                                                />
                                             </InputGroup>
                                         </FormControl>
 
@@ -269,7 +286,15 @@ const AddModal = ({ onChange, handleSubmit, onClose, supplierDetails, setSupplie
                                                     pointerEvents="none"
                                                     children={<BsPerson color="gray.800" />}
                                                 />
-                                                <Input name="first_name" type="text" size="sm" onChange={onChange} value={supplierDetails?.first_name || ''} />
+                                                <Input
+                                                    isInvalid={isError(errors?.first_name)}
+                                                    errorBorderColor='red.300'
+                                                    name={'first_name'}
+                                                    onChange={handleChange}
+                                                    type="text"
+                                                    size="sm"
+                                                    value={values?.first_name || ''}
+                                                />
                                             </InputGroup>
                                         </FormControl>
                                         <FormControl id="last_name">
@@ -279,7 +304,15 @@ const AddModal = ({ onChange, handleSubmit, onClose, supplierDetails, setSupplie
                                                     pointerEvents="none"
                                                     children={<BsPerson color="gray.800" />}
                                                 />
-                                                <Input name="last_name" type="text" size="sm" onChange={onChange} value={supplierDetails?.last_name || ''} />
+                                                <Input
+                                                    isInvalid={isError(errors?.last_name)}
+                                                    errorBorderColor='red.300'
+                                                    name={'last_name'}
+                                                    onChange={handleChange}
+                                                    type="text"
+                                                    size="sm"
+                                                    value={values?.last_name || ''}
+                                                />
                                             </InputGroup>
                                         </FormControl>
                                         <FormControl id="email">
@@ -402,13 +435,13 @@ const AddModal = ({ onChange, handleSubmit, onClose, supplierDetails, setSupplie
 
 );
 
-const DeleteModal = ({onClose, currentSupplier}) => (
+const DeleteModal = ({ onClose, currentSupplier }) => (
     <ModalContent>
         <ModalHeader>Delete Supplier Information</ModalHeader>
         <ModalCloseButton />
         <ModalBody>
             <Container maxW="full">
-                <Text> Are you sure you want to delete {currentSupplier?.first_name + " " + currentSupplier?.last_name } ?
+                <Text> Are you sure you want to delete {currentSupplier?.first_name + " " + currentSupplier?.last_name} ?
                 </Text>
             </Container>
         </ModalBody>
@@ -425,6 +458,8 @@ const DeleteModal = ({onClose, currentSupplier}) => (
 
 export default function Dashboard() {
     const value = "$100.000";
+    const [values, setValues] = React.useState({});
+    const [errors, setErrors] = React.useState({});
 
     const [supplierDetails, setSupplierDetails] = useState({});
     const [currentSupplier, setCurrentSupplier] = useState({});
@@ -446,6 +481,94 @@ export default function Dashboard() {
     const { isOpen, onOpen, onClose } = useDisclosure();
 
     const [modalType, setModalType] = useState('add');
+
+    const payload_data = {}
+    const mutation = useMutation(postData, {
+        onSuccess: (response) => {
+            toast({
+                title: 'Success',
+                description: "Action succesful",
+                status: 'success',
+                duration: 3000,
+                isClosable: true,
+            });
+
+            return;
+        },
+        onError: (error) => {
+            handleApiError(error);
+        }
+    });
+
+    const validate = () => {
+        let uerrors = {}
+        uerrors.first_name = values?.company_name ? "" : FIELD_REQUIRED;
+        uerrors.first_name = values?.first_name ? "" : FIELD_REQUIRED;
+        uerrors.last_name = values?.last_name ? "" : FIELD_REQUIRED;
+
+        if (!values?.first_name || !values?.last_name || !values?.company_name) {
+            toast({
+                title: 'Missing Information.',
+                description: "Please fill all required fields.",
+                status: 'warning',
+                duration: 3000,
+                isClosable: true,
+            });
+            return uerrors;
+
+        }
+
+        const email_is_valid = validator.isEmail(values?.email);
+
+        if (!email_is_valid) {
+            uerrors.email = "enter a valid email address";
+            toast({
+                title: 'Invalid Field.',
+                description: "Please enter a valid email address",
+                status: 'warning',
+                duration: 3000,
+                isClosable: true,
+            });
+            return uerrors;
+        }
+
+        return uerrors;
+    }
+
+    const handleChange = (event) => {
+        setValues({ ...values, [event.target.name]: event.target.value });
+    }
+
+    const handleSubmit = () => {
+
+        let checkErrors = validate();
+        let areAllFieldsFalse = checkObject(checkErrors);
+
+        if (!areAllFieldsFalse) {
+            // if there are errors
+            // set to state and terminate
+            setErrors(checkErrors);
+            return;
+        }
+
+        const data = values;
+        mutation.mutate(
+            {
+                url: GET_CREATE_SUPPLIERS,
+                payload_data: data,
+                token: token,
+                authenticate: true
+            }
+        );
+        setValues({});
+        setErrors({});
+
+        return;
+
+    }
+
+
+
 
     const onChange = (e) => {
 
@@ -469,23 +592,6 @@ export default function Dashboard() {
         setItemOffset(newOffset);
     };
 
-    const handleSubmit = () => {
-        if (!supplierDetails?.first_name || !supplierDetails?.last_name) {
-            toast({
-                title: 'Missing Information.',
-                description: "Please fill all required fields.",
-                status: 'warning',
-                duration: 3000,
-                isClosable: true,
-            });
-            return;
-        }
-
-        setSupplierDetails({});
-        history.push('/admin/suppliers');
-        return;
-    }
-
     const handleEditSubmit = () => {
         if (!currentSupplier?.first_name || !currentSupplier?.last_name) {
             toast({
@@ -501,7 +607,7 @@ export default function Dashboard() {
         setCurrentSupplier({});
         history.push('/admin/suppliers');
         return;
-        
+
     }
 
 
@@ -509,12 +615,12 @@ export default function Dashboard() {
         <>
             <Modal isOpen={isOpen} onClose={onClose}>
                 <ModalOverlay />
-                {modalType === "add"? <AddModal onChange={onChange} onClose={onClose}
+                {modalType === "add" ? <AddModal onChange={onChange} onClose={onClose}
                     handleSubmit={handleSubmit} supplierDetails={supplierDetails}
-                    setSupplierDetails={setSupplierDetails} /> : modalType === "edit" ?
+                    setSupplierDetails={setSupplierDetails} values={values} setValues={setValues} handleChange={handleChange} /> : modalType === "edit" ?
                     <EditModal onEditChange={onEditChange} onClose={onClose}
-                    handleEditSubmit={handleEditSubmit} currentSupplier={currentSupplier}
-                    setCurrentSupplier={setCurrentSupplier} /> : <DeleteModal onClose={onClose} currentSupplier={currentSupplier}/>}
+                        handleEditSubmit={handleEditSubmit} currentSupplier={currentSupplier}
+                        setCurrentSupplier={setCurrentSupplier} /> : <DeleteModal onClose={onClose} currentSupplier={currentSupplier} />}
 
             </Modal>
             <Flex flexDirection="column" pt={{ base: "120px", md: "75px" }}>
@@ -645,9 +751,9 @@ export default function Dashboard() {
                                             onEditClick={() => {
                                                 setCurrentSupplier(row);
                                                 setModalType('edit');
-                                                onOpen();                                                
+                                                onOpen();
                                             }}
-                                            onDeleteClick = {() => {
+                                            onDeleteClick={() => {
                                                 setCurrentSupplier(row);
                                                 setModalType('delete');
                                                 onOpen();

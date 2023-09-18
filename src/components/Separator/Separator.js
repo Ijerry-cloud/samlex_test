@@ -7,7 +7,7 @@ export function Separator(props) {
     <Flex
       h="1px"
       w="100%"
-      bg="linear-gradient(90deg, rgba(0, 0, 0, 0) 0%, #000000 49.52%, rgba(0, 0, 0, 0) 100%)"
+      bg="linear-gradient(90deg, rgba(255, 255, 255, 0) 0%, #ffffff 49.52%, rgba(255, 255, 255, 0) 100%)"
       {...rest}
     >
       {children}

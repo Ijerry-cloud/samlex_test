@@ -17,23 +17,24 @@ const MyPaginate = styled(ReactPaginate).attrs({
       padding: 0.5rem 0.7rem;
       border: grey 1px solid;
       cursor: pointer;
-      border-color: #c7c7c7;
-      color: #5a8100;
+      border-color: #4285f4;
+      color: #4285f4;
     }
     li.previous a,
     li.next a,
     li.break a {
-      border-color: #c7c7c7;
+      border-color: #4285f4;
       margin: 10px;
     }
     li.active a {
-      background-color: #5a8100;
+      background-color: #4285f4;
       border-color: transparent;
       color: white;
       min-width: 32px;
     }
     li.disabled a {
       color: grey;
+      border-color: grey;
     }
     li.disable,
     li.disabled a {
