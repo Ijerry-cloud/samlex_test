@@ -13,12 +13,13 @@ const MyPaginate = styled(ReactPaginate).attrs({
     list-style-type: none;
     padding: 0 5rem;
     li a {
-      border-radius: 2px;
+      border-radius: 20px;
       padding: 0.5rem 0.7rem;
       border: grey 1px solid;
       cursor: pointer;
       border-color: #4285f4;
       color: #4285f4;
+      margin: 2px;
     }
     li.previous a,
     li.next a,
@@ -42,5 +43,47 @@ const MyPaginate = styled(ReactPaginate).attrs({
     }
   `;
 
+
+export const MyPaginate2 = styled(ReactPaginate).attrs({
+    // You can redefine classes here, if you want.
+    activeClassName: 'active', // default to "selected"
+  })`
+    margin-bottom: 2rem;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    list-style-type: none;
+    padding: 0 5rem;
+    li a {
+      border-radius: 20px;
+      padding: 0.5rem 0.7rem;
+      border: grey 1px solid;
+      cursor: pointer;
+      border-color: white;
+      color: black;
+      background-color: white;
+      margin: 2px;
+    }
+    li.previous a,
+    li.next a,
+    li.break a {
+      border-color: white;
+      margin: 10px;
+    }
+    li.active a {
+      background-color: #4285f4;
+      border-color: white;
+      color: white;
+      min-width: 32px;
+    }
+    li.disabled a {
+      color: black;
+      border-color: grey;
+    }
+    li.disable,
+    li.disabled a {
+      cursor: default;
+    }
+  `;
 
 export default MyPaginate;

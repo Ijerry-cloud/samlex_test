@@ -25,7 +25,11 @@ import {
   RocketIcon,
 } from "components/Icons/Icons";
 
-import { MdOutlineSummarize, MdAddCircle, MdViewList, MdFilterList, MdPersonAdd} from "react-icons/md";
+import { MdOutlineSummarize, MdAddCircle, MdViewList, MdFilterList, MdPersonAdd, MdDashboardCustomize} from "react-icons/md";
+import { AiOutlineUsergroupAdd } from "react-icons/ai";
+import { IoIosCalendar } from 'react-icons/io';
+import { FaTruck, FaCalendarCheck, FaUsers } from "react-icons/fa";
+import { GiArchiveResearch } from 'react-icons/gi';
 import UserMgt from "views/Management/UserMgt";
 import EmployeeMgt from "views/Management/EmployeeMgt";
 import StoreConfig from "views/Management/StoreConfig";
@@ -36,7 +40,8 @@ var dashRoutes = [
   {
     path: "/dashboard",
     name: "Dashboard",
-    icon: <HomeIcon color="inherit" />,
+    icon: <MdDashboardCustomize color="inherit" />,
+    icon_color: "#0074E4",
     component: Dashboard,
     layout: "/admin",
     isProtected: true,
@@ -45,7 +50,8 @@ var dashRoutes = [
   {
     path: "/customers",
     name: "Customers",
-    icon: <HomeIcon color="inherit" />,
+    icon: <FaUsers color="inherit" />,
+    icon_color: "#FF6B6B",
     component: ListCustomers,
     layout: "/admin",
     isProtected: true,
@@ -54,7 +60,8 @@ var dashRoutes = [
   {
     path: "/suppliers",
     name: "Suppliers",
-    icon: <HomeIcon color="inherit" />,
+    icon: <FaTruck color="inherit" />,
+    icon_color: "#FFA500",
     component: ListSuppliers,
     layout: "/admin",
     isProtected: true,
@@ -72,6 +79,7 @@ var dashRoutes = [
         path: "/add-item",
         name: "Add Sales",
         icon: <MdAddCircle color="inherit" />,
+        icon_color: "#3498DB",
         component: AddItem,
         layout: "/admin",
         isProtected: true,
@@ -81,6 +89,7 @@ var dashRoutes = [
         path: "/list-items",
         name: "View Transactions",
         icon: <MdViewList color="inherit" />,
+        icon_color: "#1E8449",
         component: ListItems,
         layout: "/admin",
         isProtected: true,
@@ -90,6 +99,7 @@ var dashRoutes = [
         path: "/filter-items",
         name: "Filter Transactions",
         icon: <MdFilterList color="inherit" />,
+        icon_color: "#FFD700",
         component: FilterItems,
         layout: "/admin",
         isProtected: true,
@@ -109,6 +119,7 @@ var dashRoutes = [
         path: "/add-Purchases",
         name: "Add Purchases",
         icon: <MdAddCircle color="inherit" />,
+        icon_color: "#3498DB",
         component: AddPurchases,
         layout: "/admin",
         isProtected: true,
@@ -118,6 +129,7 @@ var dashRoutes = [
         path: "/list-Purchases",
         name: "List Purchases",
         icon: <MdViewList color="inherit" />,
+        icon_color: "#1E8449",
         component: ListPurchases,
         layout: "/admin",
         isProtected: true,
@@ -127,6 +139,7 @@ var dashRoutes = [
         path: "/filter-Purchases",
         name: "Filter Purchases",
         icon: <MdFilterList color="inherit" />,
+        icon_color: "#FFD700",
         component: FilterPurchases,
         layout: "/admin",
         isProtected: true,
@@ -145,7 +158,8 @@ var dashRoutes = [
       {
         path: "/daily-reports",
         name: "Daily Report",
-        icon: <MdAddCircle color="inherit" />,
+        icon: <FaCalendarCheck color="inherit" />,
+        icon_color: "#8E44AD",
         component: DailyReports,
         layout: "/admin",
         isProtected: true,
@@ -154,7 +168,8 @@ var dashRoutes = [
       {
         path: "/customer-reports",
         name: "Customers Summary",
-        icon: <MdAddCircle color="inherit" />,
+        icon: <FaUsers color="inherit" />,
+        icon_color: "#27AE60",
         component: CustomerSummary,
         layout: "/admin",
         isProtected: true,
@@ -163,7 +178,8 @@ var dashRoutes = [
       {
         path: "/item-reports-summary",
         name: "Items Summary",
-        icon: <MdAddCircle color="inherit" />,
+        icon: <GiArchiveResearch color="inherit" />,
+        icon_color: "#F39C12",
         component: ItemSummary,
         layout: "/admin",
         isProtected: true,
@@ -172,7 +188,8 @@ var dashRoutes = [
       {
         path: "/employee-reports-summary",
         name: "Employee Summary",
-        icon: <MdAddCircle color="inherit" />,
+        icon: <AiOutlineUsergroupAdd color="inherit" />,
+        icon_color: "#3498DB",
         component: EmployeeSummary,
         layout: "/admin",
         isProtected: true,

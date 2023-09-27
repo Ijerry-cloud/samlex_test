@@ -34,6 +34,13 @@ import { FaApple, FaFacebook, FaGoogle } from "react-icons/fa";
 import { MdFilterList, MdViewList } from "react-icons/md";
 import { IoMdAddCircle } from "react-icons/io";
 
+import { fetchData, postData, uploadCsvFile } from 'modules/utilities/util_query';
+import { useMutation } from 'react-query';
+import { handleApiError } from "modules/utilities/responseHandlers";
+import { getAuthToken } from 'modules/auth/redux/authSelector';
+import { useSelector } from 'react-redux';
+import { UPLOAD_ITEM_CSV } from 'config/serverUrls';
+
 
 function AddItem() {
     const titleColor = useColorModeValue("#5A8100", "#8abb18");
@@ -46,6 +53,25 @@ function AddItem() {
     const history = useHistory();
     const toast = useToast();
 
+    const token = useSelector(getAuthToken);
+
+    const mutation = useMutation(uploadCsvFile, {
+        onSuccess: (response) => {
+            toast({
+                title: 'Success',
+                description: "Action succesful",
+                status: 'success',
+                duration: 3000,
+                isClosable: true,
+            });
+
+            return;
+        },
+        onError: (error) => {
+            handleApiError(error);
+        }
+    });
+
     const onChange = (e) => {
 
         const { name, value } = e.target;
@@ -57,6 +83,29 @@ function AddItem() {
         const file = event.target.files[0];
         setSelectedFile(file);
     };
+
+    const handleFileUpload = () => {
+
+        const file = selectedFile;
+
+        if (file) {
+            mutation.mutate(
+                {
+                    url: UPLOAD_ITEM_CSV,
+                    payload_data: file,
+                    token: token,
+                    authenticate: true
+
+                }
+
+
+
+                
+            );
+           
+        }
+        return;
+    }
 
     const handleSubmit = () => {
         if (!item?.name || !item?.category) {
@@ -119,7 +168,7 @@ function AddItem() {
                         }}>
                             cancel
                         </Button>
-                        <Button variant='ghost'>Submit</Button>
+                        <Button variant='ghost' onClick={handleFileUpload}>Submit</Button>
                     </ModalFooter>
                 </ModalContent>
 

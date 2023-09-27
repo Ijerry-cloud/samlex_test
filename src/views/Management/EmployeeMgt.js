@@ -203,8 +203,8 @@ const EditDrawer = ({ handleChange, handleSubmit, isOpen, btnRef, onClose, handl
                             borderColor="rgba(255, 255, 255, 0.2)"
                             placeholder='Select option'
                             size="sm">
-                            <option style={{ backgroundColor:'#232333'}} value='male'>Male</option>
-                            <option style={{ backgroundColor:'#232333'}} value='female'> Female</option>
+                            <option style={{ backgroundColor: '#232333' }} value='male'>Male</option>
+                            <option style={{ backgroundColor: '#232333' }} value='female'> Female</option>
                         </Select>
                     </FormControl>
                     <FormControl id="">
@@ -216,10 +216,10 @@ const EditDrawer = ({ handleChange, handleSubmit, isOpen, btnRef, onClose, handl
                             borderRadius='15px'
                             borderColor="rgba(255, 255, 255, 0.2)"
                             size="sm">
-                            <option style={{ backgroundColor:'#232333'}} value='tech'>Tech</option>
-                            <option style={{ backgroundColor:'#232333'}} value='ICT'> ICT</option>
-                            <option style={{ backgroundColor:'#232333'}} value='sales'> Sales</option>
-                            <option style={{ backgroundColor:'#232333'}} value='admin'> Admin</option>
+                            <option style={{ backgroundColor: '#232333' }} value='tech'>Tech</option>
+                            <option style={{ backgroundColor: '#232333' }} value='ICT'> ICT</option>
+                            <option style={{ backgroundColor: '#232333' }} value='sales'> Sales</option>
+                            <option style={{ backgroundColor: '#232333' }} value='admin'> Admin</option>
                         </Select>
                     </FormControl>
                     <FormControl id="">
@@ -783,7 +783,13 @@ export default function EmployeeMgt() {
         return (
             <Flex direction="column" pt={{ base: "120px", md: "75px" }}>
                 <Center>
-                    <Spinner size='xl' />
+                    <Spinner
+                        thickness='4px'
+                        speed='0.65s'
+                        emptyColor='gray.200'
+                        color='blue.500'
+                        size='xl'
+                    />
                 </Center>
             </Flex>
         )

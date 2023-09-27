@@ -27,6 +27,10 @@ export const DELETE_USER = BASE_URL + 'authentication/users/delete_one_user/';
 export const GET_PROFILE = BASE_URL + 'authentication/profile/';
 
 export const GET_CREATE_SUPPLIERS = BASE_URL + 'people/suppliers/';
+export const UPDATE_SUPPLIERS = BASE_URL + 'people/suppliers/update/';
+export const DELETE_SUPPLIER = BASE_URL + 'people/suppliers/delete/';
+
+export const UPLOAD_ITEM_CSV = BASE_URL + 'items/csv/';
 
 
 

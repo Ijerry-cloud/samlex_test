@@ -14,7 +14,14 @@ export const globalStyles = {
       },
       html: {
         fontFamily: 'Helvetica, sans-serif'
-      }
+      },
+      "::-webkit-scrollbar": {
+        width: "5px", // Adjust the width as desired
+      },
+      "::-webkit-scrollbar-thumb": {
+        backgroundColor: "gray.400", // Customize scrollbar thumb color
+        borderRadius: "full", // Make the scrollbar thumb round
+      },
     }),
   },
 };

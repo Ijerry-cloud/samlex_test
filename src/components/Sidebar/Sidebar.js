@@ -43,9 +43,9 @@ function Sidebar(props) {
   const createLinks = (routes) => {
     const { sidebarVariant } = props;
     // Chakra Color Mode
-    let activeBg = useColorModeValue("white", "gray.700");
-    let inactiveBg = useColorModeValue("white", "gray.700");
-    let activeColor = useColorModeValue("gray.700", "white");
+    let activeBg = "#2a2c40";
+    let inactiveBg = "#2a2c40";
+    let activeColor = "white";
     let inactiveColor = useColorModeValue("gray.400", "gray.400");
     let sidebarActiveShadow = "0px 7px 11px rgba(0, 0, 0, 0.04)";
     // Here are all the props that may change depending on sidebar's state.(Opaque or transparent)
@@ -128,7 +128,7 @@ function Sidebar(props) {
                   <Icon>{prop.icon}</Icon>
                 ) : (
                   <IconBox
-                    bg="#5A8100"
+                    bg="#4285f4"
                     color="white"
                     h="30px"
                     w="30px"
@@ -180,7 +180,7 @@ function Sidebar(props) {
                 ) : (
                   <IconBox
                     bg={inactiveBg}
-                    color="#5A8100"
+                    color={prop.icon_color}
                     h="30px"
                     w="30px"
                     me="12px"

@@ -479,21 +479,22 @@ export function DashboardTableRow4(props) {
 }
 
 export function DashboardTableRow3(props) {
-  const { first_name, last_name, phone_no, email_address, total_purchased, onEditClick, onDeleteClick } = props;
-  const textColor = useColorModeValue("gray.700", "white");
+  const { first_name, last_name, phone_no, email, total_purchased, onEditClick, onDeleteClick } = props;
+  const textColor = "gray.500";
   return (
     <Tr my=".8rem" ps="0px">
-      <Td minWidth={{ sm: "150px" }} pl="0px">
-        <Flex align="center" py=".3rem" minWidth="100%" flexWrap="nowrap">
+      <Td minWidth={{ sm: "150px" }}>
+
           <Text
             fontSize="sm"
-            color={textColor}
+            color={"white"}
             fontWeight="bold"
             minWidth="100%"
+            pb=".3rem"
           >
             {first_name}
           </Text>
-        </Flex>
+
       </Td>
 
       <Td>
@@ -510,7 +511,7 @@ export function DashboardTableRow3(props) {
 
       <Td>
         <Text fontSize="sm" color={textColor} fontWeight="bold" pb=".3rem">
-          {email_address}
+          {email}
         </Text>
       </Td>
 
@@ -525,28 +526,25 @@ export function DashboardTableRow3(props) {
           <IconButton
             backgroundColor='blue'
             color='white'
-            borderRadius='0px'
             aria-label='edit customer'
             icon={<EditIcon />}
             onClick={onEditClick}
-            mx='1px'
+            mx='2px'
           />
           <IconButton
             backgroundColor='red'
             color='white'
-            borderRadius='0px'
             aria-label='delete customer'
             icon={<DeleteIcon />}
             onClick={onDeleteClick}
-            mx='1px'
+            mx='2px'
           />
           <IconButton
             backgroundColor='#5a8100'
             color='white'
-            borderRadius='0px'
             aria-label='email customer'
             icon={<EmailIcon />}
-            mx='1px'
+            mx='2px'
           />
         </Center>
 

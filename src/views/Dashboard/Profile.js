@@ -189,15 +189,15 @@ function Profile() {
     const email_is_valid = validator.isEmail(values?.email);
 
     if (!email_is_valid) {
-        uerrors.email = "enter a valid email address";
-        toast({
-            title: 'Invalid Field.',
-            description: "Please enter a valid email address",
-            status: 'warning',
-            duration: 3000,
-            isClosable: true,
-        });
-        return uerrors;
+      uerrors.email = "enter a valid email address";
+      toast({
+        title: 'Invalid Field.',
+        description: "Please enter a valid email address",
+        status: 'warning',
+        duration: 3000,
+        isClosable: true,
+      });
+      return uerrors;
     }
 
     if (values?.password != values?.confirmPassword) {
@@ -241,14 +241,14 @@ function Profile() {
     });
     setValues({});
     setPermissions({
-        customer_perm: false,
-        items_perm: false,
-        item_kits_perm: false,
-        suppliers_perm: false,
-        reports_perm: false,
-        receivings_perm: false,
-        sales_perm: false,
-        employees_perm: false      
+      customer_perm: false,
+      items_perm: false,
+      item_kits_perm: false,
+      suppliers_perm: false,
+      reports_perm: false,
+      receivings_perm: false,
+      sales_perm: false,
+      employees_perm: false
     });
     setErrors({});
 
@@ -260,7 +260,14 @@ function Profile() {
     return (
       <Flex direction="column" pt={{ base: "120px", md: "75px" }}>
         <Center>
-          <Spinner size='xl' />
+          <Spinner
+            thickness='4px'
+            speed='0.65s'
+            emptyColor='gray.200'
+            color='blue.500'
+            size='xl'
+          />
+
         </Center>
       </Flex>
     )
@@ -340,8 +347,8 @@ function Profile() {
                   borderRadius='15px'
                   borderColor="rgba(255, 255, 255, 0.2)"
                   size="sm">
-                  <option style={{ backgroundColor:'#232333'}} value='male'>Male</option>
-                  <option style={{ backgroundColor:'#232333'}} value='female'> Female</option>
+                  <option style={{ backgroundColor: '#232333' }} value='male'>Male</option>
+                  <option style={{ backgroundColor: '#232333' }} value='female'> Female</option>
                 </Select>
               </FormControl>
               <FormControl id="">
@@ -353,10 +360,10 @@ function Profile() {
                   borderColor="rgba(255, 255, 255, 0.2)"
                   placeholder='Select option'
                   size="sm">
-                  <option style={{ backgroundColor:'#232333'}} value='tech'>Tech</option>
-                  <option style={{ backgroundColor:'#232333'}} value='ICT'> ICT</option>
-                  <option style={{ backgroundColor:'#232333'}} value='sales'> Sales</option>
-                  <option style={{ backgroundColor:'#232333'}} value='admin'> Admin</option>
+                  <option style={{ backgroundColor: '#232333' }} value='tech'>Tech</option>
+                  <option style={{ backgroundColor: '#232333' }} value='ICT'> ICT</option>
+                  <option style={{ backgroundColor: '#232333' }} value='sales'> Sales</option>
+                  <option style={{ backgroundColor: '#232333' }} value='admin'> Admin</option>
                 </Select>
               </FormControl>
 

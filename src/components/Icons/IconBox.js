@@ -9,6 +9,7 @@ export default function IconBox(props) {
       alignItems={"center"}
       justifyContent={"center"}
       borderRadius={"12px"}
+      backgroundColor={"#4285f4"}
       {...rest}
     >
       {children}

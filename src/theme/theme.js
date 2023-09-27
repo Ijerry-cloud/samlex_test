@@ -4,6 +4,7 @@ import { font } from "./foundations/fonts";
 import { breakpoints } from "./foundations/breakpoints";
 import { buttonStyles } from "./components/button";
 import { selectStyles } from "./components/select";
+import { formControlStyles } from "./components/formControl";
 import { badgeStyles } from "./components/badge";
 import { linkStyles } from "./components/link";
 import { drawerStyles } from "./components/drawer";
@@ -28,5 +29,6 @@ export default extendTheme(
   MainPanelComponent, // Main Panel component
   PanelContentComponent, // Panel Content component
   PanelContainerComponent, // Panel Container component
-  selectStyles
+  selectStyles,
+  formControlStyles, //form control sty;es 
 );
