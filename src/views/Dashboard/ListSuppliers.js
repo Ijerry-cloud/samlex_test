@@ -19,22 +19,14 @@ import {
     ModalFooter,
     ModalBody,
     ModalCloseButton,
-    Stack,
     Table,
     Tbody,
     Text,
     Th,
     Thead,
     Tr,
-    useColorMode,
-    useColorModeValue,
     useDisclosure,
     Container,
-    Heading,
-    IconButton,
-    VStack,
-    Wrap,
-    WrapItem,
     FormControl,
     FormLabel,
     Input,
@@ -44,7 +36,6 @@ import {
     Textarea,
 } from "@chakra-ui/react";
 import { useToast } from '@chakra-ui/react';
-import { useParams, useHistory } from 'react-router-dom';
 // Custom components
 import Card from "components/Card/Card.js";
 import CardBody from "components/Card/CardBody.js";
@@ -57,12 +48,15 @@ import { DashboardTableRow3 } from "components/Tables/DashboardTableRow";
 import MyPaginate from "components/Pagination";
 import React, { useState } from "react";
 // react icons
+import { AiOutlineNumber } from 'react-icons/ai';
 import { TbPhone } from 'react-icons/tb';
 import {
     MdLocationCity,
     MdLocationOn,
+    MdEmail
 } from 'react-icons/md';
-import { BsPerson, BsPersonAdd, BsFillTelephoneFill } from 'react-icons/bs';
+import { BsPerson, BsPersonAdd, BsFillTelephoneFill, BsFillFlagFill } from 'react-icons/bs';
+import { FaRegAddressCard, FaCity, FaBuilding, FaCreditCard } from 'react-icons/fa';
 import { fetchData, postData } from 'modules/utilities/util_query';
 import { useQuery, useMutation } from 'react-query';
 import { checkObject, isError } from 'modules/utilities';
@@ -75,16 +69,37 @@ import { useSelector } from 'react-redux';
 
 
 
-const EditModal = ({ handleEditSubmit, onClose, values, handleChange, errors }) => (
+const EditModal = ({ handleEditSubmit, onClose, values, handleChange, errors, loading }) => (
     <>
         <ModalHeader>Edit Supplier Information</ModalHeader>
         <ModalCloseButton />
         <ModalBody>
             <Grid templateColumns="repeat(2, 1fr)" gap={4}>
+                <FormControl id="company_name">
+                    <FormLabel fontSize="sm" fontWeight='bold'>Company Name: *</FormLabel>
+                    <InputGroup borderColor="#E0E1E7">
+                        <InputLeftElement
+                            pointerEvents="none"
+                            children={<FaBuilding color="gray.800" />}
+                        />
+                        <Input
+                            isInvalid={isError(errors?.company_name)}
+                            errorBorderColor='red.300'
+                            name={'company_name'}
+                            onChange={handleChange}
+                            type="text"
+                            size="sm"
+                            value={values?.company_name || ''}
+                            borderRadius='15px'
+                            borderColor="rgba(255, 255, 255, 0.2)"
+                            _placeholder={{ opacity: 0.2, color: 'white' }}
+                        />
+                    </InputGroup>
+                </FormControl>
 
 
                 <FormControl id="first_name">
-                    <FormLabel fontSize="sm" fontWeight='bold'>First Name:</FormLabel>
+                    <FormLabel fontSize="sm" fontWeight='bold'>First Name: *</FormLabel>
                     <InputGroup borderColor="#E0E1E7">
                         <InputLeftElement
                             pointerEvents="none"
@@ -112,7 +127,7 @@ const EditModal = ({ handleEditSubmit, onClose, values, handleChange, errors }) 
 
 
                 <FormControl id="last_name">
-                    <FormLabel fontSize="sm" fontWeight='bold'>Last Name:</FormLabel>
+                    <FormLabel fontSize="sm" fontWeight='bold'>Last Name: *</FormLabel>
                     <InputGroup borderColor="#E0E1E7">
                         <InputLeftElement
                             pointerEvents="none"
@@ -133,34 +148,14 @@ const EditModal = ({ handleEditSubmit, onClose, values, handleChange, errors }) 
                     </InputGroup>
                 </FormControl>
 
-                <FormControl id="company_name">
-                    <FormLabel fontSize="sm" fontWeight='bold'>Company Name:</FormLabel>
-                    <InputGroup borderColor="#E0E1E7">
-                        <InputLeftElement
-                            pointerEvents="none"
-                            children={<BsPerson color="gray.800" />}
-                        />
-                        <Input
-                            isInvalid={isError(errors?.company_name)}
-                            errorBorderColor='red.300'
-                            name={'company_name'}
-                            onChange={handleChange}
-                            type="text"
-                            size="sm"
-                            value={values?.company_name || ''}
-                            borderRadius='15px'
-                            borderColor="rgba(255, 255, 255, 0.2)"
-                            _placeholder={{ opacity: 0.2, color: 'white' }}
-                        />
-                    </InputGroup>
-                </FormControl>
+
 
                 <FormControl id="email">
                     <FormLabel fontSize="sm" fontWeight='bold'>E-Mail:</FormLabel>
                     <InputGroup borderColor="#E0E1E7">
                         <InputLeftElement
                             pointerEvents="none"
-                            children={<BsPerson color="gray.800" />}
+                            children={<MdEmail color="gray.800" />}
                         />
                         <Input
                             isInvalid={isError(errors?.email)}
@@ -182,7 +177,7 @@ const EditModal = ({ handleEditSubmit, onClose, values, handleChange, errors }) 
                     <InputGroup borderColor="#E0E1E7">
                         <InputLeftElement
                             pointerEvents="none"
-                            children={<BsPerson color="gray.800" />}
+                            children={<BsFillTelephoneFill color="gray.800" />}
                         />
                         <Input
                             isInvalid={isError(errors?.phone_no)}
@@ -203,7 +198,7 @@ const EditModal = ({ handleEditSubmit, onClose, values, handleChange, errors }) 
                     <InputGroup borderColor="#E0E1E7">
                         <InputLeftElement
                             pointerEvents="none"
-                            children={<BsPerson color="gray.800" />}
+                            children={<FaRegAddressCard color="gray.800" />}
                         />
                         <Input
                             isInvalid={isError(errors?.address_1)}
@@ -225,7 +220,7 @@ const EditModal = ({ handleEditSubmit, onClose, values, handleChange, errors }) 
                     <InputGroup borderColor="#E0E1E7">
                         <InputLeftElement
                             pointerEvents="none"
-                            children={<BsPerson color="gray.800" />}
+                            children={<FaRegAddressCard color="gray.800" />}
                         />
                         <Input
                             isInvalid={isError(errors?.address_2)}
@@ -246,7 +241,7 @@ const EditModal = ({ handleEditSubmit, onClose, values, handleChange, errors }) 
                     <InputGroup borderColor="#E0E1E7">
                         <InputLeftElement
                             pointerEvents="none"
-                            children={<BsPerson color="gray.800" />}
+                            children={<FaCity color="gray.800" />}
                         />
                         <Input
                             isInvalid={isError(errors?.city)}
@@ -268,7 +263,7 @@ const EditModal = ({ handleEditSubmit, onClose, values, handleChange, errors }) 
                     <InputGroup borderColor="#E0E1E7">
                         <InputLeftElement
                             pointerEvents="none"
-                            children={<BsPerson color="gray.800" />}
+                            children={<MdLocationOn color="gray.800" />}
                         />
                         <Input
                             isInvalid={isError(errors?.state)}
@@ -289,7 +284,7 @@ const EditModal = ({ handleEditSubmit, onClose, values, handleChange, errors }) 
                     <InputGroup borderColor="#E0E1E7">
                         <InputLeftElement
                             pointerEvents="none"
-                            children={<BsPerson color="gray.800" />}
+                            children={<AiOutlineNumber color="gray.800" />}
                         />
                         <Input
                             isInvalid={isError(errors?.zip)}
@@ -311,7 +306,7 @@ const EditModal = ({ handleEditSubmit, onClose, values, handleChange, errors }) 
                     <InputGroup borderColor="#E0E1E7">
                         <InputLeftElement
                             pointerEvents="none"
-                            children={<BsPerson color="gray.800" />}
+                            children={<BsFillFlagFill color="gray.800" />}
                         />
                         <Input
                             isInvalid={isError(errors?.country)}
@@ -332,7 +327,7 @@ const EditModal = ({ handleEditSubmit, onClose, values, handleChange, errors }) 
                     <InputGroup borderColor="#E0E1E7">
                         <InputLeftElement
                             pointerEvents="none"
-                            children={<BsPerson color="gray.800" />}
+                            children={<FaCreditCard color="gray.800" />}
                         />
                         <Input
                             isInvalid={isError(errors?.account)}
@@ -369,10 +364,10 @@ const EditModal = ({ handleEditSubmit, onClose, values, handleChange, errors }) 
         </ModalBody>
 
         <ModalFooter>
-            <Button colorScheme='blue' mr={3} onClick={onClose}>
+            <Button colorScheme='red' mr={3} onClick={onClose}>
                 Close
             </Button>
-            <Button onClick={handleEditSubmit} variant='outline'  colorScheme="blue">Add Supplier</Button>
+            <Button isLoading={loading} onClick={handleEditSubmit} colorScheme="blue">Edit Supplier</Button>
         </ModalFooter>
 
     </>
@@ -380,7 +375,7 @@ const EditModal = ({ handleEditSubmit, onClose, values, handleChange, errors }) 
 
 );
 
-const AddModal = ({ handleSubmit, onClose, values, handleChange, errors }) => (
+const AddModal = ({ handleSubmit, onClose, values, handleChange, errors, loading }) => (
     <>
         <ModalHeader>Supplier Information</ModalHeader>
         <ModalCloseButton />
@@ -389,11 +384,11 @@ const AddModal = ({ handleSubmit, onClose, values, handleChange, errors }) => (
             <Grid templateColumns="repeat(2, 1fr)" gap={4}>
 
                 <FormControl id="company_name">
-                    <FormLabel fontSize="sm" fontWeight='bold'>Company Name:</FormLabel>
+                    <FormLabel fontSize="sm" fontWeight='bold'>Company Name: *</FormLabel>
                     <InputGroup borderColor="#E0E1E7">
                         <InputLeftElement
                             pointerEvents="none"
-                            children={<BsPerson color="gray.800" />}
+                            children={<FaBuilding color="gray.800" />}
                         />
                         <Input
                             isInvalid={isError(errors?.company_name)}
@@ -412,7 +407,7 @@ const AddModal = ({ handleSubmit, onClose, values, handleChange, errors }) => (
                 </FormControl>
 
                 <FormControl id="first_name">
-                    <FormLabel fontSize="sm" fontWeight='bold'>First Name:</FormLabel>
+                    <FormLabel fontSize="sm" fontWeight='bold'>First Name: *</FormLabel>
                     <InputGroup borderColor="#E0E1E7">
                         <InputLeftElement
                             pointerEvents="none"
@@ -434,7 +429,7 @@ const AddModal = ({ handleSubmit, onClose, values, handleChange, errors }) => (
                     </InputGroup>
                 </FormControl>
                 <FormControl id="last_name">
-                    <FormLabel fontSize="sm" fontWeight='bold'>Last Name:</FormLabel>
+                    <FormLabel fontSize="sm" fontWeight='bold'>Last Name: *</FormLabel>
                     <InputGroup borderColor="#E0E1E7">
                         <InputLeftElement
                             pointerEvents="none"
@@ -460,7 +455,7 @@ const AddModal = ({ handleSubmit, onClose, values, handleChange, errors }) => (
                     <InputGroup borderColor="#E0E1E7">
                         <InputLeftElement
                             pointerEvents="none"
-                            children={<BsPerson color="gray.800" />}
+                            children={<MdEmail color="gray.800" />}
                         />
                         <Input
                             isInvalid={isError(errors?.email)}
@@ -482,7 +477,7 @@ const AddModal = ({ handleSubmit, onClose, values, handleChange, errors }) => (
                     <InputGroup borderColor="#E0E1E7">
                         <InputLeftElement
                             pointerEvents="none"
-                            children={<BsPerson color="gray.800" />}
+                            children={<BsFillTelephoneFill color="gray.800" />}
                         />
                         <Input
                             isInvalid={isError(errors?.phone_no)}
@@ -504,7 +499,7 @@ const AddModal = ({ handleSubmit, onClose, values, handleChange, errors }) => (
                     <InputGroup borderColor="#E0E1E7">
                         <InputLeftElement
                             pointerEvents="none"
-                            children={<BsPerson color="gray.800" />}
+                            children={<FaRegAddressCard color="gray.800" />}
                         />
                         <Input
                             isInvalid={isError(errors?.address_1)}
@@ -526,7 +521,7 @@ const AddModal = ({ handleSubmit, onClose, values, handleChange, errors }) => (
                     <InputGroup borderColor="#E0E1E7">
                         <InputLeftElement
                             pointerEvents="none"
-                            children={<BsPerson color="gray.800" />}
+                            children={<FaRegAddressCard color="gray.800" />}
                         />
                         <Input
                             isInvalid={isError(errors?.address_2)}
@@ -548,7 +543,7 @@ const AddModal = ({ handleSubmit, onClose, values, handleChange, errors }) => (
                     <InputGroup borderColor="#E0E1E7">
                         <InputLeftElement
                             pointerEvents="none"
-                            children={<BsPerson color="gray.800" />}
+                            children={<FaCity color="gray.800" />}
                         />
                         <Input
                             isInvalid={isError(errors?.city)}
@@ -562,7 +557,7 @@ const AddModal = ({ handleSubmit, onClose, values, handleChange, errors }) => (
                             borderColor="rgba(255, 255, 255, 0.2)"
                             _placeholder={{ opacity: 0.2, color: 'white' }}
                             placeholder="eg. Onitsha"
-                            
+
                         />
                     </InputGroup>
                 </FormControl>
@@ -571,7 +566,7 @@ const AddModal = ({ handleSubmit, onClose, values, handleChange, errors }) => (
                     <InputGroup borderColor="#E0E1E7">
                         <InputLeftElement
                             pointerEvents="none"
-                            children={<BsPerson color="gray.800" />}
+                            children={<MdLocationOn color="gray.800" />}
                         />
                         <Input
                             isInvalid={isError(errors?.state)}
@@ -593,7 +588,7 @@ const AddModal = ({ handleSubmit, onClose, values, handleChange, errors }) => (
                     <InputGroup borderColor="#E0E1E7">
                         <InputLeftElement
                             pointerEvents="none"
-                            children={<BsPerson color="gray.800" />}
+                            children={<AiOutlineNumber color="gray.800" />}
                         />
                         <Input
                             isInvalid={isError(errors?.zip)}
@@ -615,7 +610,7 @@ const AddModal = ({ handleSubmit, onClose, values, handleChange, errors }) => (
                     <InputGroup borderColor="#E0E1E7">
                         <InputLeftElement
                             pointerEvents="none"
-                            children={<BsPerson color="gray.800" />}
+                            children={<BsFillFlagFill color="gray.800" />}
                         />
                         <Input
                             isInvalid={isError(errors?.country)}
@@ -637,7 +632,7 @@ const AddModal = ({ handleSubmit, onClose, values, handleChange, errors }) => (
                     <InputGroup borderColor="#E0E1E7">
                         <InputLeftElement
                             pointerEvents="none"
-                            children={<BsPerson color="gray.800" />}
+                            children={<FaCreditCard color="gray.800" />}
                         />
                         <Input
                             isInvalid={isError(errors?.account)}
@@ -674,17 +669,17 @@ const AddModal = ({ handleSubmit, onClose, values, handleChange, errors }) => (
         </ModalBody>
 
         <ModalFooter>
-            <Button colorScheme='blue' mr={3} onClick={onClose}>
+            <Button colorScheme='red' mr={3} onClick={onClose}>
                 Close
             </Button>
-            <Button onClick={handleSubmit} variant='outline'  colorScheme="blue">Add Supplier</Button>
+            <Button isLoading={loading} onClick={handleSubmit} colorScheme="blue">Add Supplier</Button>
         </ModalFooter>
     </>
 
 
 );
 
-const DeleteModal = ({ onClose, values, handleDeleteSubmit }) => (
+const DeleteModal = ({ onClose, values, handleDeleteSubmit, loading }) => (
     <>
         <ModalHeader>Delete Supplier Information</ModalHeader>
         <ModalCloseButton />
@@ -699,7 +694,7 @@ const DeleteModal = ({ onClose, values, handleDeleteSubmit }) => (
             <Button variant='ghost' mr={3} onClick={onClose}>
                 Close
             </Button>
-            <Button colorScheme='red' onClick={handleDeleteSubmit}>Yes</Button>
+            <Button isLoading={loading} colorScheme='red' onClick={handleDeleteSubmit}>Yes</Button>
         </ModalFooter>
     </>
 
@@ -710,10 +705,11 @@ export default function Dashboard() {
     const [values, setValues] = React.useState({});
     const [errors, setErrors] = React.useState({});
 
-    const [suppliers, SetSuppliers] = React.useState([]);
+    const [suppliers, setSuppliers] = React.useState([]);
     const [count, setCount] = React.useState(0);
     const [pageCount, setPageCount] = useState(1);
     const [page, setPage] = useState(1);
+    const [loading, setLoading] = useState(false);
 
     const token = useSelector(getAuthToken);
 
@@ -728,6 +724,7 @@ export default function Dashboard() {
 
     const onModalClose = () => {
         setValues({});
+        setErrors({});
         onClose();
     }
 
@@ -748,7 +745,7 @@ export default function Dashboard() {
             onSuccess: (response) => {
                 const data = response?.data;
                 setCount(data?.count || 0);
-                SetSuppliers(data?.results || []);
+                setSuppliers(data?.results || []);
                 setPageCount(data?.last_page || 1);
                 console.log(data?.results);
             },
@@ -773,13 +770,15 @@ export default function Dashboard() {
             });
             setValues({});
             setErrors({});
-            onClose();
+            setLoading(false);
+            onModalClose();
             refetch();
 
             return;
         },
         onError: (error) => {
             handleApiError(error);
+            setLoading(false);
         }
     });
 
@@ -838,6 +837,7 @@ export default function Dashboard() {
         }
 
         const data = values;
+        setLoading(true);
         mutation.mutate(
             {
                 url: GET_CREATE_SUPPLIERS,
@@ -873,6 +873,7 @@ export default function Dashboard() {
         }
 
         const data = values;
+        setLoading(true);
         mutation.mutate(
             {
                 url: UPDATE_SUPPLIERS,
@@ -888,8 +889,7 @@ export default function Dashboard() {
 
     const handleDeleteSubmit = () => {
         const data = values;
-        console.log(data);
-
+        setLoading(true);
         mutation.mutate({
             url: DELETE_SUPPLIER,
             payload_data: data,
@@ -929,11 +929,14 @@ export default function Dashboard() {
                     boxShadow="rgba(0, 0, 0, 0.1) 0px 0px 0px 1px,rgba(0, 0, 0, 0.2) 0px 5px 10px,rgba(0, 0, 0, 0.4) 0px 15px 40px"
                 >
 
-                    {modalType === "add" ? 
-                        <AddModal onClose={onModalClose} handleSubmit={handleSubmit} values={values} handleChange={handleChange} errors={errors} /> : 
+                    {modalType === "add" ?
+                        <AddModal onClose={onModalClose} handleSubmit={handleSubmit} values={values}
+                            handleChange={handleChange} errors={errors} loading={loading} /> :
                         modalType === "edit" ?
-                        <EditModal onClose={onModalClose} handleEditSubmit={handleEditSubmit} values={values} errors={errors} handleChange={handleChange} /> :
-                        <DeleteModal onClose={onModalClose} values={values} handleDeleteSubmit={handleDeleteSubmit} />}
+                            <EditModal onClose={onModalClose} handleEditSubmit={handleEditSubmit} values={values} errors={errors}
+                                handleChange={handleChange} loading={loading} /> :
+                            <DeleteModal onClose={onModalClose} values={values} handleDeleteSubmit={handleDeleteSubmit}
+                                loading={loading} />}
 
 
                 </ModalContent>
@@ -1009,7 +1012,7 @@ export default function Dashboard() {
                                     </Flex>
                                 </Stat>
                                 <IconBox as="box" h={"45px"} w={"45px"}>
-                                    <Icon h={"35px"} w={"35px"} as={MdLocationCity} color='#fff' />
+                                    <Icon h={"35px"} w={"35px"} as={FaBuilding} color='#fff' />
 
                                 </IconBox>
                             </Flex>
@@ -1055,7 +1058,7 @@ export default function Dashboard() {
                                     fontWeight="bold"
                                     pb=".5rem"
                                 >
-                                    SUPPLIERS LISTINGS (FEB 2023)
+                                    SUPPLIERS LISTINGS (2023)
                                 </Text>
                                 <Flex align="center">
                                     <ButtonGroup spacing='2' padding='2'>
@@ -1070,11 +1073,11 @@ export default function Dashboard() {
                                 </Flex>
                             </Flex>
                         </CardHeader>
-                        <Table variant="unstyled" size='md'>
+                        <Table variant="unstyled" size='sm'>
                             <Thead>
                                 <Tr my=".8rem" ps="0px">
-                                    <Th color="gray.400">FIRST NAME</Th>
-                                    <Th color="gray.400">LAST NAME</Th>
+                                    <Th color="gray.400">COMPANY NAME</Th>
+                                    <Th color="gray.400">NAME</Th>
                                     <Th color="gray.400"> PHONE NUMBER </Th>
                                     <Th color="gray.400">EMAIL ADDRESS</Th>
                                     <Th color="gray.400">PRICE PURCHASED (TOTAL)</Th>
@@ -1090,8 +1093,8 @@ export default function Dashboard() {
                                     return (
                                         <DashboardTableRow3
                                             key={index}
+                                            company_name={row.company_name}
                                             first_name={row.first_name}
-                                            last_name={row.last_name}
                                             phone_no={row.phone_no}
                                             email={row.email}
                                             total_purchased={row.total_purchased}

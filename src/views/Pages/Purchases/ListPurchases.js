@@ -1,46 +1,3 @@
-
-//---customers table
-//change table used by the customer table
-
-
-//---add purchase
-//adjust the list purchase form for suppliers and categories fields
-
-
-//---additems page
-//listing of sales in order starting from latest sales
-// Should amount be more than 100m?
-//reduce number of items in item count
-
-
-//remove all console.log statements 
-//make tabs and dropdowns where user dont have permissions to be invisible to them
-//include loading state in necessary buttons 
-// required star indicator on required fields
-//ability to filter and edit items in bulk
-// side menu bar components icon colouring on mobile version
-
-
-//===checks 
-//upload the csv files twice, each new upload should replace the onw already in the database(when done through csvupload)
-// in the add purchase/ menu, you are importing asynselect.css file, it might not be useful because the async select in add items/sales page doesnt import it and still seems to have the same styling
-// inquire from maxiskills(for each of the 3 branches) and chuks ekesons price of software
-//ask ebuka for team departments, include them in selection(when creating new user) and profile?
-//change email to username login
-//add new customer button to add items page?
-// all list pages should have defined ordering(alphabetical, date etc.)
-
-
-
-
-
-
-
-
-
-
-
-
 // Chakra imports
 import {
     Box,
@@ -124,7 +81,7 @@ import "theme/asyncSelect.css";
 const EditModal = ({ handleChange, handleSwitchChange, handleEditSubmit, onClose, item, setItem,
     loadCategories, loadSuppliers, errors, loading, nameRef, barcodeRef, categoryInput, setCategoryInput,
     supplierInput, setSupplierInput, costPriceRef, unitPriceRef, quantityRef, reorderLevelRef, tax1Ref,
-    tax2Ref, allowAltRef, hasSerialNoRef }) => {
+    tax2Ref, allowAltRef, hasSerialNoRef, categoryRef, supplierRef }) => {
 
     return (
         <ModalContent
@@ -151,7 +108,7 @@ const EditModal = ({ handleChange, handleSwitchChange, handleEditSubmit, onClose
                                 name={'barcode'}
                                 type="text"
                                 size="sm"
-                                defaultvalue={item?.barcode || ''}
+                                defaultValue={item?.barcode || ''}
                                 borderRadius='15px'
                                 borderColor="rgba(255, 255, 255, 0.2)"
                                 _placeholder={{ opacity: 0.2, color: 'white' }}
@@ -189,18 +146,17 @@ const EditModal = ({ handleChange, handleSwitchChange, handleEditSubmit, onClose
 
                                 if (action === 'clear') {
                                     // When the user clears the input, reset both the state and the displayed value
-                                    setCategoryInput
+                                    setCategoryInput({label: null, value: null});
                                 }
                                 else {
-                                    const temp = { label: selectedOption.label, value: selectedOption.value }
-                                    setItem({ ...item, category: selectedOption.value, category_data: temp });
+                                    setCategoryInput({label: selectedOption.label, value: selectedOption.value});
                                 }
                             }}
                             placeholder="Start typing name..."
                             loadOptions={loadCategories}
                             isClearable={true}
                             cacheOptions
-                            value={item?.category_data}
+                            value={categoryInput}
                             className="chakra-react-select"
                             classNamePrefix="chakra-react-select"
                         />
@@ -216,18 +172,17 @@ const EditModal = ({ handleChange, handleSwitchChange, handleEditSubmit, onClose
 
                                 if (action === 'clear') {
                                     // When the user clears the input, reset both the state and the displayed value
-                                    setItem({ ...item, supplier: null, supplier_data: null });
+                                    setSupplierInput({label: null, value: null});
                                 }
                                 else {
-                                    const temp = { label: selectedOption.label, value: selectedOption.value }
-                                    setItem({ ...item, supplier: selectedOption.value, supplier_data: temp });
+                                    setSupplierInput({label: selectedOption.label, value: selectedOption.value});
                                 }
                             }}
                             placeholder="Start typing name..."
                             loadOptions={loadSuppliers}
                             isClearable={true}
                             cacheOptions
-                            value={item?.supplier_data}
+                            value={supplierInput}
                             //getOptionLabel={(option) => option.supplier_ID} // Use the same property name
                             //getOptionValue={(option) => option.supplier_ID} // Use the same property name
                             className="chakra-react-select"
@@ -247,11 +202,11 @@ const EditModal = ({ handleChange, handleSwitchChange, handleEditSubmit, onClose
                             <Input
                                 isInvalid={isError(errors?.cost_price)}
                                 errorBorderColor='red.300'
-                                name={'cost_price'}
-                                onChange={handleChange}
+                                ref={costPriceRef}
+                                name={'cost_price'}                          
                                 type="text"
                                 size="sm"
-                                value={item?.cost_price || ''}
+                                defaultValue={item?.cost_price}
                                 borderRadius='15px'
                                 borderColor="rgba(255, 255, 255, 0.2)"
                                 _placeholder={{ opacity: 0.2, color: 'white' }}
@@ -268,11 +223,12 @@ const EditModal = ({ handleChange, handleSwitchChange, handleEditSubmit, onClose
                             <Input
                                 isInvalid={isError(errors?.unit_price)}
                                 errorBorderColor='red.300'
+                                ref={unitPriceRef}
                                 name={'unit_price'}
-                                onChange={handleChange}
+                                
                                 type="number"
                                 size="sm"
-                                value={item?.unit_price || ''}
+                                defaultValue={item?.unit_price}
                                 borderRadius='15px'
                                 borderColor="rgba(255, 255, 255, 0.2)"
                                 _placeholder={{ opacity: 0.2, color: 'white' }}
@@ -289,11 +245,11 @@ const EditModal = ({ handleChange, handleSwitchChange, handleEditSubmit, onClose
                             <Input
                                 isInvalid={isError(errors?.quantity)}
                                 errorBorderColor='red.300'
+                                ref={quantityRef}
                                 name={'quantity'}
-                                onChange={handleChange}
                                 type="number"
                                 size="sm"
-                                value={item?.quantity || ''}
+                                defaultValue={item?.quantity}
                                 borderRadius='15px'
                                 borderColor="rgba(255, 255, 255, 0.2)"
                                 _placeholder={{ opacity: 0.2, color: 'white' }}
@@ -310,11 +266,11 @@ const EditModal = ({ handleChange, handleSwitchChange, handleEditSubmit, onClose
                             <Input
                                 isInvalid={isError(errors?.reorder_level)}
                                 errorBorderColor='red.300'
+                                ref={reorderLevelRef}
                                 name={'reorder_level'}
-                                onChange={handleChange}
                                 type="number"
                                 size="sm"
-                                value={item?.reorder_level || ''}
+                                defaultValue={item?.reorder_level}
                                 borderRadius='15px'
                                 borderColor="rgba(255, 255, 255, 0.2)"
                                 _placeholder={{ opacity: 0.2, color: 'white' }}
@@ -331,11 +287,11 @@ const EditModal = ({ handleChange, handleSwitchChange, handleEditSubmit, onClose
                             <Input
                                 isInvalid={isError(errors?.tax1_percent)}
                                 errorBorderColor='red.300'
+                                ref={tax1Ref}
                                 name={'tax1_percent'}
-                                onChange={handleChange}
                                 type="number"
                                 size="sm"
-                                value={item?.tax1_percent || ''}
+                                defaultValue={item?.tax1_percent}
                                 borderRadius='15px'
                                 borderColor="rgba(255, 255, 255, 0.2)"
                                 _placeholder={{ opacity: 0.2, color: 'white' }}
@@ -352,11 +308,11 @@ const EditModal = ({ handleChange, handleSwitchChange, handleEditSubmit, onClose
                             <Input
                                 isInvalid={isError(errors?.tax2_percent)}
                                 errorBorderColor='red.300'
+                                ref={tax2Ref}
                                 name={'tax2_percent'}
-                                onChange={handleChange}
                                 type="number"
                                 size="sm"
-                                value={item?.tax2_percent || ''}
+                                defaultValue={item?.tax2_percent}
                                 borderRadius='15px'
                                 borderColor="rgba(255, 255, 255, 0.2)"
                                 _placeholder={{ opacity: 0.2, color: 'white' }}
@@ -367,8 +323,8 @@ const EditModal = ({ handleChange, handleSwitchChange, handleEditSubmit, onClose
                     <FormControl id="">
                         <FormLabel fontSize="sm" fontWeight='bold'>Allow Alt.</FormLabel>
                         <Switch
-                            isChecked={item?.allow_alt}
-                            onChange={handleSwitchChange}
+                            ref={allowAltRef}
+                            defaultChecked={item?.allow_alt}
                             name={"allow_alt"}
                             size="md"
                             colorScheme="blue"
@@ -377,8 +333,8 @@ const EditModal = ({ handleChange, handleSwitchChange, handleEditSubmit, onClose
                     <FormControl id="">
                         <FormLabel fontSize="sm" fontWeight='bold'>Item S/N?</FormLabel>
                         <Switch
-                            isChecked={item?.has_serial_no}
-                            onChange={handleSwitchChange}
+                            ref={hasSerialNoRef}
+                            defaultChecked={item?.has_serial_no}
                             name={"has_serial_no"}
                             size="md"
                             colorScheme="blue"
@@ -476,14 +432,16 @@ export default function Dashboard() {
     const barcodeRef = React.useRef(null);
     const [categoryInput, setCategoryInput] = React.useState(null);
     const [supplierInput, setSupplierInput] = React.useState(null);
-    const costPriceRef = useRef(null);
-    const unitPriceRef = useRef(null);
-    const quantityRef = useRef(null);
-    const reorderLevelRef = useRef(null);
-    const tax1Ref = useRef(null);
-    const tax2Ref = useRef(null);
-    const allowAltRef = useRef(null);
-    const hasSerialNoRef = useRef(null);
+    const categoryRef = React.useRef(null);
+    const supplierRef = React.useRef(null);
+    const costPriceRef = React.useRef(null);
+    const unitPriceRef = React.useRef(null);
+    const quantityRef = React.useRef(null);
+    const reorderLevelRef = React.useRef(null);
+    const tax1Ref = React.useRef(null);
+    const tax2Ref = React.useRef(null);
+    const allowAltRef = React.useRef(null);
+    const hasSerialNoRef = React.useRef(null);
 
     const [values, setValues] = React.useState({});
     const [errors, setErrors] = React.useState({});
@@ -624,14 +582,14 @@ export default function Dashboard() {
         setItem({ ...item, [event.target.name]: !item[event.target.name] });
     }
 
-    const validate = () => {
+    const validate = (updatedItem) => {
         let uerrors = {}
-        uerrors.name = item?.name ? "" : FIELD_REQUIRED;
-        uerrors.cost_price = item?.cost_price ? "" : FIELD_REQUIRED;
-        uerrors.unit_price = item?.unit_price ? "" : FIELD_REQUIRED;
-        uerrors.quantity = item?.quantity ? "" : FIELD_REQUIRED;
+        uerrors.name = updatedItem?.name ? "" : FIELD_REQUIRED;
+        uerrors.cost_price = updatedItem?.cost_price ? "" : FIELD_REQUIRED;
+        uerrors.unit_price = updatedItem?.unit_price ? "" : FIELD_REQUIRED;
+        uerrors.quantity = updatedItem?.quantity ? "" : FIELD_REQUIRED;
 
-        if (!item?.name || !item?.cost_price || !item?.unit_price || !item?.quantity) {
+        if (!updatedItem?.name || !updatedItem?.cost_price || !updatedItem?.unit_price || !updatedItem?.quantity) {
             toast({
                 title: 'Missing Information.',
                 description: "Please fill all required fields.",
@@ -648,7 +606,23 @@ export default function Dashboard() {
 
     const handleEditSubmit = () => {
 
-        let checkErrors = validate();
+        const updatedItem = {
+            id: item?.id,
+            barcode: barcodeRef.current.value,
+            name: nameRef.current.value,
+            category: categoryInput?.value,
+            supplier: supplierInput?.value,
+            cost_price: costPriceRef.current.value,
+            unit_price: unitPriceRef.current.value,
+            quantity: quantityRef.current.value,
+            reorder_level: reorderLevelRef.current.value,
+            tax1_percent: tax1Ref.current.value,
+            tax2_percent: tax2Ref.current.value,
+            allow_alt: allowAltRef.current.checked,
+            has_serial_no: hasSerialNoRef.current.checked
+          };
+
+        let checkErrors = validate(updatedItem);
         let areAllFieldsFalse = checkObject(checkErrors);
 
 
@@ -659,14 +633,13 @@ export default function Dashboard() {
             return;
         }
 
-        console.log(item);
-        const data = { ...item };
+        console.log(updatedItem);
 
         setLoading(true);
         mutation.mutate(
             {
                 url: UPDATE_ITEM,
-                payload_data: data,
+                payload_data: updatedItem,
                 token: token,
                 authenticate: true
             }
@@ -725,7 +698,8 @@ export default function Dashboard() {
                         categoryInput={categoryInput} setCategoryInput={setCategoryInput}
                         supplierInput={supplierInput} setSupplierInput={setSupplierInput}
                         quantityRef={quantityRef} reorderLevelRef={reorderLevelRef} tax1Ref={tax1Ref}
-                        tax2Ref={tax2Ref} allowAltRef={allowAltRef} hasSerialNoRef={hasSerialNoRef} /> : modalType === "delete" ?
+                        tax2Ref={tax2Ref} allowAltRef={allowAltRef} hasSerialNoRef={hasSerialNoRef}
+                        categoryRef={categoryRef} supplierRef={supplierRef}/> : modalType === "delete" ?
                         <DeleteModal onClose={onModalClose} item={item} handleDeleteSubmit={handleDeleteSubmit} loading={loading} /> :
                         <TrackingModal onClose={onModalClose} item={item} />}
 
@@ -777,6 +751,8 @@ export default function Dashboard() {
                                             quantity={row.quantity}
                                             onEditClick={() => {
                                                 setItem(row);
+                                                setCategoryInput(row.category_data);
+                                                setSupplierInput(row.supplier_data);
                                                 setModalType('edit');
                                                 onOpen();
                                             }}

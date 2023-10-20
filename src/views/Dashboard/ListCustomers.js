@@ -6,6 +6,7 @@ import {
     Center,
     Flex,
     Grid,
+    HStack,
     Icon,
     SimpleGrid,
     Stat,
@@ -24,25 +25,17 @@ import {
     Th,
     Thead,
     Tr,
-    useColorMode,
-    useColorModeValue,
     useDisclosure,
     Container,
-    Heading,
-    IconButton,
-    VStack,
-    HStack,
-    Wrap,
-    WrapItem,
     FormControl,
     FormLabel,
     Input,
     InputGroup,
     InputLeftElement,
+    Spinner,
     Textarea,
 } from "@chakra-ui/react";
 import { useToast } from '@chakra-ui/react';
-import { useParams, useHistory } from 'react-router-dom';
 // Custom components
 import Card from "components/Card/Card.js";
 import CardBody from "components/Card/CardBody.js";
@@ -52,323 +45,555 @@ import { PersonIcon } from "components/Icons/Icons";
 // Custom icons
 
 import { DashboardTableRow3 } from "components/Tables/DashboardTableRow";
-import TimelineRow from "components/Tables/TimelineRow";
 import MyPaginate from "components/Pagination";
 import React, { useState } from "react";
 // react icons
-import { TbCurrencyNaira, TbGitCompare } from 'react-icons/tb';
+import { AiOutlineNumber } from 'react-icons/ai';
+import { TbPhone } from 'react-icons/tb';
 import {
-    MdError,
-    MdFilterList,
-    MdPhone,
-    MdEmail,
+    MdLocationCity,
     MdLocationOn,
-    MdFacebook,
-    MdOutlineEmail,
+    MdEmail
 } from 'react-icons/md';
-import { AiOutlineNumber, AiOutlineMacCommand } from 'react-icons/ai';
-import { BsGithub, BsDiscord, BsPerson, BsPersonAdd } from 'react-icons/bs';
-import { dashboardTableData4 } from "variables/general";
-import { SalesOverviewData } from "variables/general2";
+import { BsPerson, BsPersonAdd, BsFillTelephoneFill, BsFillFlagFill } from 'react-icons/bs';
+import { FaRegAddressCard, FaCity } from 'react-icons/fa';
+import { fetchData, postData } from 'modules/utilities/util_query';
+import { useQuery, useMutation } from 'react-query';
+import { checkObject, isError } from 'modules/utilities';
+import { handleApiError } from "modules/utilities/responseHandlers";
+import validator from 'validator';
+import { GET_CREATE_CUSTOMERS, UPDATE_CUSTOMERS, DELETE_CUSTOMERS } from 'config/serverUrls';
+import { FIELD_REQUIRED } from 'constants/formErrorMessages';
+import { getAuthToken } from 'modules/auth/redux/authSelector';
+import { useSelector } from 'react-redux';
 
-const EditModal = ({onEditChange, handleEditSubmit, onClose, currentCustomer}) => (
-    <ModalContent>
+const EditModal = ({ handleEditSubmit, onClose, values, handleChange, errors, loading}) => (
+    <>
         <ModalHeader>Edit Customer Information</ModalHeader>
         <ModalCloseButton />
         <ModalBody>
-            <Container bg="#9DC4FB" maxW="full" mt={0} overflow="hidden">
-                <Box bg="white" maxW="full">
-                    <Box
-                        color="white"
-                        borderRadius="lg">
-                        <Box p={1}>
+            <Grid templateColumns="repeat(2, 1fr)" gap={4}>
 
-                            <Box borderRadius="lg">
-                                <Box m={8} color="#0B0E3F">
-                                    <VStack spacing={2} maxW="full">
 
-                                        <FormControl id="first_name">
-                                            <FormLabel>First Name</FormLabel>
-                                            <InputGroup borderColor="#E0E1E7">
-                                                <InputLeftElement
-                                                    pointerEvents="none"
-                                                    children={<BsPerson color="gray.800" />}
-                                                />
-                                                <Input name="first_name" type="text" size="sm" onChange={onEditChange} value={currentCustomer?.first_name || ''} />
-                                            </InputGroup>
-                                        </FormControl>
-                                        <FormControl id="last_name">
-                                            <FormLabel>Last Name</FormLabel>
-                                            <InputGroup borderColor="#E0E1E7">
-                                                <InputLeftElement
-                                                    pointerEvents="none"
-                                                    children={<BsPerson color="gray.800" />}
-                                                />
-                                                <Input name="last_name" type="text" size="sm" onChange={onEditChange} value={currentCustomer?.last_name || ''} />
-                                            </InputGroup>
-                                        </FormControl>
-                                        <FormControl id="email">
-                                            <FormLabel>E-Mail:</FormLabel>
-                                            <InputGroup borderColor="#E0E1E7">
-                                                <InputLeftElement
-                                                    pointerEvents="none"
-                                                    children={<BsPerson color="gray.800" />}
-                                                />
-                                                <Input type="text" size="sm" onChange={onEditChange} />
-                                            </InputGroup>
-                                        </FormControl>
-                                        <FormControl id="phone_number">
-                                            <FormLabel>Phone Number:</FormLabel>
-                                            <InputGroup borderColor="#E0E1E7">
-                                                <InputLeftElement
-                                                    pointerEvents="none"
-                                                    children={<BsPerson color="gray.800" />}
-                                                />
-                                                <Input name="" type="text" size="sm" onChange={onEditChange} />
-                                            </InputGroup>
-                                        </FormControl>
-                                        <FormControl id="address_1">
-                                            <FormLabel>Address 1</FormLabel>
-                                            <InputGroup borderColor="#E0E1E7">
-                                                <InputLeftElement
-                                                    pointerEvents="none"
-                                                    children={<BsPerson color="gray.800" />}
-                                                />
-                                                <Input type="text" size="sm" onChange={onEditChange} />
-                                            </InputGroup>
-                                        </FormControl>
-                                        <FormControl id="address_2">
-                                            <FormLabel>Address 2</FormLabel>
-                                            <InputGroup borderColor="#E0E1E7">
-                                                <InputLeftElement
-                                                    pointerEvents="none"
-                                                    children={<BsPerson color="gray.800" />}
-                                                />
-                                                <Input name="" type="text" size="sm" onChange={onEditChange} />
-                                            </InputGroup>
-                                        </FormControl>
-                                        <FormControl id="city">
-                                            <FormLabel>City:</FormLabel>
-                                            <InputGroup borderColor="#E0E1E7">
-                                                <InputLeftElement
-                                                    pointerEvents="none"
-                                                    children={<BsPerson color="gray.800" />}
-                                                />
-                                                <Input name="" type="text" size="sm" onChange={onEditChange} />
-                                            </InputGroup>
-                                        </FormControl>
-                                        <FormControl id="state">
-                                            <FormLabel>State</FormLabel>
-                                            <InputGroup borderColor="#E0E1E7">
-                                                <InputLeftElement
-                                                    pointerEvents="none"
-                                                    children={<BsPerson color="gray.800" />}
-                                                />
-                                                <Input name="" type="text" size="sm" onChange={onEditChange} />
-                                            </InputGroup>
-                                        </FormControl>
-                                        <FormControl id="zip">
-                                            <FormLabel>Zip</FormLabel>
-                                            <InputGroup borderColor="#E0E1E7">
-                                                <InputLeftElement
-                                                    pointerEvents="none"
-                                                    children={<BsPerson color="gray.800" />}
-                                                />
-                                                <Input name="" type="text" size="sm" onChange={onEditChange} />
-                                            </InputGroup>
-                                        </FormControl>
-                                        <FormControl id="country">
-                                            <FormLabel>Country</FormLabel>
-                                            <InputGroup borderColor="#E0E1E7">
-                                                <InputLeftElement
-                                                    pointerEvents="none"
-                                                    children={<BsPerson color="gray.800" />}
-                                                />
-                                                <Input name="" type="text" size="sm" onChange={onEditChange} />
-                                            </InputGroup>
-                                        </FormControl>
-                                        <FormControl id="comments">
-                                            <FormLabel>Comments:</FormLabel>
-                                            <Textarea
-                                                borderColor="gray.300"
-                                                _hover={{
-                                                    borderRadius: 'gray.300',
-                                                }}
-                                                placeholder="message"
-                                            />
-                                        </FormControl>
-                                    </VStack>
-                                </Box>
-                            </Box>
+                <FormControl id="first_name">
+                    <FormLabel fontSize="sm" fontWeight='bold'>First Name: *</FormLabel>
+                    <InputGroup borderColor="#E0E1E7">
+                        <InputLeftElement
+                            pointerEvents="none"
+                            children={<BsPerson color="gray.800" />}
+                        />
+                        <Input
+                            isInvalid={isError(errors?.first_name)}
+                            errorBorderColor='red.300'
+                            name={'first_name'}
+                            onChange={handleChange}
+                            type="text"
+                            size="sm"
+                            value={values?.first_name || ''}
+                            borderRadius='15px'
+                            borderColor="rgba(255, 255, 255, 0.2)"
+                            _placeholder={{ opacity: 0.2, color: 'white' }}
+                        />
+                    </InputGroup>
+                </FormControl>
 
-                        </Box>
-                    </Box>
-                </Box>
-            </Container>
+
+
+
+
+
+
+                <FormControl id="last_name">
+                    <FormLabel fontSize="sm" fontWeight='bold'>Last Name: *</FormLabel>
+                    <InputGroup borderColor="#E0E1E7">
+                        <InputLeftElement
+                            pointerEvents="none"
+                            children={<BsPerson color="gray.800" />}
+                        />
+                        <Input
+                            isInvalid={isError(errors?.last_name)}
+                            errorBorderColor='red.300'
+                            name={'last_name'}
+                            onChange={handleChange}
+                            type="text"
+                            size="sm"
+                            value={values?.last_name || ''}
+                            borderRadius='15px'
+                            borderColor="rgba(255, 255, 255, 0.2)"
+                            _placeholder={{ opacity: 0.2, color: 'white' }}
+                        />
+                    </InputGroup>
+                </FormControl>
+
+                <FormControl id="email">
+                    <FormLabel fontSize="sm" fontWeight='bold'>E-Mail:</FormLabel>
+                    <InputGroup borderColor="#E0E1E7">
+                        <InputLeftElement
+                            pointerEvents="none"
+                            children={<MdEmail color="gray.800" />}
+                        />
+                        <Input
+                            isInvalid={isError(errors?.email)}
+                            errorBorderColor='red.300'
+                            name={'email'}
+                            onChange={handleChange}
+                            type="text"
+                            size="sm"
+                            value={values?.email || ''}
+                            borderRadius='15px'
+                            borderColor="rgba(255, 255, 255, 0.2)"
+                            _placeholder={{ opacity: 0.2, color: 'white' }}
+                        />
+                    </InputGroup>
+                </FormControl>
+
+                <FormControl id="phone_number">
+                    <FormLabel fontSize="sm" fontWeight='bold'>Phone Number:</FormLabel>
+                    <InputGroup borderColor="#E0E1E7">
+                        <InputLeftElement
+                            pointerEvents="none"
+                            children={<BsFillTelephoneFill color="gray.800" />}
+                        />
+                        <Input
+                            isInvalid={isError(errors?.phone_no)}
+                            errorBorderColor='red.300'
+                            name={'phone_no'}
+                            onChange={handleChange}
+                            type="text"
+                            size="sm"
+                            value={values?.phone_no || ''}
+                            borderRadius='15px'
+                            borderColor="rgba(255, 255, 255, 0.2)"
+                            _placeholder={{ opacity: 0.2, color: 'white' }}
+                        />
+                    </InputGroup>
+                </FormControl>
+                <FormControl id="address_1">
+                    <FormLabel fontSize="sm" fontWeight='bold'>Address 1:</FormLabel>
+                    <InputGroup borderColor="#E0E1E7">
+                        <InputLeftElement
+                            pointerEvents="none"
+                            children={<FaRegAddressCard color="gray.800" />}
+                        />
+                        <Input
+                            isInvalid={isError(errors?.address_1)}
+                            errorBorderColor='red.300'
+                            name={'address_1'}
+                            onChange={handleChange}
+                            type="text"
+                            size="sm"
+                            value={values?.address_1 || ''}
+                            borderRadius='15px'
+                            borderColor="rgba(255, 255, 255, 0.2)"
+                            _placeholder={{ opacity: 0.2, color: 'white' }}
+                        />
+                    </InputGroup>
+                </FormControl>
+
+                <FormControl id="address_2">
+                    <FormLabel fontSize="sm" fontWeight='bold'>Address 2:</FormLabel>
+                    <InputGroup borderColor="#E0E1E7">
+                        <InputLeftElement
+                            pointerEvents="none"
+                            children={<FaRegAddressCard color="gray.800" />}
+                        />
+                        <Input
+                            isInvalid={isError(errors?.address_2)}
+                            errorBorderColor='red.300'
+                            name={'address_2'}
+                            onChange={handleChange}
+                            type="text"
+                            size="sm"
+                            value={values?.address_2 || ''}
+                            borderRadius='15px'
+                            borderColor="rgba(255, 255, 255, 0.2)"
+                            _placeholder={{ opacity: 0.2, color: 'white' }}
+                        />
+                    </InputGroup>
+                </FormControl>
+                <FormControl id="city">
+                    <FormLabel fontSize="sm" fontWeight='bold'>City:</FormLabel>
+                    <InputGroup borderColor="#E0E1E7">
+                        <InputLeftElement
+                            pointerEvents="none"
+                            children={<FaCity color="gray.800" />}
+                        />
+                        <Input
+                            isInvalid={isError(errors?.city)}
+                            errorBorderColor='red.300'
+                            name={'city'}
+                            onChange={handleChange}
+                            type="text"
+                            size="sm"
+                            value={values?.city || ''}
+                            borderRadius='15px'
+                            borderColor="rgba(255, 255, 255, 0.2)"
+                            _placeholder={{ opacity: 0.2, color: 'white' }}
+                        />
+                    </InputGroup>
+                </FormControl>
+
+                <FormControl id="state">
+                    <FormLabel fontSize="sm" fontWeight='bold'>State:</FormLabel>
+                    <InputGroup borderColor="#E0E1E7">
+                        <InputLeftElement
+                            pointerEvents="none"
+                            children={<MdLocationOn color="gray.800" />}
+                        />
+                        <Input
+                            isInvalid={isError(errors?.state)}
+                            errorBorderColor='red.300'
+                            name={'state'}
+                            onChange={handleChange}
+                            type="text"
+                            size="sm"
+                            value={values?.state || ''}
+                            borderRadius='15px'
+                            borderColor="rgba(255, 255, 255, 0.2)"
+                            _placeholder={{ opacity: 0.2, color: 'white' }}
+                        />
+                    </InputGroup>
+                </FormControl>
+                <FormControl id="zip">
+                    <FormLabel fontSize="sm" fontWeight='bold'>Zip:</FormLabel>
+                    <InputGroup borderColor="#E0E1E7">
+                        <InputLeftElement
+                            pointerEvents="none"
+                            children={<AiOutlineNumber color="gray.800" />}
+                        />
+                        <Input
+                            isInvalid={isError(errors?.zip)}
+                            errorBorderColor='red.300'
+                            name={'zip'}
+                            onChange={handleChange}
+                            type="text"
+                            size="sm"
+                            value={values?.zip || ''}
+                            borderRadius='15px'
+                            borderColor="rgba(255, 255, 255, 0.2)"
+                            _placeholder={{ opacity: 0.2, color: 'white' }}
+                        />
+                    </InputGroup>
+                </FormControl>
+
+                <FormControl id="country">
+                    <FormLabel fontSize="sm" fontWeight='bold'>Country:</FormLabel>
+                    <InputGroup borderColor="#E0E1E7">
+                        <InputLeftElement
+                            pointerEvents="none"
+                            children={<BsFillFlagFill color="gray.800" />}
+                        />
+                        <Input
+                            isInvalid={isError(errors?.country)}
+                            errorBorderColor='red.300'
+                            name={'country'}
+                            onChange={handleChange}
+                            type="text"
+                            size="sm"
+                            value={values?.country || ''}
+                            borderRadius='15px'
+                            borderColor="rgba(255, 255, 255, 0.2)"
+                            _placeholder={{ opacity: 0.2, color: 'white' }}
+                        />
+                    </InputGroup>
+                </FormControl>
+
+            </Grid>
+            <FormControl id="comments" mt={4}>
+                <FormLabel fontSize="sm" fontWeight='bold'>Comments:</FormLabel>
+                <Textarea
+                    isInvalid={isError(errors?.comments)}
+                    errorBorderColor='red.300'
+                    name={'comments'}
+                    onChange={handleChange}
+                    value={values?.comments || ''}
+                    placeholder="message"
+                    borderRadius='15px'
+                    borderColor="rgba(255, 255, 255, 0.2)"
+                    _placeholder={{ opacity: 0.2, color: 'white' }}
+
+                />
+            </FormControl>
+
         </ModalBody>
 
         <ModalFooter>
-            <Button colorScheme='blue' mr={3} onClick={onClose}>
+            <Button colorScheme='red' mr={3} onClick={onClose}>
                 Close
             </Button>
-            <Button onClick={handleEditSubmit} variant='ghost'>Add customer</Button>
+            <Button isLoading={loading} onClick={handleEditSubmit} colorScheme="blue">Edit Supplier</Button>
         </ModalFooter>
-    </ModalContent>
+
+    </>
+
+
 );
 
-const AddModal = ({ onChange, handleSubmit, onClose, customerDetails, setCustomerDetails }) => (
-    <ModalContent>
+const AddModal = ({ handleSubmit, onClose, values, handleChange, errors, loading }) => (
+    <>
         <ModalHeader>Customer Information</ModalHeader>
         <ModalCloseButton />
         <ModalBody>
-            <Container bg="#9DC4FB" maxW="full" mt={0} overflow="hidden">
-                <Box bg="white" maxW="full">
-                    <Box
-                        color="white"
-                        borderRadius="lg">
-                        <Box p={1}>
 
-                            <Box borderRadius="lg">
-                                <Box m={8} color="#0B0E3F">
-                                    <VStack spacing={2} maxW="full">
+            <Grid templateColumns="repeat(2, 1fr)" gap={4}>
+                <FormControl id="first_name">
+                    <FormLabel fontSize="sm" fontWeight='bold'>First Name: *</FormLabel>
+                    <InputGroup borderColor="#E0E1E7">
+                        <InputLeftElement
+                            pointerEvents="none"
+                            children={<BsPerson color="gray.800" />}
+                        />
+                        <Input
+                            isInvalid={isError(errors?.first_name)}
+                            errorBorderColor='red.300'
+                            name={'first_name'}
+                            onChange={handleChange}
+                            type="text"
+                            size="sm"
+                            value={values?.first_name || ''}
+                            borderRadius='15px'
+                            borderColor="rgba(255, 255, 255, 0.2)"
+                            _placeholder={{ opacity: 0.2, color: 'white' }}
+                            placeholder="eg. Okechukwu"
+                        />
+                    </InputGroup>
+                </FormControl>
+                <FormControl id="last_name">
+                    <FormLabel fontSize="sm" fontWeight='bold'>Last Name: *</FormLabel>
+                    <InputGroup borderColor="#E0E1E7">
+                        <InputLeftElement
+                            pointerEvents="none"
+                            children={<BsPerson color="gray.800" />}
+                        />
+                        <Input
+                            isInvalid={isError(errors?.last_name)}
+                            errorBorderColor='red.300'
+                            name={'last_name'}
+                            onChange={handleChange}
+                            type="text"
+                            size="sm"
+                            value={values?.last_name || ''}
+                            borderRadius='15px'
+                            borderColor="rgba(255, 255, 255, 0.2)"
+                            _placeholder={{ opacity: 0.2, color: 'white' }}
+                            placeholder="eg. Ekene"
+                        />
+                    </InputGroup>
+                </FormControl>
+                <FormControl id="email">
+                    <FormLabel fontSize="sm" fontWeight='bold'>E-Mail:</FormLabel>
+                    <InputGroup borderColor="#E0E1E7">
+                        <InputLeftElement
+                            pointerEvents="none"
+                            children={<MdEmail color="gray.800" />}
+                        />
+                        <Input
+                            isInvalid={isError(errors?.email)}
+                            errorBorderColor='red.300'
+                            name={'email'}
+                            onChange={handleChange}
+                            type="text"
+                            size="sm"
+                            value={values?.email || ''}
+                            borderRadius='15px'
+                            borderColor="rgba(255, 255, 255, 0.2)"
+                            _placeholder={{ opacity: 0.2, color: 'white' }}
+                            placeholder="eg. Okeyson@gmail.com"
+                        />
+                    </InputGroup>
+                </FormControl>
+                <FormControl id="phone_number">
+                    <FormLabel fontSize="sm" fontWeight='bold'>Phone Number:</FormLabel>
+                    <InputGroup borderColor="#E0E1E7">
+                        <InputLeftElement
+                            pointerEvents="none"
+                            children={<BsFillTelephoneFill color="gray.800" />}
+                        />
+                        <Input
+                            isInvalid={isError(errors?.phone_no)}
+                            errorBorderColor='red.300'
+                            name={'phone_no'}
+                            onChange={handleChange}
+                            type="text"
+                            size="sm"
+                            value={values?.phone_no || ''}
+                            borderRadius='15px'
+                            borderColor="rgba(255, 255, 255, 0.2)"
+                            _placeholder={{ opacity: 0.2, color: 'white' }}
+                            placeholder="eg. 09034556553"
+                        />
+                    </InputGroup>
+                </FormControl>
+                <FormControl id="address_1">
+                    <FormLabel fontSize="sm" fontWeight='bold'>Address 1:</FormLabel>
+                    <InputGroup borderColor="#E0E1E7">
+                        <InputLeftElement
+                            pointerEvents="none"
+                            children={<FaRegAddressCard color="gray.800" />}
+                        />
+                        <Input
+                            isInvalid={isError(errors?.address_1)}
+                            errorBorderColor='red.300'
+                            name={'address_1'}
+                            onChange={handleChange}
+                            type="text"
+                            size="sm"
+                            value={values?.address_1 || ''}
+                            borderRadius='15px'
+                            borderColor="rgba(255, 255, 255, 0.2)"
+                            _placeholder={{ opacity: 0.2, color: 'white' }}
+                            placeholder="eg. Nkwo Market"
+                        />
+                    </InputGroup>
+                </FormControl>
+                <FormControl id="address_2">
+                    <FormLabel fontSize="sm" fontWeight='bold'>Address 2:</FormLabel>
+                    <InputGroup borderColor="#E0E1E7">
+                        <InputLeftElement
+                            pointerEvents="none"
+                            children={<FaRegAddressCard color="gray.800" />}
+                        />
+                        <Input
+                            isInvalid={isError(errors?.address_2)}
+                            errorBorderColor='red.300'
+                            name={'address_2'}
+                            onChange={handleChange}
+                            type="text"
+                            size="sm"
+                            value={values?.address_2 || ''}
+                            borderRadius='15px'
+                            borderColor="rgba(255, 255, 255, 0.2)"
+                            _placeholder={{ opacity: 0.2, color: 'white' }}
+                            placeholder="eg. Specialist Plaze"
+                        />
+                    </InputGroup>
+                </FormControl>
+                <FormControl id="city">
+                    <FormLabel fontSize="sm" fontWeight='bold'>City:</FormLabel>
+                    <InputGroup borderColor="#E0E1E7">
+                        <InputLeftElement
+                            pointerEvents="none"
+                            children={<FaCity color="gray.800" />}
+                        />
+                        <Input
+                            isInvalid={isError(errors?.city)}
+                            errorBorderColor='red.300'
+                            name={'city'}
+                            onChange={handleChange}
+                            type="text"
+                            size="sm"
+                            value={values?.city || ''}
+                            borderRadius='15px'
+                            borderColor="rgba(255, 255, 255, 0.2)"
+                            _placeholder={{ opacity: 0.2, color: 'white' }}
+                            placeholder="eg. Onitsha"
+                            
+                        />
+                    </InputGroup>
+                </FormControl>
+                <FormControl id="state">
+                    <FormLabel fontSize="sm" fontWeight='bold'>State:</FormLabel>
+                    <InputGroup borderColor="#E0E1E7">
+                        <InputLeftElement
+                            pointerEvents="none"
+                            children={<MdLocationOn color="gray.800" />}
+                        />
+                        <Input
+                            isInvalid={isError(errors?.state)}
+                            errorBorderColor='red.300'
+                            name={'state'}
+                            onChange={handleChange}
+                            type="text"
+                            size="sm"
+                            value={values?.state || ''}
+                            borderRadius='15px'
+                            borderColor="rgba(255, 255, 255, 0.2)"
+                            _placeholder={{ opacity: 0.2, color: 'white' }}
+                            placeholder="eg. Anambra"
+                        />
+                    </InputGroup>
+                </FormControl>
+                <FormControl id="zip">
+                    <FormLabel fontSize="sm" fontWeight='bold'>Zip:</FormLabel>
+                    <InputGroup borderColor="#E0E1E7">
+                        <InputLeftElement
+                            pointerEvents="none"
+                            children={<AiOutlineNumber color="gray.800" />}
+                        />
+                        <Input
+                            isInvalid={isError(errors?.zip)}
+                            errorBorderColor='red.300'
+                            name={'zip'}
+                            onChange={handleChange}
+                            type="text"
+                            size="sm"
+                            value={values?.zip || ''}
+                            borderRadius='15px'
+                            borderColor="rgba(255, 255, 255, 0.2)"
+                            _placeholder={{ opacity: 0.2, color: 'white' }}
+                            placeholder="eg. 44320"
+                        />
+                    </InputGroup>
+                </FormControl>
+                <FormControl id="country">
+                    <FormLabel fontSize="sm" fontWeight='bold'>Country:</FormLabel>
+                    <InputGroup borderColor="#E0E1E7">
+                        <InputLeftElement
+                            pointerEvents="none"
+                            children={<BsFillFlagFill color="gray.800" />}
+                        />
+                        <Input
+                            isInvalid={isError(errors?.country)}
+                            errorBorderColor='red.300'
+                            name={'country'}
+                            onChange={handleChange}
+                            type="text"
+                            size="sm"
+                            value={values?.country || ''}
+                            borderRadius='15px'
+                            borderColor="rgba(255, 255, 255, 0.2)"
+                            _placeholder={{ opacity: 0.2, color: 'white' }}
+                            placeholder="eg. Nigeria"
+                        />
+                    </InputGroup>
+                </FormControl>
+            </Grid>
+            <FormControl id="comments">
+                <FormLabel fontSize="sm" fontWeight='bold'>Comments:</FormLabel>
+                <Textarea
+                    isInvalid={isError(errors?.comments)}
+                    errorBorderColor='red.300'
+                    name={'comments'}
+                    onChange={handleChange}
+                    value={values?.comments || ''}
+                    borderRadius='15px'
+                    borderColor="rgba(255, 255, 255, 0.2)"
+                    _placeholder={{ opacity: 0.2, color: 'white' }}
+                    placeholder="eg. message"
+                />
+            </FormControl>
 
-                                        <FormControl id="first_name">
-                                            <FormLabel>First Name</FormLabel>
-                                            <InputGroup borderColor="#E0E1E7">
-                                                <InputLeftElement
-                                                    pointerEvents="none"
-                                                    children={<BsPerson color="gray.800" />}
-                                                />
-                                                <Input name="first_name" type="text" size="sm" onChange={onChange} value={customerDetails?.first_name || ''} />
-                                            </InputGroup>
-                                        </FormControl>
-                                        <FormControl id="last_name">
-                                            <FormLabel>Last Name</FormLabel>
-                                            <InputGroup borderColor="#E0E1E7">
-                                                <InputLeftElement
-                                                    pointerEvents="none"
-                                                    children={<BsPerson color="gray.800" />}
-                                                />
-                                                <Input name="last_name" type="text" size="sm" onChange={onChange} value={customerDetails?.last_name || ''} />
-                                            </InputGroup>
-                                        </FormControl>
-                                        <FormControl id="email">
-                                            <FormLabel>E-Mail:</FormLabel>
-                                            <InputGroup borderColor="#E0E1E7">
-                                                <InputLeftElement
-                                                    pointerEvents="none"
-                                                    children={<BsPerson color="gray.800" />}
-                                                />
-                                                <Input type="text" size="sm" onChange={onChange} />
-                                            </InputGroup>
-                                        </FormControl>
-                                        <FormControl id="phone_number">
-                                            <FormLabel>Phone Number:</FormLabel>
-                                            <InputGroup borderColor="#E0E1E7">
-                                                <InputLeftElement
-                                                    pointerEvents="none"
-                                                    children={<BsPerson color="gray.800" />}
-                                                />
-                                                <Input name="" type="text" size="sm" onChange={onChange} />
-                                            </InputGroup>
-                                        </FormControl>
-                                        <FormControl id="address_1">
-                                            <FormLabel>Address 1</FormLabel>
-                                            <InputGroup borderColor="#E0E1E7">
-                                                <InputLeftElement
-                                                    pointerEvents="none"
-                                                    children={<BsPerson color="gray.800" />}
-                                                />
-                                                <Input type="text" size="sm" onChange={onChange} />
-                                            </InputGroup>
-                                        </FormControl>
-                                        <FormControl id="address_2">
-                                            <FormLabel>Address 2</FormLabel>
-                                            <InputGroup borderColor="#E0E1E7">
-                                                <InputLeftElement
-                                                    pointerEvents="none"
-                                                    children={<BsPerson color="gray.800" />}
-                                                />
-                                                <Input name="" type="text" size="sm" onChange={onChange} />
-                                            </InputGroup>
-                                        </FormControl>
-                                        <FormControl id="city">
-                                            <FormLabel>City:</FormLabel>
-                                            <InputGroup borderColor="#E0E1E7">
-                                                <InputLeftElement
-                                                    pointerEvents="none"
-                                                    children={<BsPerson color="gray.800" />}
-                                                />
-                                                <Input name="" type="text" size="sm" onChange={onChange} />
-                                            </InputGroup>
-                                        </FormControl>
-                                        <FormControl id="state">
-                                            <FormLabel>State</FormLabel>
-                                            <InputGroup borderColor="#E0E1E7">
-                                                <InputLeftElement
-                                                    pointerEvents="none"
-                                                    children={<BsPerson color="gray.800" />}
-                                                />
-                                                <Input name="" type="text" size="sm" onChange={onChange} />
-                                            </InputGroup>
-                                        </FormControl>
-                                        <FormControl id="zip">
-                                            <FormLabel>Zip</FormLabel>
-                                            <InputGroup borderColor="#E0E1E7">
-                                                <InputLeftElement
-                                                    pointerEvents="none"
-                                                    children={<BsPerson color="gray.800" />}
-                                                />
-                                                <Input name="" type="text" size="sm" onChange={onChange} />
-                                            </InputGroup>
-                                        </FormControl>
-                                        <FormControl id="country">
-                                            <FormLabel>Country</FormLabel>
-                                            <InputGroup borderColor="#E0E1E7">
-                                                <InputLeftElement
-                                                    pointerEvents="none"
-                                                    children={<BsPerson color="gray.800" />}
-                                                />
-                                                <Input name="" type="text" size="sm" onChange={onChange} />
-                                            </InputGroup>
-                                        </FormControl>
-                                        <FormControl id="comments">
-                                            <FormLabel>Comments:</FormLabel>
-                                            <Textarea
-                                                borderColor="gray.300"
-                                                _hover={{
-                                                    borderRadius: 'gray.300',
-                                                }}
-                                                placeholder="message"
-                                            />
-                                        </FormControl>
-                                    </VStack>
-                                </Box>
-                            </Box>
 
-                        </Box>
-                    </Box>
-                </Box>
-            </Container>
         </ModalBody>
 
         <ModalFooter>
-            <Button colorScheme='blue' mr={3} onClick={onClose}>
+            <Button colorScheme='red' mr={3} onClick={onClose}>
                 Close
             </Button>
-            <Button onClick={handleSubmit} variant='ghost'>Add customer</Button>
+            <Button isLoading={loading} onClick={handleSubmit} colorScheme="blue">Add Customer</Button>
         </ModalFooter>
-    </ModalContent>
+    </>
+
 
 );
 
-const DeleteModal = ({onClose, currentCustomer}) => (
-    <ModalContent>
+const DeleteModal = ({ onClose, values, handleDeleteSubmit, loading }) => (
+    <>
         <ModalHeader>Delete Customer Information</ModalHeader>
         <ModalCloseButton />
         <ModalBody>
             <Container maxW="full">
-                <Text> Are you sure you want to delete {currentCustomer?.first_name + " " + currentCustomer?.last_name } ?
+                <Text> Are you sure you want to delete {values?.first_name + " " + values?.last_name} ?
                 </Text>
             </Container>
         </ModalBody>
@@ -377,60 +602,91 @@ const DeleteModal = ({onClose, currentCustomer}) => (
             <Button variant='ghost' mr={3} onClick={onClose}>
                 Close
             </Button>
-            <Button colorScheme='red' >Yes</Button>
+            <Button isLoading={loading} colorScheme='red' onClick={handleDeleteSubmit}>Yes</Button>
         </ModalFooter>
-    </ModalContent>
+    </>
+
 
 );
 
 export default function Dashboard() {
-    const value = "$100.000";
+    const [values, setValues] = React.useState({});
+    const [errors, setErrors] = React.useState({});
+    const [loading, setLoading] = useState(false);
 
-    const [customerDetails, setCustomerDetails] = useState({});
-    const [currentCustomer, setCurrentCustomer] = useState({});
-    const history = useHistory();
-    // paginate state 
-    const [itemOffset, setItemOffset] = useState(0);
-    // 3 items per page 
-    const itemsPerPage = 10;
-    const endOffset = itemOffset + itemsPerPage;
-    const currentItems = dashboardTableData4.slice(itemOffset, endOffset);
-    const pageCount = Math.ceil(dashboardTableData4.length / itemsPerPage);
-    // Chakra Color Mode
-    const iconTeal = useColorModeValue("#ffb400", "#ffb400");
-    const iconBoxInside = useColorModeValue("white", "white");
-    const textColor = useColorModeValue("gray.700", "white");
+    const [customers, setCustomers] = React.useState([]);
+    const [pageCount, setPageCount] = useState(1);
+    const [page, setPage] = useState(1);
+
+    const token = useSelector(getAuthToken);
+    const textColor = "white";
     const toast = useToast();
-
-    //for the modal
     const { isOpen, onOpen, onClose } = useDisclosure();
+
+    const onModalClose = () => {
+        setValues({});
+        setErrors({});
+        onClose();
+    }
 
     const [modalType, setModalType] = useState('add');
 
-    const onChange = (e) => {
+    const payload_data = {};
 
-        const { name, value } = e.target;
-        setCustomerDetails({ ...customerDetails, [name]: value });
+    const result = useQuery(['customers',
+        {
+            url: GET_CREATE_CUSTOMERS + `?page=${page}`,
+            payload_data,
+            authenticate: true,
+            token
+        }],
+        fetchData,
+        {
+            retry: false,
+            onSuccess: (response) => {
+                const data = response?.data;
+                setCustomers(data?.results || []);
+                setPageCount(data?.last_page || 1);
+                console.log(data?.results);
+            },
+            onError: (error) => {
+                handleApiError(error);
+            }
+        }
+    );
 
-    };
+    const { isLoading, refetch } = result;
 
-    const onEditChange = (e) => {
 
-        const { name, value } = e.target;
-        setCurrentCustomer({ ...currentCustomer, [name]: value });
-    }
+    const mutation = useMutation(postData, {
+        onSuccess: (response) => {
+            toast({
+                title: 'Success',
+                description: "Action succesful",
+                status: 'success',
+                duration: 3000,
+                isClosable: true,
+            });
+            setValues({});
+            setErrors({});
+            setLoading(false);
+            onModalClose();
+            refetch();
 
-    // Invoke when user click to request another page.
-    const handlePageClick = (event) => {
-        const newOffset = (event.selected * itemsPerPage) % dashboardTableData5.length;
-        console.log(
-            `User requested page number ${event.selected}, which is offset ${newOffset}`
-        );
-        setItemOffset(newOffset);
-    };
+            return;
+        },
+        onError: (error) => {
+            handleApiError(error);
+            setLoading(false);
+        }
+    });
 
-    const handleSubmit = () => {
-        if (!customerDetails?.first_name || !customerDetails?.last_name) {
+    const validate = () => {
+        let uerrors = {}
+        uerrors.first_name = values?.first_name ? "" : FIELD_REQUIRED;
+        uerrors.last_name = values?.last_name ? "" : FIELD_REQUIRED;
+
+        if (!values?.first_name || !values?.last_name) {
             toast({
                 title: 'Missing Information.',
                 description: "Please fill all required fields.",
@@ -438,47 +694,152 @@ export default function Dashboard() {
                 duration: 3000,
                 isClosable: true,
             });
+            return uerrors;
+
+        }
+
+        if (values?.email) {
+            const email_is_valid = validator.isEmail(values.email);
+
+            if (!email_is_valid) {
+                uerrors.email = "enter a valid email address";
+                toast({
+                    title: 'Invalid Field.',
+                    description: "Please enter a valid email address",
+                    status: 'warning',
+                    duration: 3000,
+                    isClosable: true,
+                });
+                return uerrors;
+            }
+        }
+
+        return uerrors;
+    }
+
+    const handleChange = (event) => {
+        setValues({ ...values, [event.target.name]: event.target.value });
+    }
+
+    const handleSubmit = () => {
+
+        let checkErrors = validate();
+        let areAllFieldsFalse = checkObject(checkErrors);
+
+        console.log(checkErrors);
+        if (!areAllFieldsFalse) {
+            // if there are errors
+            // set to state and terminate
+            setErrors(checkErrors);
             return;
         }
 
-        setCustomerDetails({});
-        history.push('/admin/customers');
+        const data = values;
+        setLoading(true);
+        mutation.mutate(
+            {
+                url: GET_CREATE_CUSTOMERS,
+                payload_data: data,
+                token: token,
+                authenticate: true
+            }
+        );
+
         return;
+
+    }
+
+    const handlePageChange = (evt) => {
+
+        const { selected } = evt;
+        setPage(selected + 1);
+        window.scrollTo(0, 0); // moves the compoent to the top of the page
     }
 
     const handleEditSubmit = () => {
-        if (!currentCustomer?.first_name || !currentCustomer?.last_name) {
-            toast({
-                title: 'Missing Information.',
-                description: "Please fill all required fields.",
-                status: 'warning',
-                duration: 3000,
-                isClosable: true,
-            });
+
+        let checkErrors = validate();
+        let areAllFieldsFalse = checkObject(checkErrors);
+
+        console.log(checkErrors);
+        if (!areAllFieldsFalse) {
+            // if there are errors
+            // set to state and terminate
+            setErrors(checkErrors);
             return;
         }
 
-        setCurrentCustomer({});
-        history.push('/admin/customers');
+        const data = values;
+        setLoading(true);
+        mutation.mutate(
+            {
+                url: UPDATE_CUSTOMERS,
+                payload_data: data,
+                token: token,
+                authenticate: true
+            }
+        );
+
         return;
-        
+
     }
 
+    const handleDeleteSubmit = () => {
+        const data = values;
+        setLoading(true);
+        mutation.mutate({
+            url: DELETE_CUSTOMERS,
+            payload_data: data,
+            token: token,
+            authenticate: true
+        });
+        return;
+
+
+    }
+
+    if (isLoading) {
+        return (
+            <Flex direction="column" pt={{ base: "120px", md: "75px" }}>
+                <Center>
+                    <Spinner
+                        thickness='4px'
+                        speed='0.65s'
+                        emptyColor='gray.200'
+                        color='blue.500'
+                        size='xl'
+                    />
+                </Center>
+            </Flex>
+        )
+    }
 
     return (
         <>
-            <Modal isOpen={isOpen} onClose={onClose}>
+            <Modal isOpen={isOpen} onClose={onModalClose} size="xl">
                 <ModalOverlay />
-                {modalType === "add"? <AddModal onChange={onChange} onClose={onClose}
-                    handleSubmit={handleSubmit} customerDetails={customerDetails}
-                    setCustomerDetails={setCustomerDetails} /> : modalType === "edit" ?
-                    <EditModal onEditChange={onEditChange} onClose={onClose}
-                    handleEditSubmit={handleEditSubmit} currentCustomer={currentCustomer}
-                    setCurrentCustomer={setCurrentCustomer} /> : <DeleteModal onClose={onClose} currentCustomer={currentCustomer}/>}
+                <ModalContent
+                    bgColor="#232333"
+                    borderColor="gray.900"
+                    color="white"
+                    boxShadow="rgba(0, 0, 0, 0.1) 0px 0px 0px 1px,rgba(0, 0, 0, 0.2) 0px 5px 10px,rgba(0, 0, 0, 0.4) 0px 15px 40px"
+                >
+
+                    {modalType === "add" ? 
+                        <AddModal onClose={onModalClose} handleSubmit={handleSubmit} values={values} 
+                        handleChange={handleChange} errors={errors}loading={loading}/> : 
+                        modalType === "edit" ?
+                        <EditModal onClose={onModalClose} handleEditSubmit={handleEditSubmit} values={values}
+                         errors={errors} handleChange={handleChange} loading={loading}/> :
+                        <DeleteModal onClose={onModalClose} values={values} handleDeleteSubmit={handleDeleteSubmit} 
+                        loading={loading}/>}
+
+
+                </ModalContent>
 
             </Modal>
             <Flex flexDirection="column" pt={{ base: "120px", md: "75px" }}>
-                <SimpleGrid columns={{ sm: 1, md: 2, xl: 2 }} spacing="24px">
+                <SimpleGrid columns={{ sm: 1, md: 2, xl: 4 }} spacing="24px">
                     <Card minH="83px" w="100%">
                         <CardBody>
                             <Flex flexDirection="row" align="center" justify="center" w="100%">
@@ -489,27 +850,16 @@ export default function Dashboard() {
                                         fontWeight="bold"
                                         pb=".1rem"
                                     >
-                                        Total Number of Customers (Feb 2023)
+                                        Full Name
                                     </StatLabel>
                                     <Flex>
                                         <StatNumber fontSize="lg" color={textColor}>
-                                            125
+                                            {(customers[0]?.first_name + " " + customers[0]?.last_name) || ""}
                                         </StatNumber>
-                                        {/* <StatHelpText
-                    alignSelf="flex-end"
-                    justifySelf="flex-end"
-                    m="0px"
-                    color="green.400"
-                    fontWeight="bold"
-                    ps="3px"
-                    fontSize="md"
-                  >
-                    +55%
-                  </StatHelpText> */}
                                     </Flex>
                                 </Stat>
-                                <IconBox as="box" h={"45px"} w={"45px"} bg={iconTeal}>
-                                    <Icon h={"35px"} w={"35px"} as={TbCurrencyNaira} color='#fff' />
+                                <IconBox as="box" h={"45px"} w={"45px"}>
+                                    <PersonIcon h={"24px"} w={"24px"} color="#fff" />
                                 </IconBox>
                             </Flex>
                         </CardBody>
@@ -524,37 +874,78 @@ export default function Dashboard() {
                                         fontWeight="bold"
                                         pb=".1rem"
                                     >
-                                        Number of new customers (This Month)
+                                        Phone Number
                                     </StatLabel>
                                     <Flex>
                                         <StatNumber fontSize="lg" color={textColor}>
-                                            45
+                                            {customers[0]?.phone_no || ""}
                                         </StatNumber>
-                                        {/* <StatHelpText
-                    alignSelf="flex-end"
-                    justifySelf="flex-end"
-                    m="0px"
-                    color="green.400"
-                    fontWeight="bold"
-                    ps="3px"
-                    fontSize="md"
-                  >
-                    +5%
-                  </StatHelpText> */}
                                     </Flex>
                                 </Stat>
-                                <IconBox as="box" h={"45px"} w={"45px"} bg={iconTeal}>
-                                    <PersonIcon h={"24px"} w={"24px"} color={iconBoxInside} />
+                                <IconBox as="box" h={"45px"} w={"45px"}>
+
+                                    <Icon h={"35px"} w={"35px"} as={TbPhone} color='#fff' />
                                 </IconBox>
                             </Flex>
                         </CardBody>
                     </Card>
+                    <Card minH="83px" w="100%">
+                        <CardBody>
+                            <Flex flexDirection="row" align="center" justify="center" w="100%">
+                                <Stat me="auto">
+                                    <StatLabel
+                                        fontSize="sm"
+                                        color="gray.400"
+                                        fontWeight="bold"
+                                        pb=".1rem"
+                                    >
+                                        Email
+                                    </StatLabel>
+                                    <Flex>
+                                        <StatNumber fontSize="lg" color={textColor}>
+                                            {customers[0]?.email || ""}
+                                        </StatNumber>
+                                    </Flex>
+                                </Stat>
+                                <IconBox as="box" h={"45px"} w={"45px"}>
+                                    <Icon h={"35px"} w={"35px"} as={MdEmail} color='#fff' />
+
+                                </IconBox>
+                            </Flex>
+                        </CardBody>
+                    </Card>
+                    <Card minH="83px" w="100%">
+                        <CardBody>
+                            <Flex flexDirection="row" align="center" justify="center" w="100%">
+                                <Stat me="auto">
+                                    <StatLabel
+                                        fontSize="sm"
+                                        color="gray.400"
+                                        fontWeight="bold"
+                                        pb=".1rem"
+                                    >
+                                        State
+                                    </StatLabel>
+                                    <Flex>
+                                        <StatNumber fontSize="lg" color={textColor}>
+                                            {customers[0]?.state || ""}
+                                        </StatNumber>
+                                    </Flex>
+                                </Stat>
+                                <IconBox as="box" h={"45px"} w={"45px"}>
+                                    <Icon h={"35px"} w={"35px"} as={MdLocationOn} color='#fff' />
+
+                                </IconBox>
+                            </Flex>
+                        </CardBody>
+                    </Card>
+
                 </SimpleGrid>
                 <Grid
                     my="26px"
                     mb={{ lg: "16px" }}
                 >
-                    <Card p="16px" overflowX={{ sm: "scroll", xl: "hidden" }}>
+                    <Card p="16px" overflowX="auto">
                         <CardHeader p="12px 0px 28px 0px">
                             <Flex direction="column">
                                 <Text
@@ -563,11 +954,11 @@ export default function Dashboard() {
                                     fontWeight="bold"
                                     pb=".5rem"
                                 >
-                                    CUSTOMERS LISTINGS (FEB 2023)
+                                    CUSTOMERS LISTINGS (2023)
                                 </Text>
                                 <Flex align="center">
                                     <ButtonGroup spacing='2' padding='2'>
-                                        <Button leftIcon={<BsPersonAdd />} variant='solid' backgroundColor='#5a8100' color='white'
+                                        <Button leftIcon={<BsPersonAdd />} variant='solid' backgroundColor='#4285f4' color='white'
                                             onClick={() => {
                                                 setModalType('add');
                                                 onOpen();
@@ -578,7 +969,7 @@ export default function Dashboard() {
                                 </Flex>
                             </Flex>
                         </CardHeader>
-                        <Table variant="striped" color={textColor} size='sm'>
+                        <Table variant="unstyled" size='sm'>
                             <Thead>
                                 <Tr my=".8rem" ps="0px">
                                     <Th color="gray.400">FIRST NAME</Th>
@@ -594,21 +985,22 @@ export default function Dashboard() {
                                 </Tr>
                             </Thead>
                             <Tbody>
-                                {currentItems.map((row) => {
+                                {customers.map((row, index) => {
                                     return (
                                         <DashboardTableRow3
+                                            key={index}
                                             first_name={row.first_name}
                                             last_name={row.last_name}
                                             phone_no={row.phone_no}
-                                            email_address={row.email_address}
+                                            email={row.email}
                                             total_purchased={row.total_purchased}
                                             onEditClick={() => {
-                                                setCurrentCustomer(row);
+                                                setValues(row);
                                                 setModalType('edit');
-                                                onOpen();                                                
+                                                onOpen();
                                             }}
-                                            onDeleteClick = {() => {
-                                                setCurrentCustomer(row);
+                                            onDeleteClick={() => {
+                                                setValues(row);
                                                 setModalType('delete');
                                                 onOpen();
                                             }}
@@ -617,15 +1009,21 @@ export default function Dashboard() {
                                 })}
                             </Tbody>
                         </Table>
+
                         <Box my="1.2rem">
                             <MyPaginate
                                 breakLabel="..."
-                                nextLabel="next >"
-                                onPageChange={handlePageClick}
+                                nextLabel=">"
+
                                 pageRangeDisplayed={5}
+
+                                previousLabel="<"
+
                                 pageCount={pageCount}
-                                previousLabel="< previous"
+                                onPageChange={(e) => { handlePageChange(e) }}
+                                forcePage={pageCount > 1 ? page - 1 : 1}
                                 renderOnZeroPageCount={null}
+                                activeClassName={'active'}
                             />
                         </Box>
                     </Card>
@@ -634,4 +1032,4 @@ export default function Dashboard() {
         </>
 
     );
-}
+} 

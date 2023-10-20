@@ -9,7 +9,7 @@ import ListItems from "views/Dashboard/ListItemsPage";
 import ListCustomers from "views/Dashboard/ListCustomers";
 import ListSuppliers from "views/Dashboard/ListSuppliers";
 import AddPurchases from "views/Pages/Purchases/AddPurchases.js";
-import ListPurchases from "views/Dashboard/ListPurchases.js";
+import ListPurchases from "views/Pages/Purchases/ListPurchases.js";
 import FilterPurchases from "views/Pages/Purchases/FilterPurchases.js";
 import DailyReports from "views/Pages/Reports/DailyReports.js";
 import CustomerSummary from "views/Pages/Reports/CustomerSummary.js";

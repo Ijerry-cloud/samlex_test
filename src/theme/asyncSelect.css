@@ -1,0 +1,59 @@
+.chakra-react-select .chakra-react-select__control {
+    border-color: rgba(255, 255, 255, 0.2);
+    border-radius: 25px;
+    position: relative; /* Ensure it's a positioning context */
+    z-index: 4; /* Set a higher z-index */
+
+}
+
+.chakra-react-select .chakra-react-select__indicator-separator {
+    background-color: #232333;
+    opacity: 0.2;
+}
+
+.chakra-react-select .chakra-react-select__dropdown-indicator {
+    background-color: transparent;
+}
+
+
+/* Style the dropdown placeholder */
+.chakra-react-select .chakra-react-select__placeholder {
+    color: #c4c4c4;
+    opacity: 0.2;
+    /* Set placeholder color */
+}
+
+
+/* Style the dropdown options */
+.chakra-react-select .chakra-react-select__menu {
+    background-color: #232333;
+    /* Set the background color for the options menu */
+    border-radius: 15px;
+    /* Set the border-radius for the options menu */
+    border: 1px solid #232333;
+    /* Set the border color for the options menu */
+    margin-top: 2px;
+    /* Adjust the margin-top to your preference */
+    position: absolute; /* Position it absolutely */
+    z-index: 5;
+}
+
+/* Style the individual option items */
+.chakra-react-select .chakra-react-select__option {
+    background-color: #232333;
+    /* Set the background color for each option */
+    color: white;
+    /* Set text color for each option */
+
+    /* Set the font size for each option */
+    padding: 8px 10px;
+    /* Add padding to each option */
+    cursor: pointer;
+    /* Change cursor on hover */
+}
+
+/* Style the selected option */
+.chakra-react-select .chakra-react-select__single-value {
+    color: white;
+    /* Set text color for the selected option */
+}

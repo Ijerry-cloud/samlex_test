@@ -73,8 +73,7 @@ import {
 } from 'react-icons/bs';
 import {
   MdEmail,
-
-
+  MdLocationOn
 } from 'react-icons/md';
 import { IoDocumentsSharp } from "react-icons/io5";
 import { checkObject, isError } from 'modules/utilities';
@@ -345,7 +344,6 @@ function Profile() {
                   value={values?.gender || ''}
                   placeholder='Select option'
                   borderRadius='15px'
-                  borderColor="rgba(255, 255, 255, 0.2)"
                   size="sm">
                   <option style={{ backgroundColor: '#232333' }} value='male'>Male</option>
                   <option style={{ backgroundColor: '#232333' }} value='female'> Female</option>
@@ -357,7 +355,7 @@ function Profile() {
                   onChange={handleChange}
                   value={values?.dept || ''}
                   borderRadius='15px'
-                  borderColor="rgba(255, 255, 255, 0.2)"
+
                   placeholder='Select option'
                   size="sm">
                   <option style={{ backgroundColor: '#232333' }} value='tech'>Tech</option>
@@ -477,7 +475,7 @@ function Profile() {
                 <InputGroup borderColor="#E0E1E7">
                   <InputLeftElement
                     pointerEvents="none"
-                    children={<FaCity color="gray.800" />}
+                    children={<MdLocationOn color="gray.800" />}
                   />
                   <Input
                     isInvalid={isError(errors?.state)}

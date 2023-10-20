@@ -1,6 +1,6 @@
 import toast from 'react-hot-toast';
 import axios from 'axios';
-
+import { GET_CREATE_SUPPLIERS } from 'config/serverUrls';
 
 export const fetchData = async ({ queryKey }) => {
   // a hook that fetches data
@@ -96,5 +96,28 @@ export const uploadCsvFile = async (data) => {
     return response_data; // You can return any data you want from the server response
   } catch (error) {
     throw new Error('File upload failed');
+  }
+};
+
+export const loadSuppliers = async (inputValue) => {
+  try {
+    // Replace this with your API endpoint for fetching options
+    const response = await axios.get(GET_CREATE_SUPPLIERS + `?company_name=${inputValue}`);
+    
+    // Map the API response data to the format expected by react-select
+    //console.log(response.data);
+    const options = response.data.map((option) => ({
+      ...option,
+      value: option.id,
+      label: option.company_name,
+  
+    }));
+
+    
+    return options;
+
+  } catch (error) {
+    console.error('Error fetching options:', error);
+    return [];
   }
 };

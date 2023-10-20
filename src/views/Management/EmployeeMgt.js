@@ -142,7 +142,7 @@ const EditDrawer = ({ handleChange, handleSubmit, isOpen, btnRef, onClose, handl
             color="white"
             boxShadow="rgba(0, 0, 0, 0.1) 0px 0px 0px 1px,rgba(0, 0, 0, 0.2) 0px 5px 10px,rgba(0, 0, 0, 0.4) 0px 15px 40px">
             <DrawerCloseButton />
-            <DrawerHeader>Create New Employee</DrawerHeader>
+            <DrawerHeader>Update Employee</DrawerHeader>
 
             <DrawerBody>
                 <VStack spacing={2} maxW="full">
@@ -200,7 +200,6 @@ const EditDrawer = ({ handleChange, handleSubmit, isOpen, btnRef, onClose, handl
                         <Select name={"gender"} onChange={handleChange}
                             value={values?.gender || ''}
                             borderRadius='15px'
-                            borderColor="rgba(255, 255, 255, 0.2)"
                             placeholder='Select option'
                             size="sm">
                             <option style={{ backgroundColor: '#232333' }} value='male'>Male</option>
@@ -214,7 +213,6 @@ const EditDrawer = ({ handleChange, handleSubmit, isOpen, btnRef, onClose, handl
                             value={values?.dept || ''}
                             placeholder='Select option'
                             borderRadius='15px'
-                            borderColor="rgba(255, 255, 255, 0.2)"
                             size="sm">
                             <option style={{ backgroundColor: '#232333' }} value='tech'>Tech</option>
                             <option style={{ backgroundColor: '#232333' }} value='ICT'> ICT</option>
@@ -332,7 +330,7 @@ const EditDrawer = ({ handleChange, handleSubmit, isOpen, btnRef, onClose, handl
                         <InputGroup borderColor="#E0E1E7">
                             <InputLeftElement
                                 pointerEvents="none"
-                                children={<FaCity color="rgba(255, 255, 255, 0.2)" />}
+                                children={<MdLocationOn color="rgba(255, 255, 255, 0.2)" />}
                             />
                             <Input
                                 isInvalid={isError(errors?.state)}
@@ -748,6 +746,7 @@ export default function EmployeeMgt() {
         const data = {};
         data.user_data = user_data;
         data.user_password = user_password;
+        console.log(data);
 
 
         mutation.mutate({
@@ -873,11 +872,11 @@ export default function EmployeeMgt() {
                         <Box my="1.2rem">
                             <MyPaginate
                                 breakLabel="..."
-                                nextLabel="next >"
+                                nextLabel=">"
 
                                 pageRangeDisplayed={5}
 
-                                previousLabel="< previous"
+                                previousLabel="<"
 
                                 pageCount={pageCount}
                                 onPageChange={(e) => { handlePageChange(e) }}

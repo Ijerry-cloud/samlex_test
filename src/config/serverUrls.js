@@ -30,7 +30,18 @@ export const GET_CREATE_SUPPLIERS = BASE_URL + 'people/suppliers/';
 export const UPDATE_SUPPLIERS = BASE_URL + 'people/suppliers/update/';
 export const DELETE_SUPPLIER = BASE_URL + 'people/suppliers/delete/';
 
+export const GET_CREATE_CUSTOMERS = BASE_URL + 'people/customers/';
+export const UPDATE_CUSTOMERS = BASE_URL + 'people/customers/update/';
+export const DELETE_CUSTOMERS = BASE_URL + 'people/customers/delete/'
+
 export const UPLOAD_ITEM_CSV = BASE_URL + 'items/csv/';
+export const GET_CREATE_ITEM = BASE_URL + 'items/list-create/';
+export const UPDATE_ITEM = BASE_URL + 'items/update/';
+export const DELETE_ITEM = BASE_URL + 'items/delete/';
+
+export const GET_CREATE_CATEGORIES = BASE_URL + 'items/categories/list-create/';
+
+export const GET_CREATE_SALES = BASE_URL + 'sales/sales/';
 
 
 
