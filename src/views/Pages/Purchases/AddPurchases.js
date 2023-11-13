@@ -307,7 +307,6 @@ function AddItem() {
                 direction="column"
                 alignSelf="center"
                 justifySelf="center"
-                overflow="hidden"
 
             >
                 <Flex alignItems="center" justifyContent="center" mb="60px" mt="80px">
@@ -344,28 +343,7 @@ function AddItem() {
                         </HStack>
 
                         <Grid templateColumns="repeat(2, 1fr)" gap={4}>
-                            <FormControl id="">
-                                <FormLabel fontSize="sm" fontWeight='bold'>UPC/EAN/ISBN:</FormLabel>
-                                <InputGroup borderColor="#E0E1E7">
-                                    <InputLeftElement
-                                        pointerEvents="none"
-                                        children={<IoMdBarcode color="gray.800" />}
-                                    />
-                                    <Input
-                                        isInvalid={isError(errors?.barcode)}
-                                        errorBorderColor='red.300'
-                                        name={'barcode'}
-                                        onChange={handleChange}
-                                        type="text"
-                                        size="sm"
-                                        value={item?.barcode || ''}
-                                        borderRadius='15px'
-                                        borderColor="rgba(255, 255, 255, 0.2)"
-                                        _placeholder={{ opacity: 0.2, color: 'white' }}
-                                        placeholder="eg. 4345-545-545"
-                                    />
-                                </InputGroup>
-                            </FormControl>
+
                             <FormControl id="">
                                 <FormLabel fontSize="sm" fontWeight='bold'>Name of Item</FormLabel>
                                 <InputGroup borderColor="#E0E1E7">
@@ -413,6 +391,28 @@ function AddItem() {
                                     className="chakra-react-select"
                                     classNamePrefix="chakra-react-select"
                                 />
+                            </FormControl>
+                            <FormControl id="">
+                                <FormLabel fontSize="sm" fontWeight='bold'>UPC/EAN/ISBN:</FormLabel>
+                                <InputGroup borderColor="#E0E1E7">
+                                    <InputLeftElement
+                                        pointerEvents="none"
+                                        children={<IoMdBarcode color="gray.800" />}
+                                    />
+                                    <Input
+                                        isInvalid={isError(errors?.barcode)}
+                                        errorBorderColor='red.300'
+                                        name={'barcode'}
+                                        onChange={handleChange}
+                                        type="text"
+                                        size="sm"
+                                        value={item?.barcode || ''}
+                                        borderRadius='15px'
+                                        borderColor="rgba(255, 255, 255, 0.2)"
+                                        _placeholder={{ opacity: 0.2, color: 'white' }}
+                                        placeholder="eg. 4345-545-545"
+                                    />
+                                </InputGroup>
                             </FormControl>
                             <FormControl id="">
                                 <FormLabel fontSize="sm" fontWeight='bold'>Supplier:</FormLabel>

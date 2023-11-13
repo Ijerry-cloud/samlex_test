@@ -28,7 +28,7 @@ import {
 import { MdOutlineSummarize, MdAddCircle, MdViewList, MdFilterList, MdPersonAdd, MdDashboardCustomize} from "react-icons/md";
 import { AiOutlineUsergroupAdd } from "react-icons/ai";
 import { IoIosCalendar } from 'react-icons/io';
-import { FaTruck, FaCalendarCheck, FaUsers } from "react-icons/fa";
+import { FaTruck, FaCalendarCheck, FaUsers, FaFileInvoice } from "react-icons/fa";
 import { GiArchiveResearch } from 'react-icons/gi';
 import UserMgt from "views/Management/UserMgt";
 import EmployeeMgt from "views/Management/EmployeeMgt";
@@ -95,16 +95,6 @@ var dashRoutes = [
         isProtected: true,
         isVisible: true,
       },
-      {
-        path: "/filter-items",
-        name: "Filter Transactions",
-        icon: <MdFilterList color="inherit" />,
-        icon_color: "#FFD700",
-        component: FilterItems,
-        layout: "/admin",
-        isProtected: true,
-        isVisible: true,
-      },
     ],
   },
   {
@@ -156,6 +146,16 @@ var dashRoutes = [
     isVisible: true,
     views: [
       {
+        path: "/filter-items",
+        name: "Sales Report",
+        icon: <FaFileInvoice color="inherit" />,
+        icon_color: "#FFD700",
+        component: FilterItems,
+        layout: "/admin",
+        isProtected: true,
+        isVisible: true,
+      },
+      {
         path: "/daily-reports",
         name: "Daily Report",
         icon: <FaCalendarCheck color="inherit" />,
@@ -177,7 +177,7 @@ var dashRoutes = [
       },
       {
         path: "/item-reports-summary",
-        name: "Items Summary",
+        name: "Items Inventory",
         icon: <GiArchiveResearch color="inherit" />,
         icon_color: "#F39C12",
         component: ItemSummary,

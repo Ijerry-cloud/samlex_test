@@ -646,7 +646,6 @@ export default function EmployeeMgt() {
 
 
         if (!values?.first_name || !values?.last_name || !values?.username || !values?.email) {
-            console.log("there was an error1")
             toast({
                 title: 'Missing Information.',
                 description: "Please fill all required fields.",

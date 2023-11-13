@@ -26,6 +26,9 @@ export const GET_USERS = BASE_URL + 'authentication/users/';
 export const DELETE_USER = BASE_URL + 'authentication/users/delete_one_user/';
 export const GET_PROFILE = BASE_URL + 'authentication/profile/';
 
+export const GET_STORE_CONFIG = BASE_URL + 'authentication/config/';
+export const UPDATE_CONFIG = BASE_URL + 'authentication/update_config/';
+
 export const GET_CREATE_SUPPLIERS = BASE_URL + 'people/suppliers/';
 export const UPDATE_SUPPLIERS = BASE_URL + 'people/suppliers/update/';
 export const DELETE_SUPPLIER = BASE_URL + 'people/suppliers/delete/';
@@ -42,7 +45,13 @@ export const DELETE_ITEM = BASE_URL + 'items/delete/';
 export const GET_CREATE_CATEGORIES = BASE_URL + 'items/categories/list-create/';
 
 export const GET_CREATE_SALES = BASE_URL + 'sales/sales/';
-
+export const DELETE_SALE = BASE_URL + 'sales/delete-my-sale/';
+export const GET_SALES_REPORT = BASE_URL + 'sales/list-any-sales/';
+export const DELETE_SALE_REPORT = BASE_URL + 'sales/delete-any-sales/';
+export const GET_DAILY_REPORT = BASE_URL + 'sales/daily-report/';
+export const GET_CUSTOMER_SUMMARY_REPORT = BASE_URL + 'sales/customer-summary-report/';
+export const GET_EMPLOYEE_SUMMARY_REPORT = BASE_URL + 'sales/employee-summary-report/';
+export const GET_ITEM_INVENTORY = BASE_URL + 'sales/item-inventory/';
 
 
 

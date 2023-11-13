@@ -7,6 +7,7 @@ import {
     Container,
     Flex,
     Grid,
+    GridItem,
     FormControl,
     FormLabel,
     HStack,
@@ -29,6 +30,7 @@ import {
     StatLabel,
     StatNumber,
     Spacer,
+    Spinner,
     Table,
     Tbody,
     Thead,
@@ -40,6 +42,7 @@ import {
     VStack,
     useColorModeValue,
     useDisclosure,
+    color,
 } from "@chakra-ui/react";
 // Assets
 import Card from "components/Card/Card.js";
@@ -47,76 +50,397 @@ import CardBody from "components/Card/CardBody.js";
 import CardHeader from "components/Card/CardHeader.js";
 import IconBox from "components/Icons/IconBox";
 import BgSignUp from "assets/img/BgSignUp.png";
-import { useToast } from '@chakra-ui/react';
+
 import { useParams, useHistory } from 'react-router-dom';
-import React, { useState } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { AsyncSelect } from "chakra-react-select";
 import { FaApple, FaFacebook, FaGoogle } from "react-icons/fa";
 import { MdFilterList, MdViewList } from "react-icons/md";
 import { IoMdAddCircle } from "react-icons/io";
 import { dashboardTableData5 } from "variables/general";
+import { DashboardTableRow2 } from "components/Tables/DashboardTableRow";
 import { DashboardTableRow6 } from "components/Tables/DashboardTableRow";
 import avatar4 from "assets/img/samlex2.png";
 import MyPaginate from "components/Pagination";
+import { useToast } from '@chakra-ui/react';
 
+import { getAuthToken } from 'modules/auth/redux/authSelector';
+import { useSelector } from 'react-redux';
+import { postData, fetchData } from 'modules/utilities/util_query';
+import { useQuery, useQueryClient, useMutation } from 'react-query';
+import { getCurrentDateInput } from 'modules/utilities';
+import { handleApiError } from "modules/utilities/responseHandlers";
+import { FIELD_REQUIRED, START_GREATER_THAN_END } from 'constants/formErrorMessages';
+import { checkObject, isError } from 'modules/utilities';
+import { GET_CREATE_SALES, GET_CREATE_ITEM, GET_CREATE_CUSTOMERS, GET_CREATE_USERS, GET_SALES_REPORT, DELETE_SALE_REPORT } from 'config/serverUrls';
+import "theme/asyncSelect.css";
+
+
+const today = getCurrentDateInput();
+
+const ViewModal = (props) => {
+    return (
+        <ModalContent>
+            <ModalHeader>Transaction Receipt</ModalHeader>
+            <ModalCloseButton />
+            <ModalBody>
+                <Box px={8} color="black" bgColor="white">
+                    <Box spacing={4} p={4} mt={4} rounded="md" color="black">
+                        <Flex color='white' w='100%' h='200px' bgColor='black' mb={12}>
+                            <Container alignSelf='center' ml='10px' >
+                                <Image
+                                    me={{ md: "22px" }}
+                                    src={avatar4}
+                                    w="125px"
+                                    h="78px"
+                                    verticalAlign='center'
+                                // borderRadius="15px"
+                                />
+                            </Container>
+                            <Container alignSelf='center' >
+                                <Text fontSize="lg" fontWeight="bold">
+                                    SAMLEX ELECTRONICS
+                                </Text>
+                                <Text fontSize="lg" fontWeight="bold">
+                                    COMPANY LTD
+                                </Text>
+                                <Text>9 AKWA RD BY ABS JUNCTION,ONITSHA, ANAMBRA STATE
+                                </Text>
+                            </Container>
+                            <Spacer />
+                            <Container alignSelf='center' textAlign='right'>
+                                <Text>08030964878</Text>
+                                <Text>07053808284</Text>
+                            </Container>
+                        </Flex>
+                        <Grid templateColumns='repeat(2, 1fr)' gap={2} px='10px' mb={12}>
+                            <GridItem>
+                                <Text textTransform="uppercase" fontSize='sm'>Billed to:</Text>
+                                <Text fontSize="lg" fontWeight="bold">
+                                    {props.sale.customer_name}
+                                </Text>
+                                <Text textTransform="uppercase" fontSize='sm'>{props.sale.email}</Text>
+                                <Text textTransform="uppercase" fontSize='sm'>{props.sale.address_1}</Text>
+                            </GridItem>
+                            <GridItem textAlign='right'>
+                                <Text textTransform="uppercase" fontSize='sm'>Invoice Number:</Text>
+                                <Text fontSize="lg" fontWeight="bold">
+                                    {props.sale.sales_id}
+                                </Text>
+                                <Text textTransform="uppercase" fontSize='sm'>{`Sales Mode: ${props.sale.register_mode} Payment Type: ${props.sale.payment_type}`}</Text>
+                                <Text textTransform="uppercase" fontSize='sm'>Date: {props.sale.date}</Text>
+                            </GridItem>
+
+                            <GridItem >
+                                <Text textTransform="uppercase" fontSize='sm'>Employee ID</Text>
+                                <Text fontSize='sm'>
+                                    {props.sale.employee_name}
+                                </Text>
+                                <Text textTransform="uppercase" fontSize='sm'>{`Designation: ${props.sale.employee_dept || ""}`}</Text>
+                            </GridItem>
+                        </Grid>
+                        <Box width='100%' px='10px'>
+                            <Table variant="unstyled" size='sm'>
+                                <Thead>
+                                    <Tr backgroundColor="#ffebae" borderBottomWidth="1px" borderColor="black">
+                                        <Th textAlign='center'>Item</Th>
+                                        <Th isNumeric textAlign='right'>Unit Price </Th>
+                                        <Th isNumeric textAlign='right'>NUMBER</Th>
+                                        <Th isNumeric textAlign='right'>Amount</Th>
+                                    </Tr>
+                                </Thead>
+                                <Tbody>
+                                    {props.sale.items?.map((option, index) => {
+                                        return (
+                                            <Tr key={index} borderBottomWidth="1px" borderColor="black">
+                                                <Td textAlign='left'>{option.name}</Td>
+                                                <Td isNumeric textAlign='right' >{option.unit_price}</Td>
+                                                <Td isNumeric textAlign='right' backgroundColor="#ffebae">{option.number}</Td>
+                                                <Td isNumeric textAlign='right' backgroundColor="#ffebae">{(option.number * option.unit_price).toFixed(2)}</Td>
+                                            </Tr>
+                                        );
+                                    })}
+                                </Tbody>
+                                <Tfoot>
+                                    <Tr>
+                                        <Th></Th>
+                                        <Th></Th>
+                                        <Th backgroundColor="#ffebae" fontSize='sm' textTransform='none' fontWeight='normal' textAlign='right'>Sub Total:</Th>
+                                        <Th isNumeric backgroundColor="#ffebae" fontSize='sm' textTransform='none' textAlign='right'>NGN {Number(props.sale.sub_total).toFixed(2)}</Th>
+                                    </Tr>
+                                    <Tr>
+                                        <Th></Th>
+                                        <Th></Th>
+                                        <Th backgroundColor="#ffebae" fontSize='sm' textTransform='none' fontWeight='normal' textAlign='right'>Discount:</Th>
+                                        <Th isNumeric backgroundColor="#ffebae" fontSize='sm' textTransform='none' textAlign='right'>NGN {props.sale.discount >= 0 && (Number(props.sale.discount).toFixed(2))}</Th>
+                                    </Tr>
+                                    <Tr>
+                                        <Th></Th>
+                                        <Th></Th>
+                                        <Th backgroundColor="black" color='white' fontSize='sm' textTransform='none' fontWeight='normal' textAlign='right'>TOTAL:</Th>
+                                        <Th backgroundColor="black" color='white' fontSize='sm' textTransform='none' textAlign='right'>NGN {props.sale.discount >= 0 && (Number(props.sale.sub_total) - Number(props.sale.discount)).toFixed(2)}</Th>
+                                    </Tr>
+                                    <Tr>
+                                        <Th></Th>
+                                        <Th></Th>
+                                        <Th backgroundColor="#6b6b6b" color='white' fontSize='sm' textAlign='right'>CASH:</Th>
+                                        <Th backgroundColor="#6b6b6b" color='white' fontSize='sm' textAlign='right'>{props.sale.paid_cash >= 0 && (Number(props.sale.paid_cash).toFixed(2))}</Th>
+                                    </Tr>
+                                    <Tr>
+                                        <Th></Th>
+                                        <Th></Th>
+                                        <Th backgroundColor="#6b6b6b" color='white' fontSize='sm' textAlign='right'>CHANGE DUE:</Th>
+                                        <Th backgroundColor="#6b6b6b" color='white' fontSize='sm' textAlign='right'>NGN {(props.sale.discount >= 0 && props.sale.paid_cash >= 0) && Number(+props.sale.paid_cash + +props.sale.discount - props.sale.sub_total).toFixed(2)}</Th>
+                                    </Tr>
+                                </Tfoot>
+                            </Table>
+                        </Box>
+
+                        <Box alignItems='center' justifyContent='center' width='100%'>
+                            <Text fontSize="lg" fontWeight="bold" textAlign='center'>
+                                {props.sale.comments}
+                            </Text>
+                        </Box>
+                    </Box>
+                </Box>
+            </ModalBody>
+
+            <ModalFooter>
+                <Button colorScheme='red' onClick={props.onClose} mr={3}>
+                    Close
+                </Button>
+            </ModalFooter>
+        </ModalContent>
+
+    )
+
+}
+
+const DeleteModal = (props) => {
+    return (
+        <ModalContent
+            bgColor="#232333"
+            borderColor="gray.900"
+            color="white"
+            boxShadow="rgba(0, 0, 0, 0.1) 0px 0px 0px 1px,rgba(0, 0, 0, 0.2) 0px 5px 10px,rgba(0, 0, 0, 0.4) 0px 15px 40px"
+        >
+            <ModalHeader>Delete Sale</ModalHeader>
+            <ModalCloseButton />
+            <ModalBody>
+                <Container maxW="full">
+                    <Text> Are you sure you want to delete Sale Id:{props.sale.sales_id} ?
+                    </Text>
+                </Container>
+            </ModalBody>
+
+            <ModalFooter>
+                <Button variant='ghost' mr={3} onClick={props.onClose}>
+                    Close
+                </Button>
+                <Button colorScheme='red' isLoading={props.loading} onClick={props.handleDeleteSubmit}>Yes</Button>
+            </ModalFooter>
+        </ModalContent>
+
+    )
+
+}
 
 function FilterSales() {
-
-    const itemOptions = [
-        { value: '1HP SPW THERMOCOOL', label: "1HP SPW THERMOCOOL[0.00 in stock]", colorScheme: "blue", quantity: 1, price: '39500.00' },
-        { value: 'BRUHM GAS COOKER BGC-9642SN 90*60 4 GAS +2E WOODEN FINISH', label: "BRUHM GAS COOKER BGC-9642SN 90*60 4 GAS +2E WOODEN FINISH", colorScheme: "purple", quantity: 1, price: '3900.00' },
-        { value: 'SCANFROST STAINLESS GASCOOKER 2HOB', label: "SCANFROST STAINLESS GASCOOKER 2HOB[6.00 in stock]", colorScheme: "red", quantity: 1, price: '679500.00' },
-        { value: '1000 WATTS PR -SOCKET TEC', label: "1000 WATTS PR -SOCKET TEC[0.00 in stock]", colorScheme: "orange", quantity: 1, price: '39500.00' },
-        { value: '32 T.V HANGER', label: "32'-60' T.V HANGER[14.00 in stock", colorScheme: "yellow", quantity: 1, price: '9500.00' },
-        { value: 'BFV-409SD 409LTS', label: "BFV-409SD 409LTS[3.00 in stock]", colorScheme: "green", quantity: 1, price: '35500.00' }
-    ];
-
-    const customerOptions = [
-        { value: "blue", label: "Okeke Vincent", colorScheme: "blue" },
-        { value: "purple", label: "Enyemaka Ngwa", colorScheme: "purple" },
-        { value: "red", label: "Jerry Ihediwa", colorScheme: "red" },
-        { value: "green", label: "Maximillian Ezeude", colorScheme: "green" },
-
-    ];
-
-    const employeeOptions = [
-        { value: "blue", label: "Ebuka Pilolo", colorScheme: "blue" },
-        { value: "purple", label: "Ezinne Ekpe", colorScheme: "purple" },
-        { value: "red", label: "Ogo Ilika", colorScheme: "red" },
-        { value: "green", label: "Claret Chinaza", colorScheme: "green" },
-    ];
-
-    const titleColor = useColorModeValue("#5A8100", "#8abb18");
-    const textColor = useColorModeValue("gray.700", "white");
-    const [selectedOptions, setSelectedOptions] = useState();
-    const [customer, setCustomer] = useState();
-    const [employee, setEmployee] = useState();
-    const [resultsPage, setResultsPage] = useState(false);
-    const bgColor = useColorModeValue("white", "gray.700");
-    const bgIcons = useColorModeValue("#8abb18", "rgba(255, 255, 255, 0.5)");
-    const [item, setItem] = useState({});
-    const history = useHistory();
+    const isInitialMount = useRef(true);
+    const queryClient = useQueryClient();
+    const [modalType, setModalType] = React.useState(null);
+    const textColor = "white";
+    const bgColor = "#2a2c40";
+    const [date, setDate] = useState({
+        startDate: today,
+        endDate: today
+    });
+    const [errors, setErrors] = useState({});
+    const [selectedOptions, setSelectedOptions] = useState([]);
+    const [customers, setCustomers] = useState([]);
+    const [employees, setEmployees] = useState([]);
+    const [endpoint, setEndpoint] = useState('');
+    const [sale, setSale] = React.useState({});
+    const [sales, setSales] = useState(null);
+    const [count, setCount] = useState(0);
+    const [pageCount, setPageCount] = useState(1);
+    const [page, setPage] = useState(1);
+    const [enabled, setEnabled] = useState(false);
+    const token = useSelector(getAuthToken);
     const toast = useToast();
+    const history = useHistory();
+
+    const payload_data = {};
+    const url = `${GET_SALES_REPORT}?startDate=${date?.startDate}&endDate=${date?.endDate}&itemNames=${selectedOptions.map(obj => obj.name).join(',')}&employeeIds=${employees.map(obj => obj.value).join(',')}&customerIds=${customers.map(obj => obj.value).join(',')}&page=${page}`;
+
+    const { isLoading, refetch, isSuccess, isFetching, remove } = useQuery(['anySales',
+        {
+            url: url,
+            payload_data,
+            authenticate: true,
+            token
+
+        }],
+        fetchData,
+        {
+            enabled: enabled,
+            retry: false,
+            onSuccess: (response) => {
+                console.log(response?.data);
+                const data = response?.data;
+                setCount(data?.count || 0);
+                setSales(data?.results || []);
+                setPageCount(data?.last_page || 1);
+
+            },
+            onError: (error) => {
+                handleApiError(error);
+            }
+        }
+    )
+
+    const mutation = useMutation(postData, {
+        onSuccess: (response) => {
+            toast({
+                title: 'Success',
+                description: 'sales deleted',
+                status: 'success',
+                duration: 3000,
+                isClosable: true,
+            });
+
+            onModalClose();
+            refetch();
+
+            return;
+        },
+        onError: (error) => {
+            handleApiError(error);
+            onModalClose();
+        }
+    });
+
+    const handlePageChange = (evt) => {
+
+        const { selected } = evt;
+        setPage(selected + 1);
+        setEnabled(true);
+
+        window.scrollTo(0, 0); // moves the compoent to the top of the page
+    }
+
+    const loadCustomers = async (inputValue) => {
+        let response = await fetchData({
+            queryKey: ['all customers', {
+                url: GET_CREATE_CUSTOMERS + `?name=${inputValue}`,
+                payload_data: {},
+                authenticate: true,
+                token
+            }]
+        });
+
+        const options = response.data.map((option) => ({
+            ...option,
+            value: option?.id,
+            label: option?.first_name + " " + option?.last_name,
+            colorScheme: 'none'
+
+        }));
+
+
+        return options;
+    }
+
+    const loadItems = async (inputValue) => {
+        console.log('waiting');
+        let response = await fetchData({
+            queryKey: ['all items', {
+                url: GET_CREATE_ITEM + `?name=${inputValue}`,
+                payload_data: {},
+                authenticate: true,
+                token
+            }]
+        });
+
+        const options = response.data;
+
+
+        return options;
+    }
+
+    const loadEmployees = async (inputValue) => {
+        let response = await fetchData({
+            queryKey: ['all employees', {
+                url: GET_CREATE_USERS + `?username=${inputValue}`,
+                payload_data: {},
+                authenticate: true,
+                token
+            }]
+        });
+
+        const options = response.data;
+
+
+        return options;
+    }
+
+    const handleItemChange = (selectedOption) => {
+        const allSelected = selectedOption.map(obj => {
+            return {
+                label: obj.label,
+                value: obj.value,
+                colorScheme: obj.colorScheme,
+                name: obj.name,
+            }
+        });
+        setSelectedOptions(allSelected);
+    };
+
+    const handleCustomerChange = (customer, { action }) => {
+
+        if (action === 'clear') {
+            setCustomers(null);
+        }
+        else {
+            setCustomers(customer);
+        }
+    };
+
+    const handleEmployeeChange = (employee, { action }) => {
+
+        if (action === 'clear') {
+            setEmployees(null);
+        }
+        else {
+            setEmployees(employee);
+        }
+    };
+
+    const handleDateChange = (evt) => {
+        const { name, value } = evt.target;
+        if (name) {
+            setDate({ ...date, [name]: value });
+            return;
+        }
+    }
+
+    const [resultsPage, setResultsPage] = useState(false);
+
+    const [item, setItem] = useState({});
+
 
     //for receipt details page
     const [selectedItem, setSelectedItem] = useState({});
 
     // for search results and pagination 
-    const [itemOffset, setItemOffset] = useState(0);
-    const itemsPerPage = 10;
-    const endOffset = itemOffset + itemsPerPage;
-    const currentItems = dashboardTableData5.slice(itemOffset, endOffset);
-    const pageCount = Math.ceil(dashboardTableData5.length / itemsPerPage);
+
     const { isOpen, onOpen, onClose } = useDisclosure()
 
-    // Invoke when user click to request another page.
-    const handlePageClick = (event) => {
-        const newOffset = (event.selected * itemsPerPage) % dashboardTableData5.length;
-        console.log(
-            `User requested page number ${event.selected}, which is offset ${newOffset}`
-        );
-        setItemOffset(newOffset);
-    };
+    const onModalClose = () => {
+        setSale({});
+        setModalType(null);
+        onClose();
+    }
 
     const sumTotal = (arr) => {
         return arr?.reduce((total, obj) => {
@@ -133,358 +457,185 @@ function FilterSales() {
 
     };
 
-    var handleChange = (selectedOption) => {
-        setSelectedOptions(selectedOption);
-    };
+    const validate = () => {
+        let uerrors = {}
+        uerrors.startDate = date.startDate ? "" : FIELD_REQUIRED
+        uerrors.endDate = date.endDate ? "" : FIELD_REQUIRED
+
+        if (!date.startDate || !date.endDate) {
+            toast({
+                title: 'Missing Information.',
+                description: "Please set a start and end date",
+                status: 'warning',
+                duration: 3000,
+                isClosable: true,
+            });
+            return uerrors;
+        }
+
+        if (date.startDate && date.endDate && date.startDate > date.endDate) {
+            uerrors.startDate = START_GREATER_THAN_END
+            uerrors.endDate = START_GREATER_THAN_END
+            toast({
+                title: 'Missing Information.',
+                description: "Start date must come before end date",
+                status: 'warning',
+                duration: 3000,
+                isClosable: true,
+            });
+            return uerrors;
+        }
+        return uerrors
+    }
+
 
     const handleSubmit = () => {
-        setResultsPage(true);
+
+        let checkErrors = validate();
+        let areAllFieldsFalse = checkObject(checkErrors);
+
+        if (!areAllFieldsFalse) {
+            // if there are errors
+            // set to state and terminate
+            setErrors(checkErrors);
+            return;
+        }
+
+        // remove this ??
+        const data = {
+            selectedOptions,
+            customers,
+            employees,
+            date
+        }
+        console.log(data);
+
+        refetch();
     }
+
+
 
     const goBack = () => {
         setResultsPage(false);
     }
 
+    const handleDeleteSubmit = () => {
+        const data = { ...sale }
 
-    return (
-        <>
-            <Modal isOpen={isOpen} onClose={onClose} size='4xl'>
-                <ModalOverlay />
-                <ModalContent>
-                    <ModalHeader>Transaction Receipt</ModalHeader>
-                    <ModalCloseButton />
-                    <ModalBody>
-                        <Box px={8} color="black">
-                            <VStack spacing={4} align="start" p={4} rounded="md" color="black">
-                                <Flex color='white' w='100%' h='200px' bgColor='black'>
-                                    <Container alignSelf='center' ml='10px' >
-                                        <Image
-                                            me={{ md: "22px" }}
-                                            src={avatar4}
-                                            w="125px"
-                                            h="78px"
-                                            verticalAlign='center'
-                                        // borderRadius="15px"
-                                        />
-                                    </Container>
-                                    <Container alignSelf='center' >
-                                        <Text fontSize="lg" fontWeight="bold">
-                                            SAMLEX ELECTRONICS
-                                        </Text>
-                                        <Text fontSize="lg" fontWeight="bold">
-                                            COMPANY LTD
-                                        </Text>
-                                        <Text>9 AKWA RD BY ABS JUNCTION,ONITSHA, ANAMBRA STATE
-                                        </Text>
-                                    </Container>
-                                    <Spacer />
-                                    <Container alignSelf='center' textAlign='right'>
-                                        <Text>08030964878</Text>
-                                        <Text>07053808284</Text>
-                                    </Container>
-                                </Flex>
-                                <Grid templateColumns='repeat(3, 1fr)' gap={6}>
-                                    <Container alignSelf='center' >
-                                        <Container my='20px' >
-                                            <Text>Billed to:</Text>
-                                            <Text fontSize="lg" fontWeight="bold">
-                                                Company Name
-                                            </Text>
-                                            <Text>Address</Text>
-                                            <Text>City, State, ZIP</Text>
-                                        </Container>
-                                        <Container my='20px'>
-                                            <Text>Invoice Number:</Text>
-                                            <Text fontSize="lg" fontWeight="bold">
-                                                ########
-                                            </Text>
-                                            <Text>Sales Receipt</Text>
-                                            <Text>Date: June 11, 2023</Text>
-                                        </Container>
-                                    </Container>
+        mutation.mutate({
+            url: DELETE_SALE_REPORT,
+            payload_data: data,
+            token: token,
+            authenticate: true
+        });
+        return;
 
-                                    <Container textAlign='right' alignSelf='center'>
-                                        <Text>Employee ID</Text>
-                                        <Text fontSize="lg" fontWeight="bold">
-                                            Ebuka Pilolo
-                                        </Text>
-                                        <Text>City, State, ZIP</Text>
-                                    </Container>
-                                </Grid>
-                                <Box width='100%' px='10px'>
-                                    <Table variant="unstyled" size='sm'>
-                                        <Thead>
-                                            <Tr backgroundColor="#ffebae" borderBottomWidth="1px" borderColor="black">
-                                                <Th textAlign='center'>Item</Th>
-                                                <Th isNumeric textAlign='right'>Unit Price </Th>
-                                                <Th isNumeric textAlign='right'>Quantity</Th>
-                                                <Th isNumeric textAlign='right'>Amount</Th>
-                                            </Tr>
-                                        </Thead>
-                                        <Tbody>
-                                            {selectedItem?.values?.map((option, index) => {
-                                                return (
-                                                    <Tr key={index} borderBottomWidth="1px" borderColor="black">
-                                                        <Td textAlign='left'>{option.label}</Td>
-                                                        <Td isNumeric textAlign='right' >{option.price}</Td>
-                                                        <Td isNumeric textAlign='right' backgroundColor="#ffebae">{option.quantity}</Td>
-                                                        <Td isNumeric textAlign='right' backgroundColor="#ffebae">{option.quantity * option.price}</Td>
-                                                    </Tr>
-                                                );
-                                            })}
-                                        </Tbody>
-                                        <Tfoot>
-                                            <Tr>
-                                                <Th></Th>
-                                                <Th></Th>
-                                                <Th backgroundColor="#ffebae" fontSize='sm' textTransform='none' fontWeight='normal' textAlign='right'>Sub Total</Th>
-                                                <Th isNumeric backgroundColor="#ffebae" fontSize='sm' textTransform='none' textAlign='right'>{sumTotal(selectedItem?.values)}</Th>
-                                            </Tr>
-                                            <Tr>
-                                                <Th></Th>
-                                                <Th></Th>
-                                                <Th backgroundColor="#ffebae" fontSize='sm' textTransform='none' fontWeight='normal' textAlign='right'>Discount</Th>
-                                                <Th isNumeric backgroundColor="#ffebae" fontSize='sm' textTransform='none' textAlign='right'>{selectedItem?.discount}</Th>
-                                            </Tr>
-                                            <Tr>
-                                                <Th></Th>
-                                                <Th></Th>
-                                                <Th backgroundColor="black" color='white' fontSize='sm' textTransform='none' fontWeight='normal' textAlign='right'>TOTAL</Th>
-                                                <Th backgroundColor="black" color='white' fontSize='sm' textTransform='none' textAlign='right'>{sumTotal(selectedItem?.values) - selectedItem?.discount}</Th>
-                                            </Tr>
-                                            <Tr>
-                                                <Th></Th>
-                                                <Th></Th>
-                                                <Th>CASH {selectedItem?.amount_tendered}</Th>
-                                                <Th>CHANGE DUE {+selectedItem?.amount_tendered + +selectedItem?.discount - sumTotal(selectedItem?.values)}</Th>
-                                            </Tr>
-                                        </Tfoot>
-                                    </Table>
-                                </Box>
+    }
 
-                                <Box alignItems='center' justifyContent='center' width='100%'>
-                                    <Text fontSize="lg" textAlign='center'>
-                                        Any other commengts goes here
-                                    </Text>
-                                    <Text fontSize="lg" fontWeight="bold" textAlign='center'>
-                                        Thanks for your Patronage !!
-                                    </Text>
-                                </Box>
-                            </VStack>
-                        </Box>
-                    </ModalBody>
 
-                    <ModalFooter>
-                        <Button colorScheme='blue' mr={3} onClick={onClose}>
-                            Close
-                        </Button>
-                        <Button variant='ghost'>Secondary Action</Button>
-                    </ModalFooter>
-                </ModalContent>
-            </Modal>
-            <Flex
-                direction="column"
-                alignSelf="center"
-                justifySelf="center"
-                overflow="hidden"
-            >
-                {resultsPage ? <Flex flexDirection="column" pt={{ base: "120px", md: "75px" }}>
-                    <SimpleGrid columns={{ sm: 1, md: 2, xl: 4 }} spacing="24px">
-                        <Card minH="83px">
-                            <CardBody>
-                                <Flex flexDirection="row" align="center" justify="center" w="100%">
-                                    <Stat me="auto">
-                                        <StatLabel
-                                            fontSize="sm"
-                                            color="gray.400"
-                                            fontWeight="bold"
-                                            pb=".1rem"
-                                        >
-                                            Total Units Sold (Feb 2023)
-                                        </StatLabel>
-                                        <Flex>
-                                            <StatNumber fontSize="lg" color="blue">
-                                                125
-                                            </StatNumber>
-                                            {/* <StatHelpText
-                    alignSelf="flex-end"
-                    justifySelf="flex-end"
-                    m="0px"
-                    color="green.400"
-                    fontWeight="bold"
-                    ps="3px"
-                    fontSize="md"
-                  >
-                    +55%
-                  </StatHelpText> */}
-                                        </Flex>
-                                    </Stat>
-                                    <IconBox as="box" h={"45px"} w={"45px"} bg="blue">
-                                        <Icon h={"35px"} w={"35px"} as={MdFilterList} color='#fff' />
-                                    </IconBox>
-                                </Flex>
-                            </CardBody>
-                        </Card>
-                        <Card minH="83px">
-                            <CardBody>
-                                <Flex flexDirection="row" align="center" justify="center" w="100%">
-                                    <Stat me="auto">
-                                        <StatLabel
-                                            fontSize="sm"
-                                            color="gray.400"
-                                            fontWeight="bold"
-                                            pb=".1rem"
-                                        >
-                                            Net Income (Amount)(Feb 2023)
-                                        </StatLabel>
-                                        <Flex>
-                                            <StatNumber fontSize="lg" color="black">
-                                                45
-                                            </StatNumber>
-                                            {/* <StatHelpText
-                    alignSelf="flex-end"
-                    justifySelf="flex-end"
-                    m="0px"
-                    color="green.400"
-                    fontWeight="bold"
-                    ps="3px"
-                    fontSize="md"
-                  >
-                    +5%
-                  </StatHelpText> */}
-                                        </Flex>
-                                    </Stat>
-                                    <IconBox as="box" h={"45px"} w={"45px"} bg="blue">
-                                        <Icon h={"35px"} w={"35px"} as={MdFilterList} color='#fff' />
-                                    </IconBox>
-                                </Flex>
-                            </CardBody>
-                        </Card>
-                        <Card minH="83px">
-                            <CardBody>
-                                <Flex flexDirection="row" align="center" justify="center" w="100%">
-                                    <Stat me="auto">
-                                        <StatLabel
-                                            fontSize="sm"
-                                            color="gray.400"
-                                            fontWeight="bold"
-                                            pb=".1rem"
-                                        >
-                                            Total Sales (Amount)(Feb 2023)
-                                        </StatLabel>
-                                        <Flex>
-                                            <StatNumber fontSize="lg" color="blue">
-                                                3,020,009
-                                            </StatNumber>
-                                            {/* <StatHelpText
-                    alignSelf="flex-end"
-                    justifySelf="flex-end"
-                    m="0px"
-                    color="red.500"
-                    fontWeight="bold"
-                    ps="3px"
-                    fontSize="md"
-                  >
-                    -14%
-                  </StatHelpText> */}
-                                        </Flex>
-                                    </Stat>
-                                    <IconBox as="box" h={"45px"} w={"45px"} bg="blue">
-                                        <Icon h={"35px"} w={"35px"} as={MdFilterList} color='#fff' />
-                                    </IconBox>
-                                </Flex>
-                            </CardBody>
-                        </Card>
-                        <Card minH="83px">
-                            <CardBody>
-                                <Flex flexDirection="row" align="center" justify="center" w="100%">
-                                    <Stat me="auto">
-                                        <StatLabel
-                                            fontSize="sm"
-                                            color="gray.400"
-                                            fontWeight="bold"
-                                            pb=".1rem"
-                                        >
-                                            Total Violations (Rules)
-                                        </StatLabel>
-                                        <Flex>
-                                            <StatNumber fontSize="lg" color="blue" fontWeight="bold">
-                                                9
-                                            </StatNumber>
-                                            {/* <StatHelpText
-                    alignSelf="flex-end"
-                    justifySelf="flex-end"
-                    m="0px"
-                    color="green.400"
-                    fontWeight="bold"
-                    ps="3px"
-                    fontSize="md"
-                  >
-                    +8%
-                  </StatHelpText> */}
-                                        </Flex>
-                                    </Stat>
-                                    <IconBox as="box" h={"45px"} w={"45px"} bg="blue">
-                                        <Icon h={"35px"} w={"35px"} as={MdFilterList} color='#fff' />
-                                    </IconBox>
-                                </Flex>
-                            </CardBody>
-                        </Card>
-                    </SimpleGrid>
+
+    if (isLoading) {
+        return (
+            <Flex direction="column" pt={{ base: "120px", md: "75px" }}>
+                <Center>
+                    <Spinner
+                        thickness='4px'
+                        speed='0.65s'
+                        emptyColor='gray.200'
+                        color='blue.500'
+                        size='xl'
+                    />
+                </Center>
+            </Flex>
+        )
+    }
+
+    if ( isSuccess && sales ) {
+        return (
+            <>
+                <Modal isOpen={isOpen} onClose={onModalClose} size="4xl">
+                    <ModalOverlay />
+                    {modalType === "view" ? <ViewModal sale={sale} onClose={onModalClose} /> :
+                        <DeleteModal sale={sale} onClose={onModalClose} handleDeleteSubmit={handleDeleteSubmit}
+                            loading={mutation.isLoading} />}
+                </Modal>
+                <Flex flexDirection="column" pt={{ base: "120px", md: "75px" }}>
                     <Grid
                         my="26px"
                         mb={{ lg: "16px" }}
                     >
                         <Card p="16px" overflowX={{ sm: "scroll", xl: "hidden" }}>
                             <CardHeader p="12px 0px 28px 0px">
-                                <Flex direction="column">
+                                <Flex w='100%' alignItems='center' gap='2' >
                                     <Text
                                         fontSize="lg"
-                                        color="blue"
+                                        color={textColor}
                                         fontWeight="bold"
-                                        pb=".5rem"
                                     >
-                                        ITEM SALES INVETORY (FEB 2023)
+
+                                        {`SALES RECORD (${date.startDate} to ${date.endDate}) (${count} records found)`}
                                     </Text>
+                                    <Spacer />
+                                    <Button
+                                        bgColor="#FFD700"
+                                        size="sm"
+                                        onClick={() => {
+                                            setEnabled(false);
+                                            setSales(null);
+                                        }}
+                                    >
+                                        Back to Search
+                                    </Button>
+
                                 </Flex>
                             </CardHeader>
-                            <Table variant="striped" color={textColor} size='sm'>
+                            <Table variant="unstyled" color={textColor} size='sm'>
                                 <Thead>
-                                    <Tr my=".8rem" ps="0px">
-                                        <Th ps="0px" color="gray.400">
-                                            Sale ID
+                                    <Tr my=".8rem">
+                                        <Th color="white" fontSize="sm" px={2} mx={0}>
+                                            DATE
                                         </Th>
-                                        <Th color="gray.400">DATE</Th>
-                                        <Th color="gray.400">Items(QTY)</Th>
-                                        <Th color="gray.400">Sold By</Th>
+                                        <Th color="white" fontSize="sm" px={2} mx={0}>EMPLOYEE</Th>
+                                        <Th color="white" fontSize="sm" px={2} mx={0}>SOLD TO</Th>
+                                        <Th maxWidth={{ sm: "70px" }} px={2} mx={0} textAlign="right" color="white" fontSize="sm"> QTY</Th>
+                                        <Th textAlign="right" color="white" px={2} mx={0} fontSize="sm">SUBTOTAL</Th>
+                                        <Th textAlign="right" color="white" px={2} mx={0} fontSize="sm">DISC</Th>
+                                        <Th textAlign="right" color="white" px={2} mx={0} fontSize="sm">TOTAL</Th>
+                                        <Th textAlign="right" color="white" px={2} mx={0} fontSize="sm">PAYMENT</Th>
+                                        <Th textAlign="center" color="white" px={2} mx={0} fontSize="sm">ACTIONS</Th>
 
-                                        <Th color="gray.400">Sold To</Th>
-                                        <Th color="gray.400">Subtotal</Th>
-                                        <Th color="gray.400">TAX</Th>
-                                        <Th color="gray.400">Total</Th>
-                                        <Th color="gray.400">PAYMENT </Th>
-                                        <Center>
-                                            <Th color="gray.400">ACTIONS</Th>
-                                        </Center>
 
 
                                     </Tr>
                                 </Thead>
                                 <Tbody>
-                                    {currentItems.map((row, key) => {
+                                    {sales.map((row, index) => {
+                                        const jsDate = new Date(row.date);
+                                        const options = { year: 'numeric', month: 'short', day: '2-digit' };
+                                        const formattedDate = jsDate.toLocaleDateString('en-US', options);
+
                                         return (
-                                            <DashboardTableRow6
-                                                sale_id={row.sale_id}
-                                                Date={row.Date}
-                                                units_sold={row.units_sold}
-                                                sold_by={row.sold_by}
-                                                sold_to={row.sold_to}
-                                                total_price={row.total_price}
-                                                amount_tendered={row.amount_tendered}
-                                                handleViewDetails={() => {
-                                                    setSelectedItem(row);
+                                            <DashboardTableRow2
+                                                key={index}
+                                                Date={formattedDate}
+                                                employee_name={row.employee_name}
+                                                customer_name={row.customer_name}
+                                                sum_items={row.sum_items}
+                                                sub_total={row.sub_total}
+                                                discount={row.discount}
+                                                payment_type={row.payment_type}
+                                                paid_cash={row.paid_cash}
+                                                onViewClick={() => {
+                                                    setSale(row);
+                                                    setModalType("view");
                                                     onOpen();
                                                 }}
+                                                onDeleteClick={() => {
+                                                    setSale(row);
+                                                    setModalType("delete");
+                                                    onOpen();
+                                                }}
+
                                             />
                                         );
                                     })}
@@ -493,161 +644,173 @@ function FilterSales() {
                             <Box my="1.2rem">
                                 <MyPaginate
                                     breakLabel="..."
-                                    nextLabel="next >"
-                                    onPageChange={handlePageClick}
+                                    nextLabel=">"
+
                                     pageRangeDisplayed={5}
+
+                                    previousLabel="<"
+
                                     pageCount={pageCount}
-                                    previousLabel="< previous"
+                                    onPageChange={(e) => { handlePageChange(e) }}
+                                    forcePage={pageCount > 1 ? page - 1 : 1}
                                     renderOnZeroPageCount={null}
+                                    activeClassName={'active'}
                                 />
                             </Box>
                         </Card>
                     </Grid>
-                </Flex> :
-                    <Flex alignItems="center" justifyContent="center" mb="60px" mt="80px">
-                        <Flex
-                            direction="column"
-                            w="745px"
-                            background="transparent"
-                            borderRadius="15px"
-                            p="40px"
-                            mx={{ base: "100px" }}
-                            bg={bgColor}
-                            boxShadow="0 20px 27px 0 rgb(0 0 0 / 5%)"
+                </Flex>
+            </>
+
+        )
+    }
+
+
+    return (
+        <>
+
+            <Flex
+                direction="column"
+                alignSelf="center"
+                justifySelf="center"
+            >
+
+                <Flex alignItems="center" justifyContent="center" mb="60px" mt="80px">
+
+                    <Flex
+                        direction="column"
+                        w="100%"
+                        background="transparent"
+                        borderRadius="15px"
+                        p="40px"
+                        mx={{ base: "10px" }}
+                        bg={bgColor}
+                        color={textColor}
+                        boxShadow="0 20px 27px 0 rgb(0 0 0 / 5%)"
+                    >
+                        <Text
+                            fontSize="2xl"
+                            color="#FFD700"
+                            fontWeight="bold"
+                            textAlign="center"
+                            mb="22px"
+                            fontFamily="heading"
+
                         >
-                            <FormControl>
-                                <FormLabel ms="4px" fontSize="sm" fontWeight="normal">
-                                    Name of Item
+                            SALES REPORT
+                        </Text>
+                        <FormControl>
+                            <FormLabel fontSize="sm" fontWeight="bold">
+                                Name of Items:
+                            </FormLabel>
+                            <AsyncSelect
+                                isMulti
+                                name="item_name"
+                                onChange={handleItemChange}
+                                placeholder="Start typing name..."
+                                loadOptions={loadItems}
+                                value={selectedOptions}
+                                cacheOptions
+                                className="chakra-react-select"
+                                classNamePrefix="chakra-react-select"
+                            />
+                        </FormControl>
+                        <Grid templateColumns='repeat(2, 1fr)' gap={6} mt={4}>
+                            <FormControl >
+                                <FormLabel fontSize="sm" fontWeight="bold">
+                                    Customer Names:
                                 </FormLabel>
                                 <AsyncSelect
                                     isMulti
-                                    name="item_name"
-                                    onChange={handleChange}
+                                    name="customer_name"
+                                    size="sm"
+                                    onChange={(customer) => {
+                                        setCustomers(customer);
+                                    }}
                                     placeholder="Start typing name..."
-                                    loadOptions={(inputValue, callback) => {
-                                        setTimeout(() => {
-                                            const values = itemOptions.filter((option) =>
-                                                option.label.toLowerCase().includes(inputValue.toLowerCase())
-                                            );
-                                            callback(values);
-                                        }, 3000);
-                                    }}
-                                    value={selectedOptions}
+                                    loadOptions={loadCustomers}
                                     cacheOptions
+                                    value={customers}
+                                    className="chakra-react-select"
+                                    classNamePrefix="chakra-react-select"
                                 />
-                                <FormLabel ms="4px" fontSize="sm" fontWeight="normal">
-                                    Category
-                                </FormLabel>
-                                <Select variant='filled' placeholder='Select option' mb="24px" name="category" onChange={onChange} value={item?.category || ""}>
-                                    <option value='option1'>Stabilizer</option>
-                                    <option value='option2'>Microwave</option>
-                                    <option value='option3'>Blender</option>
-                                </Select>
-                                <Grid templateColumns='repeat(2, 1fr)' gap={6} my="4px">
-                                    <FormControl >
-                                        <FormLabel ms="4px" fontSize="sm" fontWeight="normal">
-                                            Customer's name
-                                        </FormLabel>
-                                        <AsyncSelect
-                                            isMulti
-                                            name="customer_name"
-                                            onChange={(customer) => {
-                                                setCustomer(customer);
-                                            }}
-                                            placeholder="Start typing name..."
-                                            loadOptions={(inputValue, callback) => {
-                                                setTimeout(() => {
-                                                    const values = customerOptions.filter((option) =>
-                                                        option.label.toLowerCase().includes(inputValue.toLowerCase())
-                                                    );
-                                                    callback(values);
-                                                }, 3000);
-                                            }}
-                                            cacheOptions
-                                            value={customer}
-                                        />
 
-                                    </FormControl>
-                                    <FormControl >
-                                        <FormLabel ms="4px" fontSize="sm" fontWeight="normal">
-                                            Employee's name
-                                        </FormLabel>
-                                        <AsyncSelect
-                                            isMulti
-                                            name="employee_name"
-                                            onChange={(employee) => {
-                                                setEmployee(employee);
-                                            }}
-                                            placeholder="Start typing name..."
-                                            loadOptions={(inputValue, callback) => {
-                                                setTimeout(() => {
-                                                    const values = employeeOptions.filter((option) =>
-                                                        option.label.toLowerCase().includes(inputValue.toLowerCase())
-                                                    );
-                                                    callback(values);
-                                                }, 3000);
-                                            }}
-                                            cacheOptions
-                                            value={employee}
-                                        />
-
-                                    </FormControl>
-                                </Grid>
-                                <HStack spacing="15px" mb="35px" mt="8px" justify="center">
-                                    <Box width="100%" mt="4px">
-                                        <FormLabel ms="4px" fontSize="md" fontWeight="bold">
-                                            Start Date
-                                        </FormLabel>
-                                        <Input
-                                            fontSize="sm"
-                                            ms="4px"
-                                            borderRadius="15px"
-                                            type="date"
-                                            size="lg"
-                                        />
-                                    </Box>
-                                    <Box width="100%">
-                                        <FormLabel ms="4px" fontSize="md" fontWeight="bold">
-                                            End Date
-                                        </FormLabel>
-                                        <Input
-                                            fontSize="sm"
-                                            ms="4px"
-                                            borderRadius="15px"
-                                            type="date"
-                                            size="lg"
-                                        />
-                                    </Box>
-                                    <FormControl>
-                                        <FormLabel ms="4px" fontSize="sm" fontWeight="normal">
-                                            Export to PDF/Excel
-                                        </FormLabel>
-                                        <Switch colorScheme="#5A8100" me="10px" />
-                                    </FormControl>
-                                </HStack>
-                                <Button
-                                    type="submit"
-                                    bg="#5A8100"
-                                    fontSize="15px"
-                                    color="white"
-                                    fontWeight="bold"
-                                    onClick={handleSubmit}
-                                    w="100%"
-                                    h="45"
-                                    mb="24px"
-                                    _hover={{
-                                        bg: "#8abb18",
-                                    }}
-                                    _active={{
-                                        bg: "#354c00",
-                                    }}
-                                >
-                                    SUBMIT
-                                </Button>
                             </FormControl>
-                        </Flex>
+                            <FormControl >
+                                <FormLabel fontSize="sm" fontWeight="bold">
+                                    Employee Names:
+                                </FormLabel>
+                                <AsyncSelect
+                                    isMulti
+                                    name="employee_name"
+                                    size="sm"
+                                    onChange={(employee) => {
+                                        setEmployees(employee);
+                                    }}
+                                    placeholder="Start typing name..."
+                                    loadOptions={loadEmployees}
+                                    cacheOptions
+                                    value={employees}
+                                    className="chakra-react-select"
+                                    classNamePrefix="chakra-react-select"
+                                />
+                            </FormControl>
+                        </Grid>
+                        <Grid templateColumns='repeat(3, 1fr)' gap={2} mt={4}>
+                            <FormControl>
+                                <FormLabel fontSize="sm" fontWeight="bold">
+                                    Start Date: *
+                                </FormLabel>
+                                <Input
+                                    isInvalid={isError(errors?.startDate)}
+                                    errorBorderColor='red.300'
+                                    name="startDate"
+                                    onChange={handleDateChange}
+                                    type="date"
+                                    size="sm"
+                                    value={date?.startDate}
+                                    borderRadius="15px"
+                                    borderColor="rgba(255, 255, 255, 0.2)"
+                                    _placeholder={{ opacity: 0.2, color: 'white' }}
+                                />
+                            </FormControl>
+                            <FormControl>
+                                <FormLabel fontSize="sm" fontWeight="bold">
+                                    End Date: *
+                                </FormLabel>
+                                <Input
+                                    isInvalid={isError(errors?.endDate)}
+                                    errorBorderColor='red.300'
+                                    name="endDate"
+                                    onChange={handleDateChange}
+                                    type="date"
+                                    size="sm"
+                                    value={date?.endDate}
+                                    borderRadius="15px"
+                                    borderColor="rgba(255, 255, 255, 0.2)"
+                                    _placeholder={{ opacity: 0.2, color: 'white' }}
+                                />
+                            </FormControl>
+                            <FormControl id="">
+                                <FormLabel fontSize="sm" fontWeight='bold'>Export to PDF</FormLabel>
+                                <Switch
+                                    size="md"
+                                    colorScheme="blue"
+                                />
+                            </FormControl>
+                        </Grid>
+                        <Box display="flex" justifyContent="flex-end">
+                            <Button
+                                colorScheme="blue"
+                                onClick={handleSubmit}
+                            >
+                                Search
+                            </Button>
+
+                        </Box>
+
                     </Flex>
-                }
+                </Flex>
 
             </Flex>
         </>

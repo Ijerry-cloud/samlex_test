@@ -7,6 +7,7 @@ import {
     Container,
     Flex,
     Grid,
+    GridItem,
     FormControl,
     FormLabel,
     HStack,
@@ -29,6 +30,7 @@ import {
     StatLabel,
     StatNumber,
     Spacer,
+    Spinner,
     Table,
     Tbody,
     Thead,
@@ -40,6 +42,7 @@ import {
     VStack,
     useColorModeValue,
     useDisclosure,
+    color,
 } from "@chakra-ui/react";
 // Assets
 import Card from "components/Card/Card.js";
@@ -47,296 +50,253 @@ import CardBody from "components/Card/CardBody.js";
 import CardHeader from "components/Card/CardHeader.js";
 import IconBox from "components/Icons/IconBox";
 import BgSignUp from "assets/img/BgSignUp.png";
-import { useToast } from '@chakra-ui/react';
+
 import { useParams, useHistory } from 'react-router-dom';
-import React, { useState } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { AsyncSelect } from "chakra-react-select";
 import { FaApple, FaFacebook, FaGoogle } from "react-icons/fa";
 import { MdFilterList, MdViewList } from "react-icons/md";
 import { IoMdAddCircle } from "react-icons/io";
-import { dashboardTableData } from "variables/general";
+import { dashboardTableData5 } from "variables/general";
 import { DashboardTableRow8 } from "components/Tables/DashboardTableRow";
+import { DashboardTableRow6 } from "components/Tables/DashboardTableRow";
 import avatar4 from "assets/img/samlex2.png";
 import MyPaginate from "components/Pagination";
+import { useToast } from '@chakra-ui/react';
+
+import { getAuthToken } from 'modules/auth/redux/authSelector';
+import { useSelector } from 'react-redux';
+import { postData, fetchData } from 'modules/utilities/util_query';
+import { useQuery, useQueryClient, useMutation } from 'react-query';
+import { getCurrentDateInput } from 'modules/utilities';
+import { handleApiError } from "modules/utilities/responseHandlers";
+import { FIELD_REQUIRED, START_GREATER_THAN_END } from 'constants/formErrorMessages';
+import { checkObject, isError } from 'modules/utilities';
+import { GET_DAILY_REPORT, GET_CREATE_CUSTOMERS, GET_CUSTOMER_SUMMARY_REPORT } from 'config/serverUrls';
+import "theme/asyncSelect.css";
+
+
+const today = getCurrentDateInput();
+
 
 
 function CustomerSummary() {
+    const textColor = "white";
+    const bgColor = "#2a2c40";
+    const [date, setDate] = useState({
+        startDate: today,
+        endDate: today
+    });
+    const [errors, setErrors] = useState({});
 
-    const itemOptions = [
-        { value: '1HP SPW THERMOCOOL', label: "1HP SPW THERMOCOOL[0.00 in stock]", colorScheme: "blue", quantity: 1, price: '39500.00' },
-        { value: 'BRUHM GAS COOKER BGC-9642SN 90*60 4 GAS +2E WOODEN FINISH', label: "BRUHM GAS COOKER BGC-9642SN 90*60 4 GAS +2E WOODEN FINISH", colorScheme: "purple", quantity: 1, price: '3900.00' },
-        { value: 'SCANFROST STAINLESS GASCOOKER 2HOB', label: "SCANFROST STAINLESS GASCOOKER 2HOB[6.00 in stock]", colorScheme: "red", quantity: 1, price: '679500.00' },
-        { value: '1000 WATTS PR -SOCKET TEC', label: "1000 WATTS PR -SOCKET TEC[0.00 in stock]", colorScheme: "orange", quantity: 1, price: '39500.00' },
-        { value: '32 T.V HANGER', label: "32'-60' T.V HANGER[14.00 in stock", colorScheme: "yellow", quantity: 1, price: '9500.00' },
-        { value: 'BFV-409SD 409LTS', label: "BFV-409SD 409LTS[3.00 in stock]", colorScheme: "green", quantity: 1, price: '35500.00' }
-    ];
-
-    const customerOptions = [
-        { value: "blue", label: "Okeke Vincent", colorScheme: "blue" },
-        { value: "purple", label: "Enyemaka Ngwa", colorScheme: "purple" },
-        { value: "red", label: "Jerry Ihediwa", colorScheme: "red" },
-        { value: "green", label: "Maximillian Ezeude", colorScheme: "green" },
-
-    ];
-
-    const employeeOptions = [
-        { value: "blue", label: "Ebuka Pilolo", colorScheme: "blue" },
-        { value: "purple", label: "Ezinne Ekpe", colorScheme: "purple" },
-        { value: "red", label: "Ogo Ilika", colorScheme: "red" },
-        { value: "green", label: "Claret Chinaza", colorScheme: "green" },
-    ];
-
-    const titleColor = useColorModeValue("#5A8100", "#8abb18");
-    const textColor = useColorModeValue("gray.700", "white");
-    const [selectedOptions, setSelectedOptions] = useState();
-    const [customer, setCustomer] = useState();
-    const [employee, setEmployee] = useState();
-    const [resultsPage, setResultsPage] = useState(false);
-    const bgColor = useColorModeValue("white", "gray.700");
-    const bgIcons = useColorModeValue("#8abb18", "rgba(255, 255, 255, 0.5)");
-    const [item, setItem] = useState({});
-    const history = useHistory();
+    const [customers, setCustomers] = useState([]);
+    const [list, setList] = useState(null);
+    const [days, setDays] = useState(null);
+    const [count, setCount] = useState(0);
+    const [pageCount, setPageCount] = useState(1);
+    const [page, setPage] = useState(1);
+    const [enabled, setEnabled] = useState(false);
+    const token = useSelector(getAuthToken);
     const toast = useToast();
 
-    //for receipt details page
-    const [selectedItem, setSelectedItem] = useState({});
+    const payload_data = {};
+    const url = `${GET_CUSTOMER_SUMMARY_REPORT}?startDate=${date?.startDate}&endDate=${date?.endDate}&customerIds=${customers.map(obj => obj.value).join(',')}&page=${page}`;
 
-    // for search results and pagination 
-    const [itemOffset, setItemOffset] = useState(0);
-    const itemsPerPage = 10;
-    const endOffset = itemOffset + itemsPerPage;
-    const currentItems = dashboardTableData.slice(itemOffset, endOffset);
-    const pageCount = Math.ceil(dashboardTableData.length / itemsPerPage);
-    const { isOpen, onOpen, onClose } = useDisclosure()
+    const { isLoading, refetch, isSuccess, isFetching, remove } = useQuery(['customer-report',
+        {
+            url: url,
+            payload_data,
+            authenticate: true,
+            token
 
-    // Invoke when user click to request another page.
-    const handlePageClick = (event) => {
-        const newOffset = (event.selected * itemsPerPage) % dashboardTableData.length;
-        console.log(
-            `User requested page number ${event.selected}, which is offset ${newOffset}`
-        );
-        setItemOffset(newOffset);
-    };
+        }],
+        fetchData,
+        {
+            enabled: enabled,
+            retry: false,
+            onSuccess: (response) => {
+                console.log(response?.data);
+                const data = response?.data;
+                setCount(data?.count || 0);
+                setList(data?.results || []);
+                setPageCount(data?.last_page || 1);
 
-    const sumTotal = (arr) => {
-        return arr?.reduce((total, obj) => {
-            var itemTotal = obj.price * obj.quantity;
-            return (total + itemTotal);
-        }, 0)
+            },
+            onError: (error) => {
+                handleApiError(error);
+            }
+        }
+    )
 
-    };
+    const loadCustomers = async (inputValue) => {
+        let response = await fetchData({
+            queryKey: ['all customers', {
+                url: GET_CREATE_CUSTOMERS + `?name=${inputValue}`,
+                payload_data: {},
+                authenticate: true,
+                token
+            }]
+        });
 
-    const onChange = (e) => {
+        const options = response.data.map((option) => ({
+            ...option,
+            value: option?.id,
+            label: option?.first_name + " " + option?.last_name,
+            colorScheme: 'none'
 
-        const { name, value } = e.target;
-        setItem({ ...item, [name]: value });
+        }));
 
-    };
 
-    var handleChange = (selectedOption) => {
-        setSelectedOptions(selectedOption);
-    };
+        return options;
+    }
+
+
+    const handlePageChange = (evt) => {
+
+        const { selected } = evt;
+        setPage(selected + 1);
+        setEnabled(true);
+
+        window.scrollTo(0, 0); // moves the compoent to the top of the page
+    }
+
+
+    const handleDateChange = (evt) => {
+        const { name, value } = evt.target;
+        if (name) {
+            setDate({ ...date, [name]: value });
+            return;
+        }
+    }
+
+
+
+    const validate = () => {
+        let uerrors = {}
+        uerrors.startDate = date.startDate ? "" : FIELD_REQUIRED
+        uerrors.endDate = date.endDate ? "" : FIELD_REQUIRED
+
+        if (!date.startDate || !date.endDate) {
+            toast({
+                title: 'Missing Information.',
+                description: "Please set a start and end date",
+                status: 'warning',
+                duration: 3000,
+                isClosable: true,
+            });
+            return uerrors;
+        }
+
+        if (date.startDate && date.endDate && date.startDate > date.endDate) {
+            uerrors.startDate = START_GREATER_THAN_END
+            uerrors.endDate = START_GREATER_THAN_END
+            toast({
+                title: 'Missing Information.',
+                description: "Start date must come before end date",
+                status: 'warning',
+                duration: 3000,
+                isClosable: true,
+            });
+            return uerrors;
+        }
+        return uerrors
+    }
+
 
     const handleSubmit = () => {
-        setResultsPage(true);
+
+        let checkErrors = validate();
+        let areAllFieldsFalse = checkObject(checkErrors);
+
+        if (!areAllFieldsFalse) {
+            // if there are errors
+            // set to state and terminate
+            setErrors(checkErrors);
+            return;
+        }
+
+        refetch();
     }
 
-    const goBack = () => {
-        setResultsPage(false);
+
+    if (isLoading) {
+        return (
+            <Flex direction="column" pt={{ base: "120px", md: "75px" }}>
+                <Center>
+                    <Spinner
+                        thickness='4px'
+                        speed='0.65s'
+                        emptyColor='gray.200'
+                        color='blue.500'
+                        size='xl'
+                    />
+                </Center>
+            </Flex>
+        )
     }
 
-
-    return (
-        <>
-            <Flex
-                direction="column"
-                alignSelf="center"
-                justifySelf="center"
-                overflow="hidden"
-            >
-                {resultsPage ? <Flex flexDirection="column" pt={{ base: "120px", md: "75px" }}>
-                    <SimpleGrid columns={{ sm: 1, md: 2, xl: 4 }} spacing="24px">
-                        <Card minH="83px">
-                            <CardBody>
-                                <Flex flexDirection="row" align="center" justify="center" w="100%">
-                                    <Stat me="auto">
-                                        <StatLabel
-                                            fontSize="sm"
-                                            color="gray.400"
-                                            fontWeight="bold"
-                                            pb=".1rem"
-                                        >
-                                            Total Units Sold (Feb 2023)
-                                        </StatLabel>
-                                        <Flex>
-                                            <StatNumber fontSize="lg" color="blue">
-                                                125
-                                            </StatNumber>
-                                            {/* <StatHelpText
-                    alignSelf="flex-end"
-                    justifySelf="flex-end"
-                    m="0px"
-                    color="green.400"
-                    fontWeight="bold"
-                    ps="3px"
-                    fontSize="md"
-                  >
-                    +55%
-                  </StatHelpText> */}
-                                        </Flex>
-                                    </Stat>
-                                    <IconBox as="box" h={"45px"} w={"45px"} bg="blue">
-                                        <Icon h={"35px"} w={"35px"} as={MdFilterList} color='#fff' />
-                                    </IconBox>
-                                </Flex>
-                            </CardBody>
-                        </Card>
-                        <Card minH="83px">
-                            <CardBody>
-                                <Flex flexDirection="row" align="center" justify="center" w="100%">
-                                    <Stat me="auto">
-                                        <StatLabel
-                                            fontSize="sm"
-                                            color="gray.400"
-                                            fontWeight="bold"
-                                            pb=".1rem"
-                                        >
-                                            Net Income (Amount)(Feb 2023)
-                                        </StatLabel>
-                                        <Flex>
-                                            <StatNumber fontSize="lg" color="black">
-                                                45
-                                            </StatNumber>
-                                            {/* <StatHelpText
-                    alignSelf="flex-end"
-                    justifySelf="flex-end"
-                    m="0px"
-                    color="green.400"
-                    fontWeight="bold"
-                    ps="3px"
-                    fontSize="md"
-                  >
-                    +5%
-                  </StatHelpText> */}
-                                        </Flex>
-                                    </Stat>
-                                    <IconBox as="box" h={"45px"} w={"45px"} bg="blue">
-                                        <Icon h={"35px"} w={"35px"} as={MdFilterList} color='#fff' />
-                                    </IconBox>
-                                </Flex>
-                            </CardBody>
-                        </Card>
-                        <Card minH="83px">
-                            <CardBody>
-                                <Flex flexDirection="row" align="center" justify="center" w="100%">
-                                    <Stat me="auto">
-                                        <StatLabel
-                                            fontSize="sm"
-                                            color="gray.400"
-                                            fontWeight="bold"
-                                            pb=".1rem"
-                                        >
-                                            Total Sales (Amount)(Feb 2023)
-                                        </StatLabel>
-                                        <Flex>
-                                            <StatNumber fontSize="lg" color="blue">
-                                                3,020,009
-                                            </StatNumber>
-                                            {/* <StatHelpText
-                    alignSelf="flex-end"
-                    justifySelf="flex-end"
-                    m="0px"
-                    color="red.500"
-                    fontWeight="bold"
-                    ps="3px"
-                    fontSize="md"
-                  >
-                    -14%
-                  </StatHelpText> */}
-                                        </Flex>
-                                    </Stat>
-                                    <IconBox as="box" h={"45px"} w={"45px"} bg="blue">
-                                        <Icon h={"35px"} w={"35px"} as={MdFilterList} color='#fff' />
-                                    </IconBox>
-                                </Flex>
-                            </CardBody>
-                        </Card>
-                        <Card minH="83px">
-                            <CardBody>
-                                <Flex flexDirection="row" align="center" justify="center" w="100%">
-                                    <Stat me="auto">
-                                        <StatLabel
-                                            fontSize="sm"
-                                            color="gray.400"
-                                            fontWeight="bold"
-                                            pb=".1rem"
-                                        >
-                                            Total Violations (Rules)
-                                        </StatLabel>
-                                        <Flex>
-                                            <StatNumber fontSize="lg" color="blue" fontWeight="bold">
-                                                9
-                                            </StatNumber>
-                                            {/* <StatHelpText
-                    alignSelf="flex-end"
-                    justifySelf="flex-end"
-                    m="0px"
-                    color="green.400"
-                    fontWeight="bold"
-                    ps="3px"
-                    fontSize="md"
-                  >
-                    +8%
-                  </StatHelpText> */}
-                                        </Flex>
-                                    </Stat>
-                                    <IconBox as="box" h={"45px"} w={"45px"} bg="blue">
-                                        <Icon h={"35px"} w={"35px"} as={MdFilterList} color='#fff' />
-                                    </IconBox>
-                                </Flex>
-                            </CardBody>
-                        </Card>
-                    </SimpleGrid>
+    if (isSuccess && list) {
+        return (
+            <>
+                <Flex flexDirection="column" pt={{ base: "120px", md: "75px" }}>
                     <Grid
                         my="26px"
                         mb={{ lg: "16px" }}
                     >
-                        <Card p="16px" overflowX={{ sm: "scroll", xl: "hidden" }}>
+                        <Card p="16px" bgColor="gray.900">
                             <CardHeader p="12px 0px 28px 0px">
-                                <Flex direction="column">
+                                <Flex w='100%' alignItems='center' gap='2' >
                                     <Text
                                         fontSize="lg"
-                                        color="blue"
+                                        color={textColor}
                                         fontWeight="bold"
-                                        pb=".5rem"
                                     >
-                                        CUSTOMERS SUMMARY TABLE
+                                        <Text as="span" bgColor="#8E44AD" p={2}>
+                                            CUSTOMER SUMMARY REPORT
+                                        </Text>
+                                        <Text as="span" bgColor="#27AE60" p={2}>
+                                        {`(${date.startDate} to ${date.endDate})`}
+                                        </Text>
+                                        <Text as="span" bgColor="#F39C12" p={2}>
+                                        {`(${count} record(s) found)`}
+                                        </Text>
                                     </Text>
+                                    <Spacer />
+                                    <Button
+                                        bgColor="#FFD700"
+                                        size="sm"
+                                        onClick={() => {
+                                            setEnabled(false);
+                                            setList(null);
+                                        }}
+                                    >
+                                        Back to Search
+                                    </Button>
+
                                 </Flex>
                             </CardHeader>
-                            <Table variant="striped" color={textColor} size='sm'>
-                                <Thead>
-                                    <Tr my=".8rem" ps="0px">
-                                        <Th ps="0px" color="gray.400">
-                                            CUSTOMERS
+                            <Table color={textColor} size='sm'>
+                                <Thead >
+                                    <Tr my=".8rem" borderBottom="4px" borderColor="#232333">
+                                        <Th color="gray.500" fontSize="sm" px={2} mx={0}  >
+                                            Customer Name
                                         </Th>
-                                        <Th color="gray.400">Subtotal</Th>
-                                        <Th color="gray.400">Total</Th>
-                                        <Th color="gray.400">TAX </Th>
-                                        <Th color="gray.400">PROFIT </Th>
-
-
+                                        <Th textAlign="right" color="gray.500" fontSize="sm" px={2} mx={0} >NO. OF PURCHASES</Th>
+                                        <Th textAlign="right" color="gray.500" fontSize="sm" px={2} mx={0} >TOTAL QTY. PURCHASED</Th>
+                                        <Th textAlign="right" color="gray.500" fontSize="sm" px={2} mx={0} >TOTAL AMOUNT</Th>
+                                        <Th textAlign="right" color="gray.500" fontSize="sm" px={2} mx={0} >TOTAL PAID</Th>
                                     </Tr>
                                 </Thead>
-                                <Tbody>
-                                    {currentItems.map((row, key) => {
+                                <Tbody borderColor="red">
+                                    {list.map((row, index) => {
                                         return (
                                             <DashboardTableRow8
-                                                customer={row.customer}
-                                                subtotal={row.subtotal}
-                                                total={row.total}
-                                                tax={row.tax}
-                                                profit={row.profit}
+                                                key={index}
+                                                name={row.customers_name}
+                                                no_of_purchases={row.no_of_sales}
+                                                total_amount={row.total_amount}
+                                                total_paid={row.total_paid}
+                                                total_qty={row.total_items}
                                             />
                                         );
                                     })}
@@ -345,105 +305,136 @@ function CustomerSummary() {
                             <Box my="1.2rem">
                                 <MyPaginate
                                     breakLabel="..."
-                                    nextLabel="next >"
-                                    onPageChange={handlePageClick}
+                                    nextLabel=">"
+
                                     pageRangeDisplayed={5}
+
+                                    previousLabel="<"
+
                                     pageCount={pageCount}
-                                    previousLabel="< previous"
+                                    onPageChange={(e) => { handlePageChange(e) }}
+                                    forcePage={pageCount > 1 ? page - 1 : 1}
                                     renderOnZeroPageCount={null}
+                                    activeClassName={'active'}
                                 />
                             </Box>
                         </Card>
                     </Grid>
-                </Flex> :
-                    <Flex alignItems="center" justifyContent="center" mb="60px" mt="80px">
-                        <Flex
-                            direction="column"
-                            w="745px"
-                            background="transparent"
-                            borderRadius="15px"
-                            p="40px"
-                            mx={{ base: "100px" }}
-                            bg={bgColor}
-                            boxShadow="0 20px 27px 0 rgb(0 0 0 / 5%)"
+                </Flex>
+            </>
+
+        )
+    }
+
+
+    return (
+        <>
+
+            <Flex
+                direction="column"
+                alignSelf="center"
+                justifySelf="center"
+            >
+
+                <Flex alignItems="center" justifyContent="center" mb="60px" mt="80px">
+
+                    <Flex
+                        direction="column"
+                        w="745px"
+                        background="transparent"
+                        borderRadius="15px"
+                        p="40px"
+                        mx={{ base: "10px" }}
+                        bg={bgColor}
+                        color={textColor}
+                        boxShadow="0 20px 27px 0 rgb(0 0 0 / 5%)"
+                    >
+                        <Text
+                            fontSize="2xl"
+                            color="#FFD700"
+                            fontWeight="bold"
+                            textAlign="center"
+                            mb="22px"
+                            fontFamily="heading"
+
                         >
-                            <FormControl>
-                                <FormLabel ms="4px" fontSize="sm" fontWeight="normal">
-                                    Customer's name
+                            CUSTOMER SUMMARY REPORT
+                        </Text>
+                        <FormControl >
+                                <FormLabel fontSize="sm" fontWeight="bold">
+                                    Customer Names:
                                 </FormLabel>
                                 <AsyncSelect
                                     isMulti
                                     name="customer_name"
+                                    size="sm"
                                     onChange={(customer) => {
-                                        setCustomer(customer);
+                                        setCustomers(customer);
                                     }}
                                     placeholder="Start typing name..."
-                                    loadOptions={(inputValue, callback) => {
-                                        setTimeout(() => {
-                                            const values = customerOptions.filter((option) =>
-                                                option.label.toLowerCase().includes(inputValue.toLowerCase())
-                                            );
-                                            callback(values);
-                                        }, 3000);
-                                    }}
+                                    loadOptions={loadCustomers}
                                     cacheOptions
-                                    value={customer}
+                                    value={customers}
+                                    className="chakra-react-select"
+                                    classNamePrefix="chakra-react-select"
                                 />
-                                <HStack spacing="15px" mb="35px" mt="8px" justify="center">
-                                    <Box width="100%" mt="4px">
-                                        <FormLabel ms="4px" fontSize="md" fontWeight="bold">
-                                            Start Date
-                                        </FormLabel>
-                                        <Input
-                                            fontSize="sm"
-                                            ms="4px"
-                                            borderRadius="15px"
-                                            type="date"
-                                            size="lg"
-                                        />
-                                    </Box>
-                                    <Box width="100%">
-                                        <FormLabel ms="4px" fontSize="md" fontWeight="bold">
-                                            End Date
-                                        </FormLabel>
-                                        <Input
-                                            fontSize="sm"
-                                            ms="4px"
-                                            borderRadius="15px"
-                                            type="date"
-                                            size="lg"
-                                        />
-                                    </Box>
-                                    <FormControl>
-                                        <FormLabel ms="4px" fontSize="sm" fontWeight="normal">
-                                            Export to PDF/Excel
-                                        </FormLabel>
-                                        <Switch colorScheme="#5A8100" me="10px" />
-                                    </FormControl>
-                                </HStack>
-                                <Button
-                                    type="submit"
-                                    bg="#5A8100"
-                                    fontSize="15px"
-                                    color="white"
-                                    fontWeight="bold"
-                                    onClick={handleSubmit}
-                                    w="100%"
-                                    h="45"
-                                    mb="24px"
-                                    _hover={{
-                                        bg: "#8abb18",
-                                    }}
-                                    _active={{
-                                        bg: "#354c00",
-                                    }}
-                                >
-                                    SUBMIT
-                                </Button>
+
                             </FormControl>
-                        </Flex>
+                        <Grid templateColumns='repeat(3, 1fr)' gap={2} mt={4}>
+                            <FormControl>
+                                <FormLabel fontSize="sm" fontWeight="bold">
+                                    Start Date: *
+                                </FormLabel>
+                                <Input
+                                    isInvalid={isError(errors?.startDate)}
+                                    errorBorderColor='red.300'
+                                    name="startDate"
+                                    onChange={handleDateChange}
+                                    type="date"
+                                    size="sm"
+                                    value={date?.startDate}
+                                    borderRadius="15px"
+                                    borderColor="rgba(255, 255, 255, 0.2)"
+                                    _placeholder={{ opacity: 0.2, color: 'white' }}
+                                />
+                            </FormControl>
+                            <FormControl>
+                                <FormLabel fontSize="sm" fontWeight="bold">
+                                    End Date: *
+                                </FormLabel>
+                                <Input
+                                    isInvalid={isError(errors?.endDate)}
+                                    errorBorderColor='red.300'
+                                    name="endDate"
+                                    onChange={handleDateChange}
+                                    type="date"
+                                    size="sm"
+                                    value={date?.endDate}
+                                    borderRadius="15px"
+                                    borderColor="rgba(255, 255, 255, 0.2)"
+                                    _placeholder={{ opacity: 0.2, color: 'white' }}
+                                />
+                            </FormControl>
+                            <FormControl id="">
+                                <FormLabel fontSize="sm" fontWeight='bold'>Export to PDF</FormLabel>
+                                <Switch
+                                    size="md"
+                                    colorScheme="blue"
+                                />
+                            </FormControl>
+                        </Grid>
+                        <Box display="flex" justifyContent="flex-end">
+                            <Button
+                                colorScheme="blue"
+                                onClick={handleSubmit}
+                            >
+                                Search
+                            </Button>
+
+                        </Box>
+
                     </Flex>
-                }
+                </Flex>
 
             </Flex>
         </>

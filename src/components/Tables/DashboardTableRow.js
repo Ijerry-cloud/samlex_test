@@ -13,10 +13,47 @@ import {
   useColorModeValue,
 } from "@chakra-ui/react";
 import React from "react";
-import { EmailIcon, DeleteIcon, EditIcon, DownloadIcon, InfoIcon } from '@chakra-ui/icons'
+import { EmailIcon, DeleteIcon, EditIcon, DownloadIcon, InfoIcon, CheckCircleIcon, WarningTwoIcon } from '@chakra-ui/icons'
 import { RiAdminLine, RiStackLine } from "react-icons/ri";
+import { FaCalendarAlt } from "react-icons/fa";
+import { AiFillWarning } from "react-icons/ai";
+
 import avatar7 from "assets/img/avatars/male.jpg";
 import avatar8 from "assets/img/avatars/female.png";
+
+
+export function DashboardTableRow12(props) {
+  const { Date, no_of_sales, total_amount, total_qty } = props;
+  const textColor = "white";
+  return (
+    <Tr my=".8rem" borderBottom="4px" borderColor="#232333">
+      <Td minWidth={{ sm: "100px" }} fontSize="sm" color="gray.500" fontWeight="bold" px={2} mx={0}>
+        {Date}
+      </Td>
+
+      <Td textAlign="right" fontSize="sm" color={textColor} fontWeight="bold" px={2} mx={0}>
+        {no_of_sales}
+      </Td>
+
+      <Td textAlign="right" minWidth={{ sm: "150px" }} pl="0px" px={2} mx={0}>
+        <Flex align="center" py=".3rem" minWidth="100%" flexWrap="nowrap">
+          <Text
+            fontSize="sm"
+            color="white"
+            fontWeight="bold"
+            minWidth="100%"
+          >
+            {total_qty}
+          </Text>
+        </Flex>
+      </Td>
+      <Td textAlign="right" fontSize="sm" color={textColor} fontWeight="bold" px={2} mx={0}>
+        {total_amount}
+      </Td>
+    </Tr>
+  );
+}
+
 
 
 export function DashboardTableRow11(props) {
@@ -95,145 +132,101 @@ export function DashboardTableRow11(props) {
 }
 
 export function DashboardTableRow10(props) {
-  const { employee, subtotal, total, tax, profit } = props;
-  const textColor = useColorModeValue("gray.700", "white");
+  const { name, no_of_sales, total_paid, total_amount, total_qty } = props;
+  const textColor = "white";
   return (
-    <Tr my=".8rem" ps="0px">
-      <Td minWidth={{ sm: "100px" }} pl="0px">
+    <Tr my=".8rem" borderBottom="4px" borderColor="#232333">
+      <Td minWidth={{ sm: "100px" }} fontSize="sm" color="gray.500" fontWeight="bold" px={2} mx={0}>
+        {name}
+      </Td>
+
+      <Td textAlign="right" fontSize="sm" color={textColor} fontWeight="bold" px={2} mx={0}>
+        {no_of_sales}
+      </Td>
+
+      <Td textAlign="right" minWidth={{ sm: "150px" }} pl="0px" px={2} mx={0}>
         <Flex align="center" py=".3rem" minWidth="100%" flexWrap="nowrap">
           <Text
             fontSize="sm"
-            color={textColor}
+            color="white"
             fontWeight="bold"
             minWidth="100%"
           >
-            {employee}
+            {total_qty}
           </Text>
         </Flex>
       </Td>
-
-      <Td>
-        <Text fontSize="sm" color={textColor} fontWeight="bold" pb=".3rem">
-          {subtotal}
-        </Text>
+      <Td textAlign="right" fontSize="sm" color={textColor} fontWeight="bold" px={2} mx={0}>
+        {total_amount}
       </Td>
-
-      <Td>
-        <Text fontSize="sm" color={textColor} fontWeight="bold" pb=".3rem">
-          {total}
-        </Text>
+      <Td textAlign="right" fontSize="sm" color={textColor} fontWeight="bold" px={2} mx={0}>
+        {total_paid}
       </Td>
-
-      <Td>
-        <Text fontSize="sm" color={textColor} fontWeight="bold" pb=".3rem">
-          {tax}
-        </Text>
-      </Td>
-
-      <Td>
-        <Text fontSize="sm" color={textColor} fontWeight="bold" pb=".3rem">
-          {profit}
-        </Text>
-      </Td>
-
     </Tr>
   );
 }
 
 export function DashboardTableRow9(props) {
-  const { item, quantity_purchased, subtotal, total, tax, profit } = props;
-  const textColor = useColorModeValue("gray.700", "white");
+  const { name, qty } = props;
+  const textColor = "white";
   return (
-    <Tr my=".8rem" ps="0px">
-      <Td minWidth={{ sm: "100px" }} pl="0px">
-        <Flex align="center" py=".3rem" minWidth="100%" flexWrap="nowrap">
-          <Text
-            fontSize="sm"
-            color={textColor}
-            fontWeight="bold"
-            minWidth="100%"
-          >
-            {item}
-          </Text>
-        </Flex>
+    <Tr my=".8rem" borderBottom="4px" borderColor="#232333">
+      <Td minWidth={{ sm: "100px" }} fontSize="sm" color="gray.500" fontWeight="bold" px={2} mx={0}>
+        {name}
       </Td>
 
-      <Td>
-        <Text fontSize="sm" color={textColor} fontWeight="bold" pb=".3rem" align="right">
-          {quantity_purchased}
-        </Text>
-      </Td>
+      <Td textAlign="right" fontSize="sm" color={textColor} fontWeight="bold" px={2} mx={0}>
+        {qty <= 0 ? <WarningTwoIcon
+          color='red'
+          mx='2px'
+          boxSize={4}
+        /> :
+          <CheckCircleIcon
+            color='#7FC92F'
+            mx='2px'
+            boxSize={4}
+          />}
 
-      <Td>
-        <Text fontSize="sm" color={textColor} fontWeight="bold" pb=".3rem" align="right">
-          {subtotal}
-        </Text>
       </Td>
-
-      <Td>
-        <Text fontSize="sm" color={textColor} fontWeight="bold" pb=".3rem" align="right">
-          {total}
-        </Text>
+      <Td textAlign="right" fontSize="sm" color={textColor} fontWeight="bold" px={2} mx={0}>
+        {qty}
       </Td>
-
-      <Td>
-        <Text fontSize="sm" color={textColor} fontWeight="bold" pb=".3rem" align="right">
-          {tax}
-        </Text>
-      </Td>
-
-      <Td>
-        <Text fontSize="sm" color={textColor} fontWeight="bold" pb=".3rem" align="right">
-          {profit}
-        </Text>
-      </Td>
-
     </Tr>
   );
 }
 
+
 export function DashboardTableRow8(props) {
-  const { customer, subtotal, total, tax, profit } = props;
-  const textColor = useColorModeValue("gray.700", "white");
+  const { name, no_of_purchases, total_paid, total_amount, total_qty } = props;
+  const textColor = "white";
   return (
-    <Tr my=".8rem" ps="0px">
-      <Td minWidth={{ sm: "100px" }} pl="0px">
+    <Tr my=".8rem" borderBottom="4px" borderColor="#232333">
+      <Td minWidth={{ sm: "100px" }} fontSize="sm" color="gray.500" fontWeight="bold" px={2} mx={0}>
+        {name}
+      </Td>
+
+      <Td textAlign="right" fontSize="sm" color={textColor} fontWeight="bold" px={2} mx={0}>
+        {no_of_purchases}
+      </Td>
+
+      <Td textAlign="right" minWidth={{ sm: "150px" }} pl="0px" px={2} mx={0}>
         <Flex align="center" py=".3rem" minWidth="100%" flexWrap="nowrap">
           <Text
             fontSize="sm"
-            color={textColor}
+            color="white"
             fontWeight="bold"
             minWidth="100%"
           >
-            {customer}
+            {total_qty}
           </Text>
         </Flex>
       </Td>
-
-      <Td>
-        <Text fontSize="sm" color={textColor} fontWeight="bold" pb=".3rem">
-          {subtotal}
-        </Text>
+      <Td textAlign="right" fontSize="sm" color={textColor} fontWeight="bold" px={2} mx={0}>
+        {total_amount}
       </Td>
-
-      <Td>
-        <Text fontSize="sm" color={textColor} fontWeight="bold" pb=".3rem">
-          {total}
-        </Text>
+      <Td textAlign="right" fontSize="sm" color={textColor} fontWeight="bold" px={2} mx={0}>
+        {total_paid}
       </Td>
-
-      <Td>
-        <Text fontSize="sm" color={textColor} fontWeight="bold" pb=".3rem">
-          {tax}
-        </Text>
-      </Td>
-
-      <Td>
-        <Text fontSize="sm" color={textColor} fontWeight="bold" pb=".3rem">
-          {profit}
-        </Text>
-      </Td>
-
     </Tr>
   );
 }
@@ -419,19 +412,19 @@ export function DashboardTableRow4(props) {
       </Td>
 
       <Td>
-        <Text fontSize="sm" color={textColor} fontWeight="bold" pb=".3rem">
+        <Text fontSize="sm" color={textColor} fontWeight="bold" pb=".3rem" textAlign="right">
           {cost_price}
         </Text>
       </Td>
 
       <Td>
-        <Text fontSize="sm" color={textColor} fontWeight="bold" pb=".3rem">
+        <Text fontSize="sm" color={textColor} fontWeight="bold" pb=".3rem" textAlign="right">
           {unit_price}
         </Text>
       </Td>
 
       <Td>
-        <Text fontSize="sm" color={textColor} fontWeight="bold" pb=".3rem">
+        <Text fontSize="sm" color={textColor} fontWeight="bold" pb=".3rem" textAlign="right">
           {quantity}
         </Text>
       </Td>
@@ -547,63 +540,52 @@ export function DashboardTableRow3(props) {
 }
 
 export function DashboardTableRow2(props) {
-  const { Date, employee_name, customer_name, sum_items, sub_total, discount, paid_cash, payment_type } = props;
+  const { Date, employee_name, customer_name, sum_items, sub_total, discount, paid_cash, payment_type,
+    onViewClick, onDeleteClick } = props;
   const textColor = "gray.500";
   return (
-    <Tr my=".8rem" ps="0px">
-      <Td pl="0px">
+    <Tr my=".8rem">
+      <Td minWidth={{ sm: "100px" }} fontSize="sm" color={textColor} fontWeight="bold" px={2} mx={0}>
+        {Date}
+      </Td>
+
+      <Td fontSize="sm" color={textColor} fontWeight="bold" px={2} mx={0}>
+        {employee_name}
+      </Td>
+
+      <Td minWidth={{ sm: "150px" }} pl="0px" px={2} mx={0}>
+        <Flex align="center" py=".3rem" minWidth="100%" flexWrap="nowrap">
           <Text
             fontSize="sm"
             color="white"
             fontWeight="bold"
             minWidth="100%"
           >
-            {Date}
+            {customer_name}
           </Text>
+        </Flex>
       </Td>
 
-      <Td>
-        <Text fontSize="sm" color={textColor} fontWeight="bold" pb=".3rem">
-          {employee_name}
-        </Text>
+      <Td isNumeric maxWidth={{ sm: "70px" }} fontSize="sm" color={textColor} fontWeight="bold" textAlign="right" px={2} mx={0}>
+        {sum_items}
       </Td>
 
-      <Td>
-        <Text fontSize="sm" color={textColor} fontWeight="bold" pb=".3rem">
-          {customer_name}
-        </Text>
+      <Td isNumeric fontSize="sm" color={textColor} fontWeight="bold" textAlign="right" px={2} mx={0}>
+        {sub_total}
+      </Td>
+      <Td isNumeric fontSize="sm" color={textColor} fontWeight="bold" textAlign="right" px={2} mx={0}>
+        {discount}
+      </Td>
+      <Td isNumeric fontSize="sm" color={textColor} fontWeight="bold" textAlign="right" px={2} mx={0}>
+        {Number(sub_total - discount).toFixed(2)}
+      </Td>
+      <Td fontSize="sm" color={textColor} fontWeight="bold" textAlign="right" px={2} mx={0}>
+        {paid_cash}
       </Td>
 
-      <Td>
-        <Text fontSize="sm" color={textColor} fontWeight="bold" pb=".3rem">
-          {sum_items}
-        </Text>
-      </Td>
-
-      <Td>
-        <Text fontSize="sm" color={textColor} fontWeight="bold" pb=".3rem">
-          {sub_total}
-        </Text>
-      </Td>
-      <Td>
-        <Text fontSize="sm" color={textColor} fontWeight="bold" pb=".3rem">
-          {discount}
-        </Text>
-      </Td>
-      <Td>
-        <Text fontSize="sm" color={textColor} fontWeight="bold" pb=".3rem">
-          {Number(sub_total - discount).toFixed(2)}
-        </Text>
-      </Td>
-      <Td>
-        <Text fontSize="sm" color={textColor} fontWeight="bold" pb=".3rem">
-          {`${payment_type || ""} ${paid_cash || ""}`}
-        </Text>
-      </Td>
-
-      <Td>
+      <Td px={2} mx={0}>
         <Center>
-          <Button size='sm' colorScheme="blue">
+          <Button size='sm' colorScheme="blue" onClick={onViewClick}>
             View Receipt
           </Button>
           <IconButton
@@ -611,6 +593,7 @@ export function DashboardTableRow2(props) {
             color='white'
             aria-label='delete customer'
             icon={<DeleteIcon />}
+            onClick={onDeleteClick}
             mx='2px'
           />
 

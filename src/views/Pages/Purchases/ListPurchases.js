@@ -94,27 +94,7 @@ const EditModal = ({ handleChange, handleSwitchChange, handleEditSubmit, onClose
             <ModalCloseButton />
             <ModalBody>
                 <Grid templateColumns="repeat(2, 1fr)" gap={4}>
-                    <FormControl id="">
-                        <FormLabel fontSize="sm" fontWeight='bold'>UPC/EAN/ISBN:</FormLabel>
-                        <InputGroup borderColor="#E0E1E7">
-                            <InputLeftElement
-                                pointerEvents="none"
-                                children={<IoMdBarcode color="gray.800" />}
-                            />
-                            <Input
-                                isInvalid={isError(errors?.barcode)}
-                                errorBorderColor='red.300'
-                                ref={barcodeRef}
-                                name={'barcode'}
-                                type="text"
-                                size="sm"
-                                defaultValue={item?.barcode || ''}
-                                borderRadius='15px'
-                                borderColor="rgba(255, 255, 255, 0.2)"
-                                _placeholder={{ opacity: 0.2, color: 'white' }}
-                            />
-                        </InputGroup>
-                    </FormControl>
+
                     <FormControl id="">
                         <FormLabel fontSize="sm" fontWeight='bold'>Name of Item</FormLabel>
                         <InputGroup borderColor="#E0E1E7">
@@ -160,6 +140,27 @@ const EditModal = ({ handleChange, handleSwitchChange, handleEditSubmit, onClose
                             className="chakra-react-select"
                             classNamePrefix="chakra-react-select"
                         />
+                    </FormControl>
+                    <FormControl id="">
+                        <FormLabel fontSize="sm" fontWeight='bold'>UPC/EAN/ISBN:</FormLabel>
+                        <InputGroup borderColor="#E0E1E7">
+                            <InputLeftElement
+                                pointerEvents="none"
+                                children={<IoMdBarcode color="gray.800" />}
+                            />
+                            <Input
+                                isInvalid={isError(errors?.barcode)}
+                                errorBorderColor='red.300'
+                                ref={barcodeRef}
+                                name={'barcode'}
+                                type="text"
+                                size="sm"
+                                defaultValue={item?.barcode || ''}
+                                borderRadius='15px'
+                                borderColor="rgba(255, 255, 255, 0.2)"
+                                _placeholder={{ opacity: 0.2, color: 'white' }}
+                            />
+                        </InputGroup>
                     </FormControl>
                     <FormControl id="">
                         <FormLabel fontSize="sm" fontWeight='bold'>Supplier:</FormLabel>
@@ -729,9 +730,9 @@ export default function Dashboard() {
                                         NAME
                                     </Th>
                                     <Th color="gray.400">CATEGORY</Th>
-                                    <Th color="gray.400">COST</Th>
-                                    <Th color="gray.400">UNIT PRICE</Th>
-                                    <Th color="gray.400">QUANTITY</Th>
+                                    <Th textAlign="right" color="gray.400">COST</Th>
+                                    <Th textAlign="right" color="gray.400">UNIT PRICE</Th>
+                                    <Th textAlign="right" color="gray.400">QUANTITY</Th>
                                     <Center>
                                         <Th color="gray.400">ACTIONS</Th>
                                     </Center>

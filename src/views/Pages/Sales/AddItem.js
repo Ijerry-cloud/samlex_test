@@ -216,12 +216,11 @@ const Step1 = ({ customer, selectedOptions,
                                         <Td pl={2}>
                                             <Flex align="center" minWidth="100%" flexWrap="nowrap" sx={{ justifyContent: 'left' }}>
                                                 <Flex direction="column">
-                                                    <Text
-                                                        fontSize="sm"
-                                                        fontWeight="normal"
-                                                        minWidth="100%"
-                                                    >
-                                                        {option?.label}
+                                                    <Text>
+                                                        {option?.label}{" "}
+                                                        <Text fontWeight="bold" color="#CC7C00">
+                                                            {`[${option?.quantity} in stock]`}
+                                                        </Text>
                                                     </Text>
                                                 </Flex>
                                             </Flex>
@@ -288,7 +287,7 @@ const Step1 = ({ customer, selectedOptions,
 
 const Step2 = React.forwardRef((props, ref) => {
     const { customer, paidCash, discount, sumParameter, selectedOptions, sumTotal, receipt,
-        mode, paymentType, authUser } = props;
+        mode, paymentType, authUser, comments } = props;
 
     return (
         <>
@@ -329,7 +328,7 @@ const Step2 = React.forwardRef((props, ref) => {
                                     <Text fontSize="lg" fontWeight="bold">
                                         {customer.label}
                                     </Text>
-                                    <Text textTransform="uppercase" fontSize='sm'>{customer?.email}</Text>
+                                    <Text fontSize='sm'>{customer?.email}</Text>
                                     <Text textTransform="uppercase" fontSize='sm'>{customer?.address_1}</Text>
                                 </GridItem>
                                 <GridItem textAlign='right'>
@@ -375,34 +374,41 @@ const Step2 = React.forwardRef((props, ref) => {
                                         <Tr>
                                             <Th></Th>
                                             <Th></Th>
-                                            <Th backgroundColor="#ffebae" fontSize='sm' textTransform='none' fontWeight='normal' textAlign='right'>Sub Total</Th>
+                                            <Th backgroundColor="#ffebae" fontSize='sm' textTransform='none' fontWeight='normal' textAlign='right'>Sub Total:</Th>
                                             <Th isNumeric backgroundColor="#ffebae" fontSize='sm' textTransform='none' textAlign='right'>NGN {sumTotal(selectedOptions).toFixed(2)}</Th>
                                         </Tr>
                                         <Tr>
                                             <Th></Th>
                                             <Th></Th>
-                                            <Th backgroundColor="#ffebae" fontSize='sm' textTransform='none' fontWeight='normal' textAlign='right'>Discount</Th>
+                                            <Th backgroundColor="#ffebae" fontSize='sm' textTransform='none' fontWeight='normal' textAlign='right'>Discount:</Th>
                                             <Th isNumeric backgroundColor="#ffebae" fontSize='sm' textTransform='none' textAlign='right'>NGN {discount >= 0 && (Number(discount).toFixed(2))}</Th>
                                         </Tr>
                                         <Tr>
                                             <Th></Th>
                                             <Th></Th>
-                                            <Th backgroundColor="black" color='white' fontSize='sm' textTransform='none' fontWeight='normal' textAlign='right'>TOTAL</Th>
+                                            <Th backgroundColor="black" color='white' fontSize='sm' textTransform='none' fontWeight='normal' textAlign='right'>TOTAL:</Th>
                                             <Th backgroundColor="black" color='white' fontSize='sm' textTransform='none' textAlign='right'>NGN {discount >= 0 && (sumTotal(selectedOptions) - Number(discount)).toFixed(2)}</Th>
                                         </Tr>
                                         <Tr>
                                             <Th></Th>
                                             <Th></Th>
-                                            <Th fontSize='sm'>CASH: NGN {paidCash >= 0 && (Number(paidCash).toFixed(2))}</Th>
-                                            <Th fontSize='sm'>CHANGE DUE: NGN {(discount >= 0 && paidCash >= 0) && Number(+paidCash + +discount - sumTotal(selectedOptions)).toFixed(2)}</Th>
+                                            <Th backgroundColor="#6b6b6b" color='white' fontSize='sm' textAlign='right'>CASH:</Th>
+                                            <Th backgroundColor="#6b6b6b" color='white' fontSize='sm' textAlign='right'>NGN {paidCash >= 0 && (Number(paidCash).toFixed(2))}</Th>
                                         </Tr>
+                                        <Tr>
+                                            <Th></Th>
+                                            <Th></Th>
+                                            <Th backgroundColor="#6b6b6b" color='white' fontSize='sm' textAlign='right'>CHANGE DUE:</Th>
+                                            <Th backgroundColor="#6b6b6b" color='white' fontSize='sm' textAlign='right'>NGN {(discount >= 0 && paidCash >= 0) && Number(+paidCash + +discount - sumTotal(selectedOptions)).toFixed(2)}</Th>
+                                        </Tr>
+
                                     </Tfoot>
                                 </Table>
                             </Box>
 
                             <Box alignItems='center' justifyContent='center' width='100%'>
                                 <Text fontSize="lg" fontWeight="bold" textAlign='center'>
-                                    Thanks for your Patronage !!
+                                    {comments}
                                 </Text>
                             </Box>
                         </Box>
@@ -503,7 +509,16 @@ function AddItem() {
             dateTime = dateTime.toLocaleString('en-US', options);
             setReceipt({ ...response.data, date: dateTime });
 
+            setTimeout(() => {
+                const content = printableRef.current;
+                const originalContents = document.body.innerHTML;
+                document.body.style.backgroundColor = 'white';
 
+                document.body.innerHTML = content.innerHTML;
+                window.print();
+                document.body.innerHTML = originalContents;
+                location.reload();
+            }, 2000);
 
             return;
         },
@@ -521,7 +536,8 @@ function AddItem() {
                 unit_price: obj.unit_price,
                 value: obj.value,
                 colorScheme: obj.colorScheme,
-                cost_price: obj.cost_price
+                cost_price: obj.cost_price,
+                quantity: obj.quantity
             }
         });
         setSelectedOptions(allSelected);
@@ -620,7 +636,7 @@ function AddItem() {
             sum_items: sumParameter(selectedOptions, 'number'),
             sub_total: sumTotal(selectedOptions)
         }
- 
+
         mutation.mutate(
             {
                 url: GET_CREATE_SALES,
@@ -634,6 +650,7 @@ function AddItem() {
     }
 
     return (
+
         <Flex direction="column" alignSelf="center" justifySelf="center" overflow="hidden">
             <Flex alignItems="center" justifyContent="center" mb="60px" mt="80px">
                 <Flex
@@ -667,7 +684,7 @@ function AddItem() {
                         <Step2 paidCash={paidCash} discount={discount} sumParameter={sumParameter}
                             receipt={receipt} mode={mode} paymentType={paymentType} customer={customer}
                             selectedOptions={selectedOptions} authUser={authUser} sumTotal={sumTotal}
-                            ref={printableRef} />
+                            ref={printableRef} comments={comments} />
                     }
                     <ButtonGroup mt="5%" w="100%">
                         <Flex w="100%" justifyContent="space-between">
