@@ -53,6 +53,9 @@ export const GET_CUSTOMER_SUMMARY_REPORT = BASE_URL + 'sales/customer-summary-re
 export const GET_EMPLOYEE_SUMMARY_REPORT = BASE_URL + 'sales/employee-summary-report/';
 export const GET_ITEM_INVENTORY = BASE_URL + 'sales/item-inventory/';
 
+export const GET_DASHBOARD_COUNTS = BASE_URL + 'sales/dashboard-counts/';
+export const GET_CATEGORIES_CHART = BASE_URL + 'sales/dashboard-category-charts/';
+
 
 
 

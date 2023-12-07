@@ -123,13 +123,19 @@ export const dashboardTableData2 = [
 export const timelineData = [
   {
     logo: FaBell,
-    title: "40 new notifications",
+    title: "$2400, Design changes",
     date: "22 DEC 7:20 PM",
-    color: "#5A8100",
+    color: "teal.300",
+  },
+  {
+    logo: FaHtml5,
+    title: "New order #4219423",
+    date: "21 DEC 11:21 PM",
+    color: "orange",
   },
   {
     logo: FaShoppingCart,
-    title: "444 sales in total",
+    title: "Server Payments for April",
     date: "21 DEC 9:28 PM",
     color: "blue.400",
   },
@@ -139,9 +145,10 @@ export const timelineData = [
     date: "20 DEC 3:52 PM",
     color: "orange.300",
   },
+
   {
     logo: AdobexdLogo,
-    title: "1 additional admin",
+    title: "New order #9851258",
     date: "18 DEC 4:41 PM",
   },
 ];

@@ -314,6 +314,33 @@ export default function StoreConfig() {
                                     </InputGroup>
                                 </Stack>
                             </FormControl>
+                            <FormControl id="" mt={4}>
+                                <Stack direction="row" spacing={1} align="center">
+                                    <FormLabel fontSize="sm" fontWeight='bold' width="25%" color="#8E44AD">Company Website:</FormLabel>
+                                    <InputGroup borderColor="#E0E1E7">
+                                        <InputLeftElement
+                                            pointerEvents="none"
+                                            color="rgba(255, 255, 255, 0.2)"
+                                            children={<IoMdGlobe />}
+                                        />
+                                        <Input
+                                            isInvalid={isError(errors?.website)}
+                                            errorBorderColor='red.300'
+                                            ref={websiteRef}
+                                            name={'website'}
+                                            //onChange={handleChange}
+                                            type="text"
+                                            size="sm"
+                                            defaultValue={values?.website || ''}
+                                            borderRadius='15px'
+                                            borderColor="rgba(255, 255, 255, 0.2)"
+                                            _placeholder={{ opacity: 0.2, color: 'white' }}
+                                            placeholder="eg. www.samlex.com"
+
+                                        />
+                                    </InputGroup>
+                                </Stack>
+                            </FormControl>
                             <Grid templateColumns='repeat(3, 1fr)' gap={2} mt={4}>
                                 <FormControl id="">
                                     <FormLabel fontSize="sm" fontWeight='bold' color="#8E44AD">Company Phone (1):*</FormLabel>
@@ -411,34 +438,6 @@ export default function StoreConfig() {
                                 SITE AND SALE SETTINGS
                             </Text>
 
-
-                            <FormControl id="">
-                                <Stack direction="row" spacing={1} align="center">
-                                    <FormLabel fontSize="sm" fontWeight='bold' width="25%" color="#27AE60">Company Website:</FormLabel>
-                                    <InputGroup borderColor="#E0E1E7">
-                                        <InputLeftElement
-                                            pointerEvents="none"
-                                            color="rgba(255, 255, 255, 0.2)"
-                                            children={<IoMdGlobe />}
-                                        />
-                                        <Input
-                                            isInvalid={isError(errors?.website)}
-                                            errorBorderColor='red.300'
-                                            ref={websiteRef}
-                                            name={'website'}
-                                            //onChange={handleChange}
-                                            type="text"
-                                            size="sm"
-                                            defaultValue={values?.website || ''}
-                                            borderRadius='15px'
-                                            borderColor="rgba(255, 255, 255, 0.2)"
-                                            _placeholder={{ opacity: 0.2, color: 'white' }}
-                                            placeholder="eg. www.samlex.com"
-
-                                        />
-                                    </InputGroup>
-                                </Stack>
-                            </FormControl>
                             <FormControl id="" mt={4}>
                                 <Stack direction="row" spacing={1} align="center">
                                     <FormLabel fontSize="sm" fontWeight='bold' width="25%" color="#27AE60">Return Policy:*</FormLabel>

@@ -104,13 +104,13 @@ const ViewModal = (props) => {
                                 <Text fontSize="lg" fontWeight="bold">
                                     COMPANY LTD
                                 </Text>
-                                <Text>9 AKWA RD BY ABS JUNCTION,ONITSHA, ANAMBRA STATE
-                                </Text>
+                                <Text>{props.sale.company_address}</Text>
                             </Container>
                             <Spacer />
                             <Container alignSelf='center' textAlign='right'>
-                                <Text>08030964878</Text>
-                                <Text>07053808284</Text>
+                                <Text>{props.sale.company_phone1}</Text>
+                                {props.sale.company_phone2 && (<Text>{props.sale.company_phone2}</Text>)}
+                                <Text>{props.sale.company_email}</Text>
                             </Container>
                         </Flex>
                         <Grid templateColumns='repeat(2, 1fr)' gap={2} px='10px' mb={12}>
@@ -120,7 +120,7 @@ const ViewModal = (props) => {
                                     {props.sale.customer_name}
                                 </Text>
                                 <Text textTransform="uppercase" fontSize='sm'>{props.sale.email}</Text>
-                                <Text textTransform="uppercase" fontSize='sm'>{props.sale.address_1}</Text>
+                                <Text textTransform="uppercase" fontSize='sm'>{props.sale.customer_address}</Text>
                             </GridItem>
                             <GridItem textAlign='right'>
                                 <Text textTransform="uppercase" fontSize='sm'>Invoice Number:</Text>
@@ -286,7 +286,7 @@ function FilterSales() {
             enabled: enabled,
             retry: false,
             onSuccess: (response) => {
-                console.log(response?.data);
+                //console.log(response?.data);
                 const data = response?.data;
                 setCount(data?.count || 0);
                 setSales(data?.results || []);
@@ -550,7 +550,7 @@ function FilterSales() {
         )
     }
 
-    if ( isSuccess && sales ) {
+    if (isSuccess && sales) {
         return (
             <>
                 <Modal isOpen={isOpen} onClose={onModalClose} size="4xl">

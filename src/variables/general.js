@@ -33,34 +33,49 @@ import { SiDropbox } from "react-icons/si";
 import { SlCalender } from "react-icons/sl";
 import { TbCurrencyNaira } from "react-icons/tb";
 
+
 export const dashboardTableData = [
   {
-    customer: "Anene Linda",
-    subtotal: "N33200",
-    total: "N340000",
-    tax: 1000,
-    profit: 656,
+    logo: AdobexdLogo,
+    name: "Purity UI Version",
+    members: [avatar1, avatar2, avatar3, avatar4, avatar5],
+    budget: "$14,000",
+    progression: 60,
   },
   {
-    customer: "Anene Linda",
-    subtotal: "N30000",
-    total: "N3000",
-    tax: 1000,
-    profit: 38000,
+    logo: AtlassianLogo,
+    name: "Add Progress Track",
+    members: [avatar3, avatar2],
+    budget: "$3,000",
+    progression: 10,
   },
   {
-    customer: "Anene Linda",
-    subtotal: "N36700",
-    total: "N3408000",
-    tax: 1000,
-    profit: 38000,
+    logo: SlackLogo,
+    name: "Fix Platform Errors",
+    members: [avatar10, avatar4],
+    budget: "Not set",
+    progression: 100,
   },
   {
-    customer: "Anene Linda",
-    subtotal: "N378000",
-    total: "N340000",
-    tax: 1000,
-    profit: 38000,
+    logo: SpotifyLogo,
+    name: "Launch our Mobile App",
+    members: [avatar2, avatar3, avatar7, avatar8],
+    budget: "$32,000",
+    progression: 100,
+  },
+  {
+    logo: JiraLogo,
+    name: "Add the New Pricing Page",
+    members: [avatar10, avatar3, avatar7, avatar2, avatar8],
+    budget: "$400",
+    progression: 25,
+  },
+  {
+    logo: InvisionLogo,
+    name: "Redesign New Online Shop",
+    members: [avatar9, avatar3, avatar2],
+    budget: "$7,600",
+    progression: 40,
   },
 ];
 

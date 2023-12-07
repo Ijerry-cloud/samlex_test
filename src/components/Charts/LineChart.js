@@ -32,4 +32,22 @@ class LineChart extends React.Component {
   }
 }
 
+export function LineChart1(props) {
+  //const { options, series } = props;
+
+  return (
+
+    <div id="areachart">
+      <ReactApexChart options={lineChartOptions} series={[
+        {
+          name: "FASS Limit",
+          data: [50, 40, 500, 220, 500],
+        },
+      ]} type="area" height={350} />
+    </div>
+
+  );
+
+}
+
 export default LineChart;

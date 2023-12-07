@@ -89,13 +89,13 @@ const ViewModal = (props) => {
                                 <Text fontSize="lg" fontWeight="bold">
                                     COMPANY LTD
                                 </Text>
-                                <Text>9 AKWA RD BY ABS JUNCTION,ONITSHA, ANAMBRA STATE
-                                </Text>
+                                <Text>{props.sale.company_address}</Text>
                             </Container>
                             <Spacer />
                             <Container alignSelf='center' textAlign='right'>
-                                <Text>08030964878</Text>
-                                <Text>07053808284</Text>
+                                <Text>{props.sale.company_phone1}</Text>
+                                {props.sale.company_phone2 && (<Text>{props.sale.company_phone2}</Text>)}
+                                <Text>{props.sale.company_email}</Text>
                             </Container>
                         </Flex>
                         <Grid templateColumns='repeat(2, 1fr)' gap={2} px='10px' mb={12}>
@@ -105,7 +105,7 @@ const ViewModal = (props) => {
                                     {props.sale.customer_name}
                                 </Text>
                                 <Text textTransform="uppercase" fontSize='sm'>{props.sale.email}</Text>
-                                <Text textTransform="uppercase" fontSize='sm'>{props.sale.address_1}</Text>
+                                <Text textTransform="uppercase" fontSize='sm'>{props.sale.customer_address}</Text>
                             </GridItem>
                             <GridItem textAlign='right'>
                                 <Text textTransform="uppercase" fontSize='sm'>Invoice Number:</Text>
@@ -183,7 +183,7 @@ const ViewModal = (props) => {
 
                         <Box alignItems='center' justifyContent='center' width='100%'>
                             <Text fontSize="lg" fontWeight="bold" textAlign='center'>
-                           { props.sale.comments}
+                                {props.sale.comments}
                             </Text>
                         </Box>
                     </Box>
@@ -204,27 +204,27 @@ const ViewModal = (props) => {
 const DeleteModal = (props) => {
     return (
         <ModalContent
-        bgColor="#232333"
-        borderColor="gray.900"
-        color="white"
-        boxShadow="rgba(0, 0, 0, 0.1) 0px 0px 0px 1px,rgba(0, 0, 0, 0.2) 0px 5px 10px,rgba(0, 0, 0, 0.4) 0px 15px 40px"
-    >
-        <ModalHeader>Delete Sale</ModalHeader>
-        <ModalCloseButton />
-        <ModalBody>
-            <Container maxW="full">
-                <Text> Are you sure you want to delete Sale Id:{props.sale.sales_id} ?
-                </Text>
-            </Container>
-        </ModalBody>
+            bgColor="#232333"
+            borderColor="gray.900"
+            color="white"
+            boxShadow="rgba(0, 0, 0, 0.1) 0px 0px 0px 1px,rgba(0, 0, 0, 0.2) 0px 5px 10px,rgba(0, 0, 0, 0.4) 0px 15px 40px"
+        >
+            <ModalHeader>Delete Sale</ModalHeader>
+            <ModalCloseButton />
+            <ModalBody>
+                <Container maxW="full">
+                    <Text> Are you sure you want to delete Sale Id:{props.sale.sales_id} ?
+                    </Text>
+                </Container>
+            </ModalBody>
 
-        <ModalFooter>
-            <Button variant='ghost' mr={3} onClick={props.onClose}>
-                Close
-            </Button>
-            <Button colorScheme='red' isLoading={props.loading} onClick={props.handleDeleteSubmit}>Yes</Button>
-        </ModalFooter>
-    </ModalContent>
+            <ModalFooter>
+                <Button variant='ghost' mr={3} onClick={props.onClose}>
+                    Close
+                </Button>
+                <Button colorScheme='red' isLoading={props.loading} onClick={props.handleDeleteSubmit}>Yes</Button>
+            </ModalFooter>
+        </ModalContent>
 
     )
 
@@ -312,7 +312,7 @@ export default function Dashboard() {
     }
 
     const handleDeleteSubmit = () => {
-        const data = {...sale}
+        const data = { ...sale }
         setLoading(true);
 
         mutation.mutate({
@@ -345,9 +345,9 @@ export default function Dashboard() {
         <>
             <Modal isOpen={isOpen} onClose={onModalClose} size="4xl">
                 <ModalOverlay />
-                {modalType === "view" ? <ViewModal sale={sale} onClose={onModalClose}/> : 
-                <DeleteModal sale={sale} onClose={onModalClose} handleDeleteSubmit={handleDeleteSubmit}
-                loading={loading}/>}
+                {modalType === "view" ? <ViewModal sale={sale} onClose={onModalClose} /> :
+                    <DeleteModal sale={sale} onClose={onModalClose} handleDeleteSubmit={handleDeleteSubmit}
+                        loading={loading} />}
             </Modal>
             <Flex flexDirection="column" pt={{ base: "120px", md: "75px" }}>
                 <Grid
@@ -363,7 +363,7 @@ export default function Dashboard() {
                                     fontWeight="bold"
                                     pb=".5rem"
                                 >
-                                     SALES RECORD
+                                    SALES RECORD
                                 </Text>
                             </Flex>
                         </CardHeader>

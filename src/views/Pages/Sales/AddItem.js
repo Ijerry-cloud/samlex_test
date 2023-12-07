@@ -226,7 +226,7 @@ const Step1 = ({ customer, selectedOptions,
                                             </Flex>
                                         </Td>
                                         <Td isNumeric>{option.unit_price}</Td>
-                                        <Td isNumeric>
+                                        <Td>
                                             <Input
                                                 width='50px'
                                                 fontSize="sm"
@@ -313,13 +313,13 @@ const Step2 = React.forwardRef((props, ref) => {
                                     <Text fontSize="lg" fontWeight="bold">
                                         COMPANY LTD
                                     </Text>
-                                    <Text>9 AKWA RD BY ABS JUNCTION,ONITSHA, ANAMBRA STATE
-                                    </Text>
+                                    <Text>{receipt?.company_address || "TBG"}</Text>
                                 </Container>
                                 <Spacer />
                                 <Container alignSelf='center' textAlign='right'>
-                                    <Text>08030964878</Text>
-                                    <Text>07053808284</Text>
+                                    <Text>{receipt?.company_phone1 || "TBG"}</Text>
+                                    {receipt?.company_phone2 && (<Text>{receipt?.company_phone2}</Text>)}
+                                    <Text>{receipt?.company_email || "TBG"}</Text>
                                 </Container>
                             </Flex>
                             <Grid templateColumns='repeat(2, 1fr)' gap={2} px='10px' mb={12}>
@@ -407,9 +407,12 @@ const Step2 = React.forwardRef((props, ref) => {
                             </Box>
 
                             <Box alignItems='center' justifyContent='center' width='100%'>
-                                <Text fontSize="lg" fontWeight="bold" textAlign='center'>
-                                    {comments}
-                                </Text>
+
+                                {receipt?.comments &&
+                                    (<Text fontSize="lg" fontWeight="bold" textAlign='center'>
+                                        {receipt?.comments}
+                                    </Text>)
+                                }
                             </Box>
                         </Box>
                     </Box>
@@ -504,21 +507,24 @@ function AddItem() {
                 isClosable: true,
             });
 
-            var dateTime = new Date(response.data.date);
+            var dateTime = new Date(response.data.data.date);
             const options = { year: 'numeric', month: 'long', day: 'numeric', hour: '2-digit', minute: '2-digit', second: '2-digit' };
             dateTime = dateTime.toLocaleString('en-US', options);
-            setReceipt({ ...response.data, date: dateTime });
+            setReceipt({ ...response.data.data, date: dateTime });
 
-            setTimeout(() => {
-                const content = printableRef.current;
-                const originalContents = document.body.innerHTML;
-                document.body.style.backgroundColor = 'white';
+            if (response.data.print) {
+                setTimeout(() => {
+                    const content = printableRef.current;
+                    const originalContents = document.body.innerHTML;
+                    document.body.style.backgroundColor = 'white';
 
-                document.body.innerHTML = content.innerHTML;
-                window.print();
-                document.body.innerHTML = originalContents;
-                location.reload();
-            }, 2000);
+                    document.body.innerHTML = content.innerHTML;
+                    window.print();
+                    document.body.innerHTML = originalContents;
+                    location.reload();
+                }, 2000);
+
+            }
 
             return;
         },
@@ -558,7 +564,7 @@ function AddItem() {
         setSelectedOptions((selectedOptions) => {
             const newSelectedOptions = selectedOptions.map(obj => {
                 if (obj.label == name) {
-                    return { ...obj, number: parseInt(value) };
+                    return { ...obj, number: value };
                 }
                 return obj;
             });
@@ -602,7 +608,7 @@ function AddItem() {
             // set to state and terminate
             setErrors(checkErrors);
             toast({
-                title: 'Information errpr',
+                title: 'Information error',
                 description: "Check for errors",
                 status: 'warning',
                 duration: 3000,

@@ -24,7 +24,7 @@ import { SidebarHelp } from "components/Sidebar/SidebarHelp";
 import PropTypes from "prop-types";
 import React from "react";
 import { NavLink, useLocation } from "react-router-dom";
-import avatar4 from "../../assets/img/samlex.png";
+import avatar4 from "../../assets/img/samlex3.png";
 
 // FUNCTIONS
 
@@ -235,9 +235,6 @@ function Sidebar(props) {
           h="78px"
           // borderRadius="15px"
         />
-        <Text fontSize="sm" mt="3px">
-          {logoText}
-        </Text>
       </Link>
       <Separator></Separator>
     </Box>

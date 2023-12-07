@@ -307,12 +307,8 @@ export const AirtimeRadialChartOptions = {
 
 export const lineChartData = [
   {
-    name: "Transaction Limit",
-    data: [50, 40, 300, 220, 500, 250, 400, 230, 500],
-  },
-  {
-    name: "Overdrawn Transaction Limit",
-    data: [30, 90, 40, 140, 290, 290, 340, 230, 400],
+    name: "Total Amount",
+    data: [50, 40, 500, 220, 500],
   },
 ];
 
@@ -332,20 +328,12 @@ export const lineChartOptions = {
     curve: "smooth",
   },
   xaxis: {
-    type: "datetime",
     categories: [
-      "Jan",
-      "Feb",
-      "Mar",
-      "Apr",
-      "May",
-      "Jun",
-      "Jul",
-      "Aug",
-      "Sep",
-      "Oct",
-      "Nov",
-      "Dec",
+      "Jan 01",
+      "Jan 01",
+      "Jan 01",
+      "Jan 01",
+      "Jan 01",
     ],
     labels: {
       style: {
@@ -380,7 +368,63 @@ export const lineChartOptions = {
       opacityTo: 0,
       stops: [],
     },
-    colors: ["#5A8100", "#ffb400"],
+    colors: ["#58BDFF", "#2D3748"],
   },
-  colors: ["#5A8100", "#ffb400"],
+  colors: ["#58BDFF", "#2D3748"],
+};
+
+export const donutOptions = {
+  chart: {
+    type: 'donut',
+  },
+  responsive: [
+    {
+      breakpoint: 480,
+      options: {
+        chart: {
+          width: 200,
+        },
+        legend: {
+          position: 'bottom',
+        },
+      },
+    },
+  ],
+  //colors: ['#71B8D0', '#F0D1B5', '#D9272D', '#FFA500', '#1E8449', '#232333'],
+  //colors: ['#3498db', '#e74c3c', '#2ecc71', '#f39c12', '#9b59b6', '#34495e'],
+  colors: ['#FFFF00', '#00E396', '#FEB019', '#FF4560', '#775DD0', '#008FFB'],
+  legend: {
+    position: 'bottom',
+    labels: {
+      colors: 'white', // Set the color for all legend items
+    },
+  },
+}
+
+export const areaoptions = {
+  chart: {
+    toolbar: {
+      show: false,
+    },
+    type: 'area',
+  },
+  tooltip: {
+    theme: "dark",
+  },
+  xaxis: {
+    categories: [1991, 1992, 1993, 1994, 1995, 1996, 1997, 1998, 1999],
+  },
+  fill: {
+    colors: ['#FF7F0E'],
+  },
+  dataLabels: {
+    enabled: false,
+  },
+  stroke: {
+    curve: "smooth",
+  },
+  title: {
+    text: 'Sample Area Chart',
+    align: 'left',
+  },
 };

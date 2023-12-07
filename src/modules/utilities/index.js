@@ -143,3 +143,13 @@ export const getCurrentDateInput = () => {
   
     return shortDate;
   };
+
+export const getXdaysAgoDate = (number) => {
+
+    const day = new Date();
+    day.setDate(day.getDate() - number);
+
+    const formattedday = day.toISOString().split('T')[0];
+    return formattedday
+
+}

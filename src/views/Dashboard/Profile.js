@@ -156,6 +156,19 @@ function Profile() {
         isClosable: true,
       });
 
+      setValues({});
+      setPermissions({
+        customer_perm: false,
+        items_perm: false,
+        item_kits_perm: false,
+        suppliers_perm: false,
+        reports_perm: false,
+        receivings_perm: false,
+        sales_perm: false,
+        employees_perm: false
+      });
+      setErrors({});
+
       return;
     },
     onError: (error) => {
@@ -238,19 +251,6 @@ function Profile() {
       token: token,
       authenticate: true
     });
-    setValues({});
-    setPermissions({
-      customer_perm: false,
-      items_perm: false,
-      item_kits_perm: false,
-      suppliers_perm: false,
-      reports_perm: false,
-      receivings_perm: false,
-      sales_perm: false,
-      employees_perm: false
-    });
-    setErrors({});
-
 
     return;
   }

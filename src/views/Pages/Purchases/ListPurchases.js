@@ -79,9 +79,9 @@ import { AsyncSelect } from "chakra-react-select";
 import "theme/asyncSelect.css";
 
 const EditModal = ({ handleChange, handleSwitchChange, handleEditSubmit, onClose, item, setItem,
-    loadCategories, loadSuppliers, errors, loading, nameRef, barcodeRef, categoryInput, setCategoryInput,
-    supplierInput, setSupplierInput, costPriceRef, unitPriceRef, quantityRef, reorderLevelRef, tax1Ref,
-    tax2Ref, allowAltRef, hasSerialNoRef, categoryRef, supplierRef }) => {
+    loadCategories, loadSuppliers, errors, nameRef, barcodeRef, categoryInput, setCategoryInput,
+    supplierInput, setSupplierInput, costPriceRef, unitPriceRef, quantityRef, amountToAddRef, reorderLevelRef, tax1Ref,
+    tax2Ref, allowAltRef, hasSerialNoRef, mutation }) => {
 
     return (
         <ModalContent
@@ -237,20 +237,20 @@ const EditModal = ({ handleChange, handleSwitchChange, handleEditSubmit, onClose
                         </InputGroup>
                     </FormControl>
                     <FormControl id="">
-                        <FormLabel fontSize="sm" fontWeight='bold'>Qty</FormLabel>
+                        <FormLabel fontSize="sm" fontWeight='bold'>Add</FormLabel>
                         <InputGroup borderColor="#E0E1E7">
                             <InputLeftElement
                                 pointerEvents="none"
                                 children={<FaCubes color="gray.800" />}
                             />
                             <Input
-                                isInvalid={isError(errors?.quantity)}
+                                isInvalid={isError(errors?.amount_to_add)}
                                 errorBorderColor='red.300'
-                                ref={quantityRef}
-                                name={'quantity'}
+                                ref={amountToAddRef}
+                                name={'amount_to_add'}
                                 type="number"
                                 size="sm"
-                                defaultValue={item?.quantity}
+                                defaultValue={0}
                                 borderRadius='15px'
                                 borderColor="rgba(255, 255, 255, 0.2)"
                                 _placeholder={{ opacity: 0.2, color: 'white' }}
@@ -348,13 +348,13 @@ const EditModal = ({ handleChange, handleSwitchChange, handleEditSubmit, onClose
                 <Button colorScheme='red' mr={3} onClick={onClose}>
                     Close
                 </Button>
-                <Button isLoading={loading} onClick={handleEditSubmit} colorScheme='blue'>Submit</Button>
+                <Button isLoading={mutation.isLoading} onClick={handleEditSubmit} colorScheme='blue'>Submit</Button>
             </ModalFooter>
         </ModalContent>
     )
 }
 
-const DeleteModal = ({ onClose, item, loading, handleDeleteSubmit }) => (
+const DeleteModal = ({ onClose, item, handleDeleteSubmit, deleteMutation }) => (
     <ModalContent
         bgColor="#232333"
         borderColor="gray.900"
@@ -374,7 +374,7 @@ const DeleteModal = ({ onClose, item, loading, handleDeleteSubmit }) => (
             <Button variant='ghost' mr={3} onClick={onClose}>
                 Close
             </Button>
-            <Button colorScheme='red' isLoading={loading} onClick={handleDeleteSubmit}>Yes</Button>
+            <Button colorScheme='red' isLoading={deleteMutation.isLoading} onClick={handleDeleteSubmit}>Yes</Button>
         </ModalFooter>
     </ModalContent>
 
@@ -401,15 +401,15 @@ const TrackingModal = ({ onClose, item }) => (
                             <Th ps="0px" color="gray.400">
                                 Inventory Data Tracking
                             </Th>
-                            <Th color="gray.400" textAlign='right'>Qty/Remarks</Th>
+                            <Th color="gray.400" textAlign='right'>Amount added</Th>
                         </Tr>
                     </Thead>
                     <Tbody>
-                        {item.edit_history.map((row) => {
+                        {item?.edit_history?.map((row) => {
                             return (
                                 <DashboardTableRow5
                                     name={row.employee}
-                                    quantity={row.quantity}
+                                    amount_added={row.amount_added}
                                     date={row.date}
                                 />
                             );
@@ -438,6 +438,7 @@ export default function Dashboard() {
     const costPriceRef = React.useRef(null);
     const unitPriceRef = React.useRef(null);
     const quantityRef = React.useRef(null);
+    const amountToAddRef = React.useRef(null);
     const reorderLevelRef = React.useRef(null);
     const tax1Ref = React.useRef(null);
     const tax2Ref = React.useRef(null);
@@ -461,8 +462,6 @@ export default function Dashboard() {
     const textColor = "white";
     const [item, setItem] = useState({});
 
-    const [loading, setLoading] = useState(false);
-
     const history = useHistory();
 
 
@@ -482,7 +481,7 @@ export default function Dashboard() {
                 token
             }]
         });
-        console.log(response.data);
+        //console.log(response.data);
         return response.data;
     }
 
@@ -527,8 +526,8 @@ export default function Dashboard() {
                 setPageCount(data?.last_page || 1);
                 const item_list = data?.results.map((item) => ({
                     ...item,
-                    value: item.supplier_ID,
-                    label: item.supplier_ID,
+                    //value: item.supplier_ID,
+                    //label: item.supplier_ID,
 
                 }));
                 setItems(item_list || []);
@@ -543,6 +542,7 @@ export default function Dashboard() {
 
     const mutation = useMutation(postData, {
         onSuccess: (response) => {
+            const data = response?.data?.detail;
             toast({
                 title: 'Success',
                 description: 'Action successful',
@@ -550,16 +550,52 @@ export default function Dashboard() {
                 duration: 3000,
                 isClosable: true,
             });
-
-            setLoading(false);
             onModalClose();
-            refetch();
+            setItems((items) => {
+                const updated_items = items.map((item) => {
+                    if (item.id === data.id) {
+                        return data;
+                    }
+                    else {
+                        return item
+                    }
+                })
+                console.log(updated_items);
+                return updated_items
+            })
 
             return;
         },
         onError: (error) => {
             handleApiError(error);
-            setLoading(false);
+            onModalClose();
+        }
+    });
+
+    const deleteMutation = useMutation(postData, {
+        onSuccess: (response) => {
+            const id = response?.data?.id;
+            toast({
+                title: 'Success',
+                description: 'Item deleted successfully',
+                status: 'success',
+                duration: 3000,
+                isClosable: true,
+            });
+            onModalClose();
+            console.log(items);
+            setItems((items) => {
+                const new_items = items.filter(item => item.id !== id);
+                console.log(new_items);
+                console.log(id);
+                return new_items
+            })
+            //refetch();
+
+            return;
+        },
+        onError: (error) => {
+            handleApiError(error);
             onModalClose();
         }
     });
@@ -588,9 +624,9 @@ export default function Dashboard() {
         uerrors.name = updatedItem?.name ? "" : FIELD_REQUIRED;
         uerrors.cost_price = updatedItem?.cost_price ? "" : FIELD_REQUIRED;
         uerrors.unit_price = updatedItem?.unit_price ? "" : FIELD_REQUIRED;
-        uerrors.quantity = updatedItem?.quantity ? "" : FIELD_REQUIRED;
+        uerrors.amount_to_add = updatedItem?.amount_to_add ? "" : FIELD_REQUIRED;
 
-        if (!updatedItem?.name || !updatedItem?.cost_price || !updatedItem?.unit_price || !updatedItem?.quantity) {
+        if (!updatedItem?.name || !updatedItem?.cost_price || !updatedItem?.unit_price || !updatedItem?.amount_to_add) {
             toast({
                 title: 'Missing Information.',
                 description: "Please fill all required fields.",
@@ -615,7 +651,8 @@ export default function Dashboard() {
             supplier: supplierInput?.value,
             cost_price: costPriceRef.current.value,
             unit_price: unitPriceRef.current.value,
-            quantity: quantityRef.current.value,
+            amount_to_add: amountToAddRef.current.value,
+            //quantity: quantityRef.current.value,
             reorder_level: reorderLevelRef.current.value,
             tax1_percent: tax1Ref.current.value,
             tax2_percent: tax2Ref.current.value,
@@ -634,9 +671,6 @@ export default function Dashboard() {
             return;
         }
 
-        console.log(updatedItem);
-
-        setLoading(true);
         mutation.mutate(
             {
                 url: UPDATE_ITEM,
@@ -654,9 +688,7 @@ export default function Dashboard() {
     const handleDeleteSubmit = () => {
         const data = { ...item };
 
-        setLoading(true);
-
-        mutation.mutate({
+        deleteMutation.mutate({
             url: DELETE_ITEM,
             payload_data: data,
             token: token,
@@ -693,15 +725,16 @@ export default function Dashboard() {
                 {modalType === "edit" ?
                     <EditModal handleChange={handleChange} onClose={onModalClose}
                         handleEditSubmit={handleEditSubmit} item={item} setItem={setItem} errors={errors}
-                        handleSwitchChange={handleSwitchChange} loading={loading} 
+                        handleSwitchChange={handleSwitchChange}
                         loadSuppliers={loadSuppliers} loadCategories={loadCategories} nameRef={nameRef}
                         barcodeRef={barcodeRef} costPriceRef={costPriceRef} unitPriceRef={unitPriceRef}
                         categoryInput={categoryInput} setCategoryInput={setCategoryInput}
                         supplierInput={supplierInput} setSupplierInput={setSupplierInput}
-                        quantityRef={quantityRef} reorderLevelRef={reorderLevelRef} tax1Ref={tax1Ref}
+                        quantityRef={quantityRef} amountToAddRef={amountToAddRef} reorderLevelRef={reorderLevelRef} tax1Ref={tax1Ref}
                         tax2Ref={tax2Ref} allowAltRef={allowAltRef} hasSerialNoRef={hasSerialNoRef}
-                        categoryRef={categoryRef} supplierRef={supplierRef}/> : modalType === "delete" ?
-                        <DeleteModal onClose={onModalClose} item={item} handleDeleteSubmit={handleDeleteSubmit} loading={loading} /> :
+                        categoryRef={categoryRef} supplierRef={supplierRef} mutation={mutation}/> : modalType === "delete" ?
+                        <DeleteModal onClose={onModalClose} item={item} handleDeleteSubmit={handleDeleteSubmit}
+                        deleteMutation={deleteMutation} /> :
                         <TrackingModal onClose={onModalClose} item={item} />}
 
             </Modal>

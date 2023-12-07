@@ -21,6 +21,65 @@ import { AiFillWarning } from "react-icons/ai";
 import avatar7 from "assets/img/avatars/male.jpg";
 import avatar8 from "assets/img/avatars/female.png";
 
+export function DashboardTableRow13(props) {
+  const { name, category, cost_price, unit_price, quantity, onTrackClick } = props;
+  const textColor = "gray.500";
+  return (
+    <Tr my=".8rem" ps="0px">
+      <Td minWidth={{ sm: "150px" }} pl="0px">
+        <Flex align="center" py=".3rem" minWidth="100%" flexWrap="nowrap">
+          <Text
+            fontSize="sm"
+            color="white"
+            fontWeight="bold"
+            minWidth="100%"
+          >
+            {name}
+          </Text>
+        </Flex>
+      </Td>
+
+      <Td>
+        <Text textTransform="uppercase" fontSize="sm" color={textColor} fontWeight="bold" pb=".3rem">
+          {category}
+        </Text>
+      </Td>
+
+      <Td>
+        <Text fontSize="sm" color={textColor} fontWeight="bold" pb=".3rem" textAlign="right">
+          {cost_price}
+        </Text>
+      </Td>
+
+      <Td>
+        <Text fontSize="sm" color={textColor} fontWeight="bold" pb=".3rem" textAlign="right">
+          {unit_price}
+        </Text>
+      </Td>
+
+      <Td>
+        <Text fontSize="sm" color={textColor} fontWeight="bold" pb=".3rem" textAlign="right">
+          {quantity}
+        </Text>
+      </Td>
+
+      <Td>
+        <Center>
+          <IconButton
+            backgroundColor='orange'
+            color='white'
+            aria-label='delete sale'
+            icon={<InfoIcon />}
+            onClick={onTrackClick}
+            mx='2px'
+          />
+        </Center>
+
+      </Td>
+
+    </Tr>
+  );
+}
 
 export function DashboardTableRow12(props) {
   const { Date, no_of_sales, total_amount, total_qty } = props;
@@ -358,7 +417,7 @@ export function DashboardTableRow6(props) {
 }
 
 export function DashboardTableRow5(props) {
-  const { logo, name, quantity, date } = props;
+  const { logo, name, amount_added, date } = props;
   const textColor = "white";
   return (
     <Tr>
@@ -380,7 +439,7 @@ export function DashboardTableRow5(props) {
       </Td>
       <Td textAlign='right'>
         <Text fontSize="md" color="#4285f4" fontWeight="bold" pb=".5rem">
-          {quantity}
+          {amount_added}
         </Text>
       </Td>
     </Tr>
@@ -606,57 +665,52 @@ export function DashboardTableRow2(props) {
 }
 
 function DashboardTableRow(props) {
-  const { logo, name, members, budget, progression } = props;
+  const { Date, employee_name, customer_name, sub_total } = props;
   const textColor = useColorModeValue("gray.700", "white");
   return (
     <Tr>
-      <Td minWidth={{ sm: "250px" }} pl="0px">
-        <Flex align="center" py=".8rem" minWidth="100%" flexWrap="nowrap">
-          <Icon as={logo} h={"24px"} w={"24px"} pe="5px" />
-          <Text
-            fontSize="md"
-            color={textColor}
-            fontWeight="bold"
-            minWidth="100%"
-          >
-            {name}
-          </Text>
-        </Flex>
+      <Td minWidth={{ sm: "150px" }} pl="0px">
+        <Text
+          fontSize="md"
+          color="gray.500"
+          fontWeight="bold"
+          minWidth="100%"
+        >
+          {Date}
+        </Text>
       </Td>
 
       <Td>
-        <AvatarGroup size="sm">
-          {members.map((member) => {
-            return (
-              <Avatar
-                name="Ryan Florence"
-                src={member}
-                _hover={{ zIndex: "3", cursor: "pointer" }}
-              />
-            );
-          })}
-        </AvatarGroup>
-      </Td>
-      <Td>
-        <Text fontSize="md" color={textColor} fontWeight="bold" pb=".5rem">
-          {budget}
+        <Text
+          fontSize="md"
+          color="gray.500"
+          fontWeight="bold"
+          minWidth="100%"
+        >
+          {employee_name}
         </Text>
       </Td>
       <Td>
-        <Flex direction="column">
-          <Text
-            fontSize="md"
-            color="teal.300"
-            fontWeight="bold"
-            pb=".2rem"
-          >{`${progression}%`}</Text>
-          <Progress
-            colorScheme={progression === 100 ? "teal" : "cyan"}
-            size="xs"
-            value={progression}
-            borderRadius="15px"
-          />
-        </Flex>
+        <Text fontSize="md" color={textColor} fontWeight="bold" pb=".5rem">
+        <Text
+          fontSize="md"
+          color="white"
+          fontWeight="bold"
+          minWidth="100%"
+        >
+          {customer_name}
+        </Text>
+        </Text>
+      </Td>
+      <Td textAlign="right">
+      <Text
+          fontSize="md"
+          color="gray.500"
+          fontWeight="bold"
+          minWidth="100%"
+        >
+          {sub_total}
+        </Text>
       </Td>
     </Tr>
   );
