@@ -42,9 +42,10 @@ import { handleApiError } from "modules/utilities/responseHandlers";
 import { GET_CREATE_SALES, GET_CREATE_ITEM, GET_CREATE_CUSTOMERS } from 'config/serverUrls';
 import { checkObject, isError } from 'modules/utilities';
 import { getAuthUser } from "modules/auth/redux/authSelector";
+import { useHistory } from "react-router-dom";
 import "theme/asyncSelect.css";
 
-const Step1 = ({ customer, selectedOptions,
+const Step1 = ({ customer, selectedOptions, history,
     handleChange, handleCustomerChange, handleItemValueChange,
     paidCash, setPaidCash, discount, setDiscount, loadItems, loadCustomers,
     mode, setMode, paymentType, setPaymentType, sumTotal, errors, comments, setComments }) => {
@@ -76,8 +77,15 @@ const Step1 = ({ customer, selectedOptions,
             <Grid templateColumns='repeat(3, 1fr)' gap={6} mt={4}>
                 <FormControl >
                     <FormLabel fontSize="sm" fontWeight="bold">
-                        Customer's name: *
+                       {" Customer's name: *  "}
+                        <Button
+                        size="sm"
+                        colorScheme="blue"
+                        onClick={() => { history.push('/admin/customers'); }}>
+                        Add New
+                    </Button>
                     </FormLabel>
+
                     <div>
                         <AsyncSelect
                             name="customer_name"
@@ -247,31 +255,31 @@ const Step1 = ({ customer, selectedOptions,
                             <Tr>
                                 <Th></Th>
                                 <Th></Th>
-                                <Th backgroundColor="#232333" fontSize='sm' color='white' textTransform='none' fontWeight='normal' textAlign='right'>Sub Total</Th>
+                                <Th backgroundColor="#232333" fontSize='sm' color='white' textTransform='none' fontWeight='normal' textAlign='right'>Sub Total:</Th>
                                 <Th isNumeric backgroundColor="#232333" fontSize='sm' color='white' textTransform='none' textAlign='right'>NGN {sumTotal(selectedOptions).toFixed(2)}</Th>
                             </Tr>
                             <Tr>
                                 <Th></Th>
                                 <Th></Th>
-                                <Th backgroundColor="#232333" fontSize='sm' color='white' textTransform='none' fontWeight='normal' textAlign='right'>Discount</Th>
+                                <Th backgroundColor="#232333" fontSize='sm' color='white' textTransform='none' fontWeight='normal' textAlign='right'>Discount:</Th>
                                 <Th isNumeric backgroundColor="#232333" fontSize='sm' color='white' textTransform='none' textAlign='right'>NGN {discount >= 0 && (Number(discount).toFixed(2))}</Th>
                             </Tr>
                             <Tr>
                                 <Th></Th>
                                 <Th></Th>
-                                <Th backgroundColor="#232333" fontSize='sm' color='white' textTransform='none' fontWeight='normal' textAlign='right'>TOTAL</Th>
+                                <Th backgroundColor="black" fontSize='sm' color='white' textTransform='none' fontWeight='normal' textAlign='right'>TOTAL:</Th>
                                 <Th backgroundColor="black" fontSize='sm' color='white' textTransform='none' textAlign='right'>NGN {discount >= 0 && (sumTotal(selectedOptions) - Number(discount)).toFixed(2)}</Th>
                             </Tr>
                             <Tr>
                                 <Th></Th>
                                 <Th></Th>
-                                <Th backgroundColor="#232333" fontSize='sm' color='white' textAlign='right' fontWeight='normal'>CASH </Th>
+                                <Th backgroundColor="black" fontSize='sm' color='white' textAlign='right' fontWeight='normal'>CASH: </Th>
                                 <Th backgroundColor="black" fontSize='sm' color='white' textAlign='right'>NGN {paidCash >= 0 && (Number(paidCash).toFixed(2))}</Th>
                             </Tr>
                             <Tr>
                                 <Th></Th>
                                 <Th></Th>
-                                <Th backgroundColor="#232333" fontSize='sm' color='white' textAlign='right' fontWeight='normal'>CHANGE DUE</Th>
+                                <Th backgroundColor="black" fontSize='sm' color='white' textAlign='right' fontWeight='normal'>CHANGE DUE:</Th>
                                 <Th backgroundColor="black" fontSize='sm' color='white' textAlign='right'>NGN {(discount >= 0 && paidCash >= 0) && Number(+paidCash + +discount - sumTotal(selectedOptions)).toFixed(2)}</Th>
                             </Tr>
                         </Tfoot>
@@ -437,6 +445,7 @@ function AddItem() {
     const [paymentType, setPaymentType] = useState(null);
     const [comments, setComments] = useState(null);
     const [discount, setDiscount] = useState("0");
+    const history = useHistory();
 
     //these should be set on succesful sales submission
     const [receipt, setReceipt] = useState({});
@@ -524,6 +533,9 @@ function AddItem() {
                     location.reload();
                 }, 2000);
 
+            }
+            else {
+                location.reload();
             }
 
             return;
@@ -682,7 +694,7 @@ function AddItem() {
                         <Step1 customer={customer} loadCustomers={loadCustomers} setDiscount={setDiscount}
                             selectedOptions={selectedOptions} bgColor={bgColor} errors={errors} comments={comments}
                             handleChange={handleChange} handleCustomerChange={handleCustomerChange}
-                            handleItemValueChange={handleItemValueChange}
+                            handleItemValueChange={handleItemValueChange} history={history}
                             paidCash={paidCash} setPaidCash={setPaidCash} discount={discount}
                             sumTotal={sumTotal} mode={mode} setMode={setMode} paymentType={paymentType}
                             setPaymentType={setPaymentType} loadItems={loadItems} setComments={setComments}
@@ -711,8 +723,7 @@ function AddItem() {
                                     w="7rem"
                                     isDisabled={step === 2}
                                     onClick={handleNext}
-                                    colorScheme="blue"
-                                    variant="outline">
+                                    colorScheme="blue">
                                     Preview
                                 </Button>
                             </Flex>

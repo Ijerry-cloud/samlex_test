@@ -40,7 +40,9 @@ export const DELETE_CUSTOMERS = BASE_URL + 'people/customers/delete/'
 export const UPLOAD_ITEM_CSV = BASE_URL + 'items/csv/';
 export const GET_CREATE_ITEM = BASE_URL + 'items/list-create/';
 export const UPDATE_ITEM = BASE_URL + 'items/update/';
+export const GROUP_UPDATE_ITEM = BASE_URL + 'items/group-update/';
 export const DELETE_ITEM = BASE_URL + 'items/delete/';
+export const GROUP_DELETE = BASE_URL + 'items/group-delete/';
 
 export const GET_CREATE_CATEGORIES = BASE_URL + 'items/categories/list-create/';
 

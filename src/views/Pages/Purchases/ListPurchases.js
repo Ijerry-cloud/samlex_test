@@ -96,7 +96,7 @@ const EditModal = ({ handleChange, handleSwitchChange, handleEditSubmit, onClose
                 <Grid templateColumns="repeat(2, 1fr)" gap={4}>
 
                     <FormControl id="">
-                        <FormLabel fontSize="sm" fontWeight='bold'>Name of Item</FormLabel>
+                        <FormLabel fontSize="sm" fontWeight='bold'>Name of Item:*</FormLabel>
                         <InputGroup borderColor="#E0E1E7">
                             <InputLeftElement
                                 pointerEvents="none"
@@ -126,10 +126,10 @@ const EditModal = ({ handleChange, handleSwitchChange, handleEditSubmit, onClose
 
                                 if (action === 'clear') {
                                     // When the user clears the input, reset both the state and the displayed value
-                                    setCategoryInput({label: null, value: null});
+                                    setCategoryInput({ label: null, value: null });
                                 }
                                 else {
-                                    setCategoryInput({label: selectedOption.label, value: selectedOption.value});
+                                    setCategoryInput({ label: selectedOption.label, value: selectedOption.value });
                                 }
                             }}
                             placeholder="Start typing name..."
@@ -173,10 +173,10 @@ const EditModal = ({ handleChange, handleSwitchChange, handleEditSubmit, onClose
 
                                 if (action === 'clear') {
                                     // When the user clears the input, reset both the state and the displayed value
-                                    setSupplierInput({label: null, value: null});
+                                    setSupplierInput({ label: null, value: null });
                                 }
                                 else {
-                                    setSupplierInput({label: selectedOption.label, value: selectedOption.value});
+                                    setSupplierInput({ label: selectedOption.label, value: selectedOption.value });
                                 }
                             }}
                             placeholder="Start typing name..."
@@ -194,7 +194,7 @@ const EditModal = ({ handleChange, handleSwitchChange, handleEditSubmit, onClose
                 </Grid>
                 <Grid templateColumns='repeat(4, 1fr)' gap={2} mt={4}>
                     <FormControl id="">
-                        <FormLabel fontSize="sm" fontWeight='bold'>Cost Price</FormLabel>
+                        <FormLabel fontSize="sm" fontWeight='bold'>Cost Price:*</FormLabel>
                         <InputGroup borderColor="#E0E1E7">
                             <InputLeftElement
                                 pointerEvents="none"
@@ -204,7 +204,7 @@ const EditModal = ({ handleChange, handleSwitchChange, handleEditSubmit, onClose
                                 isInvalid={isError(errors?.cost_price)}
                                 errorBorderColor='red.300'
                                 ref={costPriceRef}
-                                name={'cost_price'}                          
+                                name={'cost_price'}
                                 type="text"
                                 size="sm"
                                 defaultValue={item?.cost_price}
@@ -215,7 +215,7 @@ const EditModal = ({ handleChange, handleSwitchChange, handleEditSubmit, onClose
                         </InputGroup>
                     </FormControl>
                     <FormControl id="">
-                        <FormLabel fontSize="sm" fontWeight='bold'>Unit Price</FormLabel>
+                        <FormLabel fontSize="sm" fontWeight='bold'>Unit Price:*</FormLabel>
                         <InputGroup borderColor="#E0E1E7">
                             <InputLeftElement
                                 pointerEvents="none"
@@ -226,7 +226,7 @@ const EditModal = ({ handleChange, handleSwitchChange, handleEditSubmit, onClose
                                 errorBorderColor='red.300'
                                 ref={unitPriceRef}
                                 name={'unit_price'}
-                                
+
                                 type="number"
                                 size="sm"
                                 defaultValue={item?.unit_price}
@@ -237,7 +237,7 @@ const EditModal = ({ handleChange, handleSwitchChange, handleEditSubmit, onClose
                         </InputGroup>
                     </FormControl>
                     <FormControl id="">
-                        <FormLabel fontSize="sm" fontWeight='bold'>Add</FormLabel>
+                        <FormLabel fontSize="sm" fontWeight='bold'>Add:*</FormLabel>
                         <InputGroup borderColor="#E0E1E7">
                             <InputLeftElement
                                 pointerEvents="none"
@@ -258,7 +258,7 @@ const EditModal = ({ handleChange, handleSwitchChange, handleEditSubmit, onClose
                         </InputGroup>
                     </FormControl>
                     <FormControl id="">
-                        <FormLabel fontSize="sm" fontWeight='bold'>Reorder Level</FormLabel>
+                        <FormLabel fontSize="sm" fontWeight='bold'>Reorder Level:</FormLabel>
                         <InputGroup borderColor="#E0E1E7">
                             <InputLeftElement
                                 pointerEvents="none"
@@ -279,7 +279,7 @@ const EditModal = ({ handleChange, handleSwitchChange, handleEditSubmit, onClose
                         </InputGroup>
                     </FormControl>
                     <FormControl id="">
-                        <FormLabel fontSize="sm" fontWeight='bold'>Tax1</FormLabel>
+                        <FormLabel fontSize="sm" fontWeight='bold'>Tax1:</FormLabel>
                         <InputGroup borderColor="#E0E1E7">
                             <InputLeftElement
                                 pointerEvents="none"
@@ -300,7 +300,7 @@ const EditModal = ({ handleChange, handleSwitchChange, handleEditSubmit, onClose
                         </InputGroup>
                     </FormControl>
                     <FormControl id="">
-                        <FormLabel fontSize="sm" fontWeight='bold'>Tax2</FormLabel>
+                        <FormLabel fontSize="sm" fontWeight='bold'>Tax2:</FormLabel>
                         <InputGroup borderColor="#E0E1E7">
                             <InputLeftElement
                                 pointerEvents="none"
@@ -322,7 +322,7 @@ const EditModal = ({ handleChange, handleSwitchChange, handleEditSubmit, onClose
                     </FormControl>
 
                     <FormControl id="">
-                        <FormLabel fontSize="sm" fontWeight='bold'>Allow Alt.</FormLabel>
+                        <FormLabel fontSize="sm" fontWeight='bold'>Allow Alt.:</FormLabel>
                         <Switch
                             ref={allowAltRef}
                             defaultChecked={item?.allow_alt}
@@ -332,7 +332,7 @@ const EditModal = ({ handleChange, handleSwitchChange, handleEditSubmit, onClose
                         />
                     </FormControl>
                     <FormControl id="">
-                        <FormLabel fontSize="sm" fontWeight='bold'>Item S/N?</FormLabel>
+                        <FormLabel fontSize="sm" fontWeight='bold'>Item S/N?:</FormLabel>
                         <Switch
                             ref={hasSerialNoRef}
                             defaultChecked={item?.has_serial_no}
@@ -550,7 +550,7 @@ export default function Dashboard() {
                 duration: 3000,
                 isClosable: true,
             });
-            onModalClose();
+           
             setItems((items) => {
                 const updated_items = items.map((item) => {
                     if (item.id === data.id) {
@@ -562,7 +562,8 @@ export default function Dashboard() {
                 })
                 console.log(updated_items);
                 return updated_items
-            })
+            });
+            onModalClose();
 
             return;
         },
@@ -582,15 +583,14 @@ export default function Dashboard() {
                 duration: 3000,
                 isClosable: true,
             });
-            onModalClose();
-            console.log(items);
+
             setItems((items) => {
                 const new_items = items.filter(item => item.id !== id);
                 console.log(new_items);
                 console.log(id);
                 return new_items
             })
-            //refetch();
+            onModalClose();
 
             return;
         },

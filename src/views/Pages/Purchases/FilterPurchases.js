@@ -26,6 +26,7 @@ import {
     IconButton,
     Stack,
     Switch,
+    Spacer,
     Table,
     Tbody,
     Text,
@@ -60,7 +61,7 @@ import { handleApiError } from "modules/utilities/responseHandlers";
 import { FIELD_REQUIRED } from 'constants/formErrorMessages';
 import { getAuthToken } from 'modules/auth/redux/authSelector';
 import { postData, fetchData } from 'modules/utilities/util_query';
-import { GET_CREATE_ITEM, UPDATE_ITEM, DELETE_ITEM, GET_CREATE_CATEGORIES, GET_CREATE_SUPPLIERS } from 'config/serverUrls';
+import { GET_CREATE_ITEM, UPDATE_ITEM, GROUP_UPDATE_ITEM, DELETE_ITEM, GROUP_DELETE, GET_CREATE_CATEGORIES, GET_CREATE_SUPPLIERS } from 'config/serverUrls';
 import { getAuthUser } from "modules/auth/redux/authSelector";
 import { AsyncSelect } from "chakra-react-select";
 import "theme/asyncSelect.css";
@@ -83,7 +84,7 @@ const EditModal = ({ handleChange, handleSwitchChange, handleEditSubmit, onClose
                 <Grid templateColumns="repeat(2, 1fr)" gap={4}>
 
                     <FormControl id="">
-                        <FormLabel fontSize="sm" fontWeight='bold'>Name of Item</FormLabel>
+                        <FormLabel fontSize="sm" fontWeight='bold'>Name of Item:*</FormLabel>
                         <InputGroup borderColor="#E0E1E7">
                             <InputLeftElement
                                 pointerEvents="none"
@@ -181,7 +182,7 @@ const EditModal = ({ handleChange, handleSwitchChange, handleEditSubmit, onClose
                 </Grid>
                 <Grid templateColumns='repeat(4, 1fr)' gap={2} mt={4}>
                     <FormControl id="">
-                        <FormLabel fontSize="sm" fontWeight='bold'>Cost Price</FormLabel>
+                        <FormLabel fontSize="sm" fontWeight='bold'>Cost Price:*</FormLabel>
                         <InputGroup borderColor="#E0E1E7">
                             <InputLeftElement
                                 pointerEvents="none"
@@ -202,7 +203,7 @@ const EditModal = ({ handleChange, handleSwitchChange, handleEditSubmit, onClose
                         </InputGroup>
                     </FormControl>
                     <FormControl id="">
-                        <FormLabel fontSize="sm" fontWeight='bold'>Unit Price</FormLabel>
+                        <FormLabel fontSize="sm" fontWeight='bold'>Unit Price:*</FormLabel>
                         <InputGroup borderColor="#E0E1E7">
                             <InputLeftElement
                                 pointerEvents="none"
@@ -224,7 +225,7 @@ const EditModal = ({ handleChange, handleSwitchChange, handleEditSubmit, onClose
                         </InputGroup>
                     </FormControl>
                     <FormControl id="">
-                        <FormLabel fontSize="sm" fontWeight='bold'>Add</FormLabel>
+                        <FormLabel fontSize="sm" fontWeight='bold'>Add:*</FormLabel>
                         <InputGroup borderColor="#E0E1E7">
                             <InputLeftElement
                                 pointerEvents="none"
@@ -245,7 +246,7 @@ const EditModal = ({ handleChange, handleSwitchChange, handleEditSubmit, onClose
                         </InputGroup>
                     </FormControl>
                     <FormControl id="">
-                        <FormLabel fontSize="sm" fontWeight='bold'>Reorder Level</FormLabel>
+                        <FormLabel fontSize="sm" fontWeight='bold'>Reorder Level:</FormLabel>
                         <InputGroup borderColor="#E0E1E7">
                             <InputLeftElement
                                 pointerEvents="none"
@@ -266,7 +267,7 @@ const EditModal = ({ handleChange, handleSwitchChange, handleEditSubmit, onClose
                         </InputGroup>
                     </FormControl>
                     <FormControl id="">
-                        <FormLabel fontSize="sm" fontWeight='bold'>Tax1</FormLabel>
+                        <FormLabel fontSize="sm" fontWeight='bold'>Tax1:</FormLabel>
                         <InputGroup borderColor="#E0E1E7">
                             <InputLeftElement
                                 pointerEvents="none"
@@ -287,7 +288,7 @@ const EditModal = ({ handleChange, handleSwitchChange, handleEditSubmit, onClose
                         </InputGroup>
                     </FormControl>
                     <FormControl id="">
-                        <FormLabel fontSize="sm" fontWeight='bold'>Tax2</FormLabel>
+                        <FormLabel fontSize="sm" fontWeight='bold'>Tax2:</FormLabel>
                         <InputGroup borderColor="#E0E1E7">
                             <InputLeftElement
                                 pointerEvents="none"
@@ -309,7 +310,7 @@ const EditModal = ({ handleChange, handleSwitchChange, handleEditSubmit, onClose
                     </FormControl>
 
                     <FormControl id="">
-                        <FormLabel fontSize="sm" fontWeight='bold'>Allow Alt.</FormLabel>
+                        <FormLabel fontSize="sm" fontWeight='bold'>Allow Alt.:</FormLabel>
                         <Switch
                             ref={allowAltRef}
                             defaultChecked={item?.allow_alt}
@@ -319,7 +320,7 @@ const EditModal = ({ handleChange, handleSwitchChange, handleEditSubmit, onClose
                         />
                     </FormControl>
                     <FormControl id="">
-                        <FormLabel fontSize="sm" fontWeight='bold'>Item S/N?</FormLabel>
+                        <FormLabel fontSize="sm" fontWeight='bold'>Item S/N?:</FormLabel>
                         <Switch
                             ref={hasSerialNoRef}
                             defaultChecked={item?.has_serial_no}
@@ -341,7 +342,7 @@ const EditModal = ({ handleChange, handleSwitchChange, handleEditSubmit, onClose
     )
 }
 
-const EditGroupModal = ({ onClose, groupAddRef, groupReorderRef, groupTax1Ref, groupTax2Ref, groupErrors, handleGroupEditSubmit }) => (
+const EditGroupModal = ({ onClose, groupAddRef, groupReorderRef, groupTax1Ref, groupTax2Ref, groupErrors, mutation, handleGroupEditSubmit }) => (
     <ModalContent
         bgColor="#232333"
         borderColor="gray.900"
@@ -355,7 +356,7 @@ const EditGroupModal = ({ onClose, groupAddRef, groupReorderRef, groupTax1Ref, g
             <Grid templateColumns='repeat(4, 1fr)' gap={2} mt={4}>
 
                 <FormControl id="">
-                    <FormLabel fontSize="sm" fontWeight='bold'>Add</FormLabel>
+                    <FormLabel fontSize="sm" fontWeight='bold'>Add:*</FormLabel>
                     <InputGroup borderColor="#E0E1E7">
                         <InputLeftElement
                             pointerEvents="none"
@@ -376,7 +377,7 @@ const EditGroupModal = ({ onClose, groupAddRef, groupReorderRef, groupTax1Ref, g
                     </InputGroup>
                 </FormControl>
                 <FormControl id="">
-                    <FormLabel fontSize="sm" fontWeight='bold'>Reorder Level</FormLabel>
+                    <FormLabel fontSize="sm" fontWeight='bold'>Reorder Level:</FormLabel>
                     <InputGroup borderColor="#E0E1E7">
                         <InputLeftElement
                             pointerEvents="none"
@@ -397,7 +398,7 @@ const EditGroupModal = ({ onClose, groupAddRef, groupReorderRef, groupTax1Ref, g
                     </InputGroup>
                 </FormControl>
                 <FormControl id="">
-                    <FormLabel fontSize="sm" fontWeight='bold'>Tax1</FormLabel>
+                    <FormLabel fontSize="sm" fontWeight='bold'>Tax1:</FormLabel>
                     <InputGroup borderColor="#E0E1E7">
                         <InputLeftElement
                             pointerEvents="none"
@@ -418,7 +419,7 @@ const EditGroupModal = ({ onClose, groupAddRef, groupReorderRef, groupTax1Ref, g
                     </InputGroup>
                 </FormControl>
                 <FormControl id="">
-                    <FormLabel fontSize="sm" fontWeight='bold'>Tax2</FormLabel>
+                    <FormLabel fontSize="sm" fontWeight='bold'>Tax2:</FormLabel>
                     <InputGroup borderColor="#E0E1E7">
                         <InputLeftElement
                             pointerEvents="none"
@@ -447,7 +448,7 @@ const EditGroupModal = ({ onClose, groupAddRef, groupReorderRef, groupTax1Ref, g
                 Close
             </Button>
             <Button
-                //isLoading={loading} 
+                isLoading={mutation.isLoading}
                 onClick={handleGroupEditSubmit}
                 colorScheme='blue'>
                 Submit
@@ -456,7 +457,7 @@ const EditGroupModal = ({ onClose, groupAddRef, groupReorderRef, groupTax1Ref, g
     </ModalContent>
 )
 
-const DeleteModal = ({ onClose, item, loading, handleDeleteSubmit }) => (
+const DeleteModal = ({ onClose, item, loading, mutation, handleDeleteSubmit }) => (
     <ModalContent
         bgColor="#232333"
         borderColor="gray.900"
@@ -476,13 +477,13 @@ const DeleteModal = ({ onClose, item, loading, handleDeleteSubmit }) => (
             <Button variant='ghost' mr={3} onClick={onClose}>
                 Close
             </Button>
-            <Button colorScheme='red' isLoading={loading} onClick={handleDeleteSubmit}>Yes</Button>
+            <Button colorScheme='red' isLoading={mutation.isLoading} onClick={handleDeleteSubmit}>Yes</Button>
         </ModalFooter>
     </ModalContent>
 
 );
 
-const DeleteGroupModal = ({ onClose }) => (
+const DeleteGroupModal = ({ mutation, onClose, handleGroupDeleteSubmit }) => (
     <ModalContent
         bgColor="#232333"
         borderColor="gray.900"
@@ -493,7 +494,7 @@ const DeleteGroupModal = ({ onClose }) => (
         <ModalCloseButton />
         <ModalBody>
             <Container maxW="full">
-                <Text> Are you sure you want to delete these ?
+                <Text> Are you sure you want to delete these items ?
                 </Text>
             </Container>
         </ModalBody>
@@ -504,7 +505,8 @@ const DeleteGroupModal = ({ onClose }) => (
             </Button>
             <Button
                 colorScheme='red'
-            //isLoading={loading} onClick={handleDeleteSubmit}
+                isLoading={mutation.isLoading}
+                onClick={handleGroupDeleteSubmit}
             >Yes</Button>
         </ModalFooter>
     </ModalContent>
@@ -668,7 +670,6 @@ function FilterItems() {
                 isClosable: true,
             });
 
-            setLoading(false);
             setSelectedOptions([]);
             onModalClose();
             //refetch();
@@ -794,6 +795,15 @@ function FilterItems() {
             return;
         }
 
+        mutation.mutate(
+            {
+                url: GROUP_UPDATE_ITEM,
+                payload_data: updatedItems,
+                token: token,
+                authenticate: true
+            }
+        );
+
         return;
     }
 
@@ -807,8 +817,18 @@ function FilterItems() {
             authenticate: true
         });
         return;
+    }
 
+    const handleGroupDeleteSubmit = () => {
+        const data = { items: selectedOptions.map(obj => obj.id).join(',') };
 
+        mutation.mutate({
+            url: GROUP_DELETE,
+            payload_data: data,
+            token: token,
+            authenticate: true
+        });
+        return;
     }
 
     const editActionClick = () => {
@@ -859,14 +879,14 @@ function FilterItems() {
                         categoryRef={categoryRef} supplierRef={supplierRef} mutation={mutation} /> : modalType === "editGroup" ?
                         <EditGroupModal onClose={onModalClose} groupAddRef={groupAddRef} groupReorderRef={groupReorderRef}
                             groupTax1Ref={groupTax1Ref} groupTax2Ref={groupTax2Ref} handleGroupEditSubmit={handleGroupEditSubmit}
-                            groupErrors={groupErrors} /> : modalType === "deleteSingle" ?
-                            <DeleteModal onClose={onModalClose} item={item} handleDeleteSubmit={handleDeleteSubmit} loading={loading} /> : modalType === "deleteGroup" ?
-                                <DeleteGroupModal onClose={onModalClose} /> :
+                            groupErrors={groupErrors} mutation={mutation} /> : modalType === "deleteSingle" ?
+                            <DeleteModal onClose={onModalClose} item={item} mutation={mutation} handleDeleteSubmit={handleDeleteSubmit} loading={loading} /> : modalType === "deleteGroup" ?
+                                <DeleteGroupModal onClose={onModalClose} mutation={mutation} handleGroupDeleteSubmit={handleGroupDeleteSubmit} /> :
                                 <TrackingModal onClose={onModalClose} item={item} />}
 
             </Modal>
             <Flex direction="column" alignSelf="center" justifySelf="center">
-                <Flex alignItems="center" justifyContent="center" mb="60px" mt="80px">
+                <Flex alignItems="center" justifyContent="center" mb="30px" mt="80px">
                     <Flex
                         direction="column"
                         w="100%"
@@ -897,8 +917,31 @@ function FilterItems() {
 
 
                         </FormControl>
-                        <Flex align="center" justifyContent="flex-end" mt={4}>
-                            <Text fontWeight="bold" mx={2} color="gray.400"> GROUP ACTIONS
+
+                    </Flex>
+
+
+
+                </Flex>
+
+                <Flex alignItems="center" justifyContent="center" mb="60px">
+                    <Flex
+                        direction="column"
+                        w="100%"
+                        background="transparent"
+                        borderRadius="15px"
+                        p="40px"
+                        mx={{ base: "10px" }}
+                        bg={bgColor}
+                        color={textColor}
+                        boxShadow="0 20px 27px 0 rgb(0 0 0 / 5%)"
+                    >
+
+                        <Flex alignItems='center' gap='2' my={4}>
+                            <Text fontWeight="bold" color="white"> ITEM INVENTORY LIST
+                            </Text>
+                            <Spacer />
+                            <Text fontWeight="bold" color="white"> GROUP ACTIONS
                             </Text>
 
                             <Center>
@@ -935,9 +978,7 @@ function FilterItems() {
                                     <Th textAlign="right" color="gray.400">COST</Th>
                                     <Th textAlign="right" color="gray.400">UNIT PRICE</Th>
                                     <Th textAlign="right" color="gray.400">QUANTITY</Th>
-                                    <Center>
-                                        <Th color="gray.400">VIEW INFO.</Th>
-                                    </Center>
+                                    <Th textAlign="right" color="gray.400">VIEW INFO.</Th>
 
 
                                 </Tr>
@@ -969,6 +1010,7 @@ function FilterItems() {
                         </Table>
 
                     </Flex>
+
 
 
                 </Flex>

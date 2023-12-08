@@ -63,17 +63,14 @@ export function DashboardTableRow13(props) {
         </Text>
       </Td>
 
-      <Td>
-        <Center>
+      <Td textAlign="right">
           <IconButton
             backgroundColor='orange'
             color='white'
             aria-label='delete sale'
             icon={<InfoIcon />}
             onClick={onTrackClick}
-            mx='2px'
           />
-        </Center>
 
       </Td>
 

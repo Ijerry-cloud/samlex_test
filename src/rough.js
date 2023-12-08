@@ -68,3 +68,8 @@
 //enable downloading of csv sheets
 
 
+//all forms on all pages should carry ":" after the form label and "*" on required fields
+//the footer "made with love by connect academy" should be firmly fixed to the bottom. on pages like filter, its coming up
+
+//remember the side menu bar for mobile screens should also have the routes hidden for permissions that are not granted to that particular user
+
