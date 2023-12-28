@@ -234,10 +234,10 @@ const DeleteModal = (props) => {
             </ModalBody>
 
             <ModalFooter>
-                <Button variant='ghost' mr={3} onClick={props.onClose}>
+                <Button size="sm" variant='ghost' mr={3} onClick={props.onClose}>
                     Close
                 </Button>
-                <Button colorScheme='red' isLoading={props.loading} onClick={props.handleDeleteSubmit}>Yes</Button>
+                <Button size="sm" colorScheme='red' isLoading={props.loading} onClick={props.handleDeleteSubmit}>Yes</Button>
             </ModalFooter>
         </ModalContent>
 
@@ -262,6 +262,7 @@ function FilterSales() {
     const [endpoint, setEndpoint] = useState('');
     const [sale, setSale] = React.useState({});
     const [sales, setSales] = useState(null);
+    const [csv, setCsv] = useState(false);
     const [count, setCount] = useState(0);
     const [pageCount, setPageCount] = useState(1);
     const [page, setPage] = useState(1);
@@ -271,7 +272,7 @@ function FilterSales() {
     const history = useHistory();
 
     const payload_data = {};
-    const url = `${GET_SALES_REPORT}?startDate=${date?.startDate}&endDate=${date?.endDate}&itemNames=${selectedOptions.map(obj => obj.name).join(',')}&employeeIds=${employees.map(obj => obj.value).join(',')}&customerIds=${customers.map(obj => obj.value).join(',')}&page=${page}`;
+    const url = `${GET_SALES_REPORT}?startDate=${date?.startDate}&endDate=${date?.endDate}&itemNames=${selectedOptions.map(obj => obj.name).join(',')}&employeeIds=${employees.map(obj => obj.value).join(',')}&customerIds=${customers.map(obj => obj.value).join(',')}&page=${page}&csv=${csv}`;
 
     const { isLoading, refetch, isSuccess, isFetching, remove } = useQuery(['anySales',
         {
@@ -286,11 +287,27 @@ function FilterSales() {
             enabled: enabled,
             retry: false,
             onSuccess: (response) => {
+
+                if (csv) {
+
+
+                    const blob = new Blob([response.data], { type: 'text/csv' });
+
+                    const link = document.createElement('a');
+                    link.href = window.URL.createObjectURL(blob);
+                    link.download = "SalesReport.csv";
+                    document.body.appendChild(link);
+                    link.click();
+                    document.body.removeChild(link);
+                }
+
                 //console.log(response?.data);
-                const data = response?.data;
-                setCount(data?.count || 0);
-                setSales(data?.results || []);
-                setPageCount(data?.last_page || 1);
+                else {
+                    const data = response?.data;
+                    setCount(data?.count || 0);
+                    setSales(data?.results || []);
+                    setPageCount(data?.last_page || 1);
+                }
 
             },
             onError: (error) => {
@@ -301,6 +318,7 @@ function FilterSales() {
 
     const mutation = useMutation(postData, {
         onSuccess: (response) => {
+            const id = response?.data?.id;
             toast({
                 title: 'Success',
                 description: 'sales deleted',
@@ -309,8 +327,16 @@ function FilterSales() {
                 isClosable: true,
             });
 
+            setSales((sales) => {
+                const updated = sales.filter(sale => sale.id !== id);
+                //console.log(new_items);
+                //console.log(id);
+                return updated
+            })
+            setCount((count) => count - 1)
+
             onModalClose();
-            refetch();
+            //refetch();
 
             return;
         },
@@ -352,7 +378,7 @@ function FilterSales() {
     }
 
     const loadItems = async (inputValue) => {
-        console.log('waiting');
+        //console.log('waiting');
         let response = await fetchData({
             queryKey: ['all items', {
                 url: GET_CREATE_ITEM + `?name=${inputValue}`,
@@ -422,6 +448,11 @@ function FilterSales() {
             setDate({ ...date, [name]: value });
             return;
         }
+    }
+
+    const handleSwitchChange = () => {
+        setCsv((csv) => !csv)
+        return;
     }
 
     const [resultsPage, setResultsPage] = useState(false);
@@ -508,7 +539,7 @@ function FilterSales() {
             employees,
             date
         }
-        console.log(data);
+        //console.log(data);
 
         refetch();
     }
@@ -572,8 +603,15 @@ function FilterSales() {
                                         color={textColor}
                                         fontWeight="bold"
                                     >
-
-                                        {`SALES RECORD (${date.startDate} to ${date.endDate}) (${count} records found)`}
+                                        <Text as="span" bgColor="#8E44AD" p={2}>
+                                            ALL SALES RECORD
+                                        </Text>
+                                        <Text as="span" bgColor="#27AE60" p={2}>
+                                            {`(Page ${page} of ${pageCount})`}
+                                        </Text>
+                                        <Text as="span" bgColor="#F39C12" p={2}>
+                                            {`(${count} item(s) found)`}
+                                        </Text>
                                     </Text>
                                     <Spacer />
                                     <Button
@@ -792,8 +830,11 @@ function FilterSales() {
                                 />
                             </FormControl>
                             <FormControl id="">
-                                <FormLabel fontSize="sm" fontWeight='bold'>Export to PDF</FormLabel>
+                                <FormLabel fontSize="sm" fontWeight='bold'>Export to CSV:</FormLabel>
                                 <Switch
+                                    isChecked={csv}
+                                    onChange={handleSwitchChange}
+                                    name={"exportCsv"}
                                     size="md"
                                     colorScheme="blue"
                                 />

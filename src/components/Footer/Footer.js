@@ -13,11 +13,21 @@ export default function Footer(props) {
       }}
       alignItems={{
         base: "center",
-        xl: "start",
+        //xl: "start",
       }}
       justifyContent="space-between"
-      px="30px"
-      pb="20px"
+      //px="30px"
+      backgroundColor="#232333"
+      //zIndex={-3}
+
+      
+      position="fixed"  // Set position to fixed
+      bottom="0"       // Place at the bottom of the screen
+      width={
+        {xl: "80%",
+        sm: "100%"}
+      }
+      px={4}
     >
       <Text
         color="gray.400"
@@ -25,7 +35,7 @@ export default function Footer(props) {
           base: "center",
           xl: "start",
         }}
-        mb={{ base: "20px", xl: "0px" }}
+        //mb={{ base: "20px", xl: "0px" }}
       >
         &copy; {1900 + new Date().getYear()},{" "}
         <Text as="span">
@@ -36,7 +46,7 @@ export default function Footer(props) {
         <Link
           // color={linkTeal}
           color="teal.400"
-          href="https://www.creative-tim.com"
+          href="#"
           target="_blank"
         >
           {document.documentElement.dir === "rtl"
@@ -56,7 +66,6 @@ export default function Footer(props) {
         >
           <Link
             color="gray.400"
-            href="#blog"
             href="#"
           >
             {document.documentElement.dir === "rtl" ? "مدونة" : "Samlex Electronics"}
@@ -65,7 +74,6 @@ export default function Footer(props) {
         <ListItem>
           <Link
             color="gray.400"
-            href="#license"
             href="#"
           >
             {document.documentElement.dir === "rtl" ? "رخصة" : "License"}

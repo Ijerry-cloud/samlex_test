@@ -180,7 +180,7 @@ export default function Dashboard() {
     {
       retry: false,
       onSuccess: (response) => {
-        console.log(response?.data);
+        //console.log(response?.data);
         const daily_totals = response?.data?.results.map((day) => day.total_amount);
         const lineData = [{ name: "Total Amount Sold", data: daily_totals }];
         const days = response?.data?.results.map((day) => {
@@ -525,13 +525,17 @@ export default function Dashboard() {
                           history.push('/admin/add-Purchases');
                         }}
                       >
-                        Add Items
+                        Add Item
                       </Button>
                       <Button
                         bgColor="#1E8449"
                         color="white"
                         size="sm"
-                        onClick={() => { history.push('/admin/list-Purchases'); }}
+                        
+                        onClick={() => {
+                          window.scrollTo(0, 0);
+                          history.push('/admin/list-Purchases');
+                        }}
                       >
                         List Items
                       </Button>

@@ -21,6 +21,62 @@ import { AiFillWarning } from "react-icons/ai";
 import avatar7 from "assets/img/avatars/male.jpg";
 import avatar8 from "assets/img/avatars/female.png";
 
+export function DashboardTableRow14(props) {
+  const { first_name, last_name, phone_no, email, city, onEditClick, onDeleteClick } = props;
+  const textColor = "gray.500";
+  return (
+    <Tr my=".8rem" borderBottom="4px" borderColor="#232333">
+      <Td minWidth={{ sm: "100px" }} maxWidth={{ sm: "200px" }} fontSize="sm" color="gray.500" fontWeight="bold" mx={0}>
+        {first_name}
+      </Td>
+
+      <Td minWidth={{ sm: "100px" }} maxWidth={{ sm: "200px" }} fontSize="sm" color="gray.500" fontWeight="bold" mx={0}>
+        {last_name}
+      </Td>
+
+      <Td minWidth={{ sm: "100px" }} fontSize="sm" color="gray.500" fontWeight="bold" mx={0}>
+        {phone_no}
+      </Td>
+
+      <Td minWidth={{ sm: "100px" }} fontSize="sm" color="gray.500" fontWeight="bold" mx={0}>
+        {email}
+      </Td>
+      <Td minWidth={{ sm: "100px" }} fontSize="sm" color="gray.500" fontWeight="bold" mx={0}>
+        {city}
+      </Td>
+
+      <Td textAlign="center">
+
+        <IconButton
+          backgroundColor='blue'
+          color='white'
+          aria-label='edit customer'
+          icon={<EditIcon />}
+          onClick={onEditClick}
+          mx='2px'
+        />
+        <IconButton
+          backgroundColor='red'
+          color='white'
+          aria-label='delete customer'
+          icon={<DeleteIcon />}
+          onClick={onDeleteClick}
+          mx='2px'
+        />
+        <IconButton
+          backgroundColor='#5a8100'
+          color='white'
+          aria-label='email customer'
+          icon={<EmailIcon />}
+          mx='2px'
+        />
+
+      </Td>
+
+    </Tr>
+  );
+}
+
 export function DashboardTableRow13(props) {
   const { name, category, cost_price, unit_price, quantity, onTrackClick } = props;
   const textColor = "gray.500";
@@ -41,7 +97,7 @@ export function DashboardTableRow13(props) {
 
       <Td>
         <Text textTransform="uppercase" fontSize="sm" color={textColor} fontWeight="bold" pb=".3rem">
-          {category}
+          {category || "--------"}
         </Text>
       </Td>
 
@@ -64,13 +120,13 @@ export function DashboardTableRow13(props) {
       </Td>
 
       <Td textAlign="right">
-          <IconButton
-            backgroundColor='orange'
-            color='white'
-            aria-label='delete sale'
-            icon={<InfoIcon />}
-            onClick={onTrackClick}
-          />
+        <IconButton
+          backgroundColor='orange'
+          color='white'
+          aria-label='delete sale'
+          icon={<InfoIcon />}
+          onClick={onTrackClick}
+        />
 
       </Td>
 
@@ -113,46 +169,39 @@ export function DashboardTableRow12(props) {
 
 
 export function DashboardTableRow11(props) {
-  const { firstName, lastName, phoneNo, emailAddress, gender, onEditClick, onDeleteClick } = props;
-  const textColor = useColorModeValue("gray.700", "white");
+  const { username, firstName, lastName, dept, emailAddress, gender, onEditClick, onDeleteClick } = props;
+  const textColor = "gray.500";
   return (
-    <Tr my=".8rem" ps="0px">
-      <Td minWidth={{ sm: "150px" }} pl="0px">
-        <Flex align="center" py=".3rem" minWidth="100%" flexWrap="nowrap">
-          <Avatar
-            src={gender == "female" ? avatar8 : avatar7}
-            w="50px"
-            h="50px"
-            me="10px"
-          />
-          <Text
-            fontSize="md"
-            color={"white"}
-            fontWeight="bold"
-            minWidth="100%"
-          >
-            {firstName}
-          </Text>
-        </Flex>
-      </Td>
+    <Tr>
 
-      <Td>
-        <Text fontSize="md" color={"gray.500"} fontWeight="bold" pb=".3rem">
-          {lastName}
+      <Td align="center" display="flex" alignItems="center" minWidth={{ sm: "100px" }} maxWidth={{ sm: "200px" }} fontSize="sm" color="gray.500" fontWeight="bold">
+        <Avatar
+          src={gender == "female" ? avatar8 : avatar7}
+          w="50px"
+          h="50px"
+          me="10px"
+        />
+        <Text
+          fontSize="sm"
+          color={"white"}
+          fontWeight="bold"
+          maxWidth="80%"
+          flexShrink={0}  // Prevent the Text from shrinking
+          overflow="hidden"
+        >
+          {username}
         </Text>
       </Td>
-
-      <Td>
-        <Text fontSize="md" color={"gray.500"} fontWeight="bold" pb=".3rem">
-          {phoneNo}
-        </Text>
+      <Td minWidth={{ sm: "100px" }} maxWidth={{ sm: "200px" }} fontSize="sm" color="gray.500" fontWeight="bold">
+        {firstName}
+      </Td>
+      <Td minWidth={{ sm: "100px" }} maxWidth={{ sm: "200px" }} fontSize="sm" color="gray.500" fontWeight="bold">
+        {dept}
+      </Td>
+      <Td minWidth={{ sm: "100px" }} maxWidth={{ sm: "200px" }} fontSize="sm" color="gray.500" fontWeight="bold">
+        {emailAddress}
       </Td>
 
-      <Td>
-        <Text fontSize="md" color={"gray.500"} fontWeight="bold" pb=".3rem">
-          {emailAddress}
-        </Text>
-      </Td>
 
       <Td>
         <Center>
@@ -463,7 +512,7 @@ export function DashboardTableRow4(props) {
 
       <Td>
         <Text textTransform="uppercase" fontSize="sm" color={textColor} fontWeight="bold" pb=".3rem">
-          {category}
+          {category || "--------"}
         </Text>
       </Td>
 
@@ -520,74 +569,54 @@ export function DashboardTableRow4(props) {
 }
 
 export function DashboardTableRow3(props) {
-  const { company_name, first_name, phone_no, email, total_purchased, onEditClick, onDeleteClick } = props;
+  const { company_name, first_name, last_name, phone_no, email, onEditClick, onDeleteClick } = props;
   const textColor = "gray.500";
   return (
-    <Tr my=".8rem" ps="0px">
-      <Td minWidth={{ sm: "150px" }}>
-
-        <Text
-          fontSize="sm"
-          color={"white"}
-          fontWeight="bold"
-          minWidth="100%"
-          pb=".3rem"
-        >
-          {company_name}
-        </Text>
-
+    <Tr my=".8rem" borderBottom="4px" borderColor="#232333">
+      <Td minWidth={{ sm: "100px" }} maxWidth={{ sm: "200px" }} fontSize="sm" color="gray.500" fontWeight="bold" mx={0}>
+        {company_name}
       </Td>
 
-      <Td>
-        <Text fontSize="sm" color={textColor} fontWeight="bold" pb=".3rem">
-          {first_name}
-        </Text>
+      <Td minWidth={{ sm: "100px" }} maxWidth={{ sm: "200px" }} fontSize="sm" color="gray.500" fontWeight="bold" mx={0}>
+        {first_name}
       </Td>
 
-      <Td>
-        <Text fontSize="sm" color={textColor} fontWeight="bold" pb=".3rem">
-          {phone_no}
-        </Text>
+      <Td minWidth={{ sm: "100px" }} fontSize="sm" color="gray.500" fontWeight="bold" mx={0}>
+        {last_name}
       </Td>
 
-      <Td>
-        <Text fontSize="sm" color={textColor} fontWeight="bold" pb=".3rem">
-          {email}
-        </Text>
+      <Td minWidth={{ sm: "100px" }} fontSize="sm" color="gray.500" fontWeight="bold" mx={0}>
+        {phone_no}
+      </Td>
+      <Td minWidth={{ sm: "100px" }} fontSize="sm" color="gray.500" fontWeight="bold" mx={0}>
+        {email}
       </Td>
 
-      <Td>
-        <Text fontSize="sm" color={textColor} fontWeight="bold" pb=".3rem">
-          {total_purchased}
-        </Text>
-      </Td>
+      <Td textAlign="right">
 
-      <Td>
-        <Center>
-          <IconButton
-            backgroundColor='blue'
-            color='white'
-            aria-label='edit customer'
-            icon={<EditIcon />}
-            onClick={onEditClick}
-            mx='2px'
-          />
-          <IconButton
-            backgroundColor='red'
-            color='white'
-            aria-label='delete customer'
-            icon={<DeleteIcon />}
-            onClick={onDeleteClick}
-            mx='2px'
-          />
-          <IconButton
-            backgroundColor='#5a8100'
-            color='white'
-            aria-label='email customer'
-            icon={<EmailIcon />}
-            mx='2px'
-          />
-        </Center>
+        <IconButton
+          backgroundColor='blue'
+          color='white'
+          aria-label='edit customer'
+          icon={<EditIcon />}
+          onClick={onEditClick}
+          mx='2px'
+        />
+        <IconButton
+          backgroundColor='red'
+          color='white'
+          aria-label='delete customer'
+          icon={<DeleteIcon />}
+          onClick={onDeleteClick}
+          mx='2px'
+        />
+        <IconButton
+          backgroundColor='#5a8100'
+          color='white'
+          aria-label='email customer'
+          icon={<EmailIcon />}
+          mx='2px'
+        />
 
       </Td>
 
@@ -689,18 +718,18 @@ function DashboardTableRow(props) {
       </Td>
       <Td>
         <Text fontSize="md" color={textColor} fontWeight="bold" pb=".5rem">
-        <Text
-          fontSize="md"
-          color="white"
-          fontWeight="bold"
-          minWidth="100%"
-        >
-          {customer_name}
-        </Text>
+          <Text
+            fontSize="md"
+            color="white"
+            fontWeight="bold"
+            minWidth="100%"
+          >
+            {customer_name}
+          </Text>
         </Text>
       </Td>
       <Td textAlign="right">
-      <Text
+        <Text
           fontSize="md"
           color="gray.500"
           fontWeight="bold"

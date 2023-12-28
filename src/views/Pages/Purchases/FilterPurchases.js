@@ -58,7 +58,7 @@ import { useSelector } from 'react-redux';
 import { useQuery, useMutation } from 'react-query';
 import { checkObject, isError } from 'modules/utilities';
 import { handleApiError } from "modules/utilities/responseHandlers";
-import { FIELD_REQUIRED } from 'constants/formErrorMessages';
+import { FIELD_REQUIRED, AMOUNT_GREATER_THAN_ZERO, AMOUNT_GREATER_THAN_OR_EQUALS_ZERO } from 'constants/formErrorMessages';
 import { getAuthToken } from 'modules/auth/redux/authSelector';
 import { postData, fetchData } from 'modules/utilities/util_query';
 import { GET_CREATE_ITEM, UPDATE_ITEM, GROUP_UPDATE_ITEM, DELETE_ITEM, GROUP_DELETE, GET_CREATE_CATEGORIES, GET_CREATE_SUPPLIERS } from 'config/serverUrls';
@@ -310,7 +310,7 @@ const EditModal = ({ handleChange, handleSwitchChange, handleEditSubmit, onClose
                     </FormControl>
 
                     <FormControl id="">
-                        <FormLabel fontSize="sm" fontWeight='bold'>Allow Alt.:</FormLabel>
+                        <FormLabel fontSize="sm" fontWeight='bold'>Allow Alt:</FormLabel>
                         <Switch
                             ref={allowAltRef}
                             defaultChecked={item?.allow_alt}
@@ -320,7 +320,7 @@ const EditModal = ({ handleChange, handleSwitchChange, handleEditSubmit, onClose
                         />
                     </FormControl>
                     <FormControl id="">
-                        <FormLabel fontSize="sm" fontWeight='bold'>Item S/N?:</FormLabel>
+                        <FormLabel fontSize="sm" fontWeight='bold'>Item S/N:</FormLabel>
                         <Switch
                             ref={hasSerialNoRef}
                             defaultChecked={item?.has_serial_no}
@@ -333,10 +333,10 @@ const EditModal = ({ handleChange, handleSwitchChange, handleEditSubmit, onClose
             </ModalBody>
 
             <ModalFooter>
-                <Button colorScheme='red' mr={3} onClick={onClose}>
+                <Button size="sm" colorScheme='red' mr={3} onClick={onClose}>
                     Close
                 </Button>
-                <Button isLoading={mutation.isLoading} onClick={handleEditSubmit} colorScheme='blue'>Submit</Button>
+                <Button size="sm" isLoading={mutation.isLoading} onClick={handleEditSubmit} colorScheme='blue'>Save</Button>
             </ModalFooter>
         </ModalContent>
     )
@@ -442,16 +442,19 @@ const EditGroupModal = ({ onClose, groupAddRef, groupReorderRef, groupTax1Ref, g
         </ModalBody>
 
         <ModalFooter>
-            <Button colorScheme='red' mr={3}
+            <Button colorScheme='red'
+                size="sm"
+                mr={3}
                 onClick={onClose}
             >
                 Close
             </Button>
             <Button
                 isLoading={mutation.isLoading}
+                size="sm"
                 onClick={handleGroupEditSubmit}
                 colorScheme='blue'>
-                Submit
+                Save
             </Button>
         </ModalFooter>
     </ModalContent>
@@ -474,10 +477,10 @@ const DeleteModal = ({ onClose, item, loading, mutation, handleDeleteSubmit }) =
         </ModalBody>
 
         <ModalFooter>
-            <Button variant='ghost' mr={3} onClick={onClose}>
+            <Button size="sm" variant='ghost' mr={3} onClick={onClose}>
                 Close
             </Button>
-            <Button colorScheme='red' isLoading={mutation.isLoading} onClick={handleDeleteSubmit}>Yes</Button>
+            <Button size="sm" colorScheme='red' isLoading={mutation.isLoading} onClick={handleDeleteSubmit}>Yes</Button>
         </ModalFooter>
     </ModalContent>
 
@@ -500,11 +503,12 @@ const DeleteGroupModal = ({ mutation, onClose, handleGroupDeleteSubmit }) => (
         </ModalBody>
 
         <ModalFooter>
-            <Button variant='ghost' mr={3} onClick={onClose}>
+            <Button variant='ghost' mr={3} onClick={onClose} size="sm">
                 Close
             </Button>
             <Button
                 colorScheme='red'
+                size="sm"
                 isLoading={mutation.isLoading}
                 onClick={handleGroupDeleteSubmit}
             >Yes</Button>
@@ -552,7 +556,7 @@ const TrackingModal = ({ onClose, item }) => (
         </ModalBody>
 
         <ModalFooter>
-            <Button colorScheme="red" mr={3} onClick={onClose}>
+            <Button size="sm" colorScheme="red" mr={3} onClick={onClose}>
                 Close
             </Button>
         </ModalFooter>
@@ -619,7 +623,7 @@ function FilterItems() {
                 token
             }]
         });
-        console.log(response.data);
+        //console.log(response.data);
         return response.data;
     }
 
@@ -692,6 +696,7 @@ function FilterItems() {
         uerrors.name = updatedItem?.name ? "" : FIELD_REQUIRED;
         uerrors.cost_price = updatedItem?.cost_price ? "" : FIELD_REQUIRED;
         uerrors.unit_price = updatedItem?.unit_price ? "" : FIELD_REQUIRED;
+        uerrors.amount_to_add = updatedItem?.amount_to_add >= 0 ? "" : AMOUNT_GREATER_THAN_OR_EQUALS_ZERO;
         //uerrors.quantity = updatedItem?.quantity ? "" : FIELD_REQUIRED;
 
         if (!updatedItem?.name || !updatedItem?.cost_price || !updatedItem?.unit_price) {
@@ -706,17 +711,31 @@ function FilterItems() {
 
         }
 
+        if (!updatedItem?.amount_to_add || updatedItem?.amount_to_add < 0) {
+            toast({
+                title: 'Error.',
+                description: "Enter an amount greater than or equals to 0.",
+                status: 'warning',
+                duration: 3000,
+                isClosable: true,
+            });
+            return uerrors;
+
+        }
+
         return uerrors;
     }
 
     const validateGroup = (updatedItems) => {
         let uerrors = {}
-        uerrors.groupAdd = updatedItems?.groupAdd ? "" : FIELD_REQUIRED;
+        uerrors.groupAdd = updatedItems?.groupAdd > 0 ? "" : AMOUNT_GREATER_THAN_ZERO;
+        //console.log(uerrors);
 
-        if (!updatedItems?.groupAdd) {
+        if (!updatedItems?.groupAdd || updatedItems?.groupAdd <= 0) {
+
             toast({
                 title: 'Missing Information.',
-                description: "Enter aan amount to add to items.",
+                description: "Enter an amount greater than 0.",
                 status: 'warning',
                 duration: 3000,
                 isClosable: true,
@@ -782,7 +801,7 @@ function FilterItems() {
 
         };
 
-        console.log(updatedItems);
+        //console.log(updatedItems);
 
         let checkErrors = validateGroup(updatedItems);
         let areAllFieldsFalse = checkObject(checkErrors);
@@ -938,10 +957,17 @@ function FilterItems() {
                     >
 
                         <Flex alignItems='center' gap='2' my={4}>
-                            <Text fontWeight="bold" color="white"> ITEM INVENTORY LIST
+                            <Text
+                                fontSize="lg"
+                                color={textColor}
+                                fontWeight="bold"
+                            >
+                                <Text as="span" bgColor="#8E44AD" p={2}>
+                                    ITEM INVENTORY LIST
+                                </Text>
                             </Text>
                             <Spacer />
-                            <Text fontWeight="bold" color="white"> GROUP ACTIONS
+                            <Text fontWeight="bold" bgColor="#8E44AD" color="white"> GROUP ACTIONS
                             </Text>
 
                             <Center>
@@ -971,14 +997,16 @@ function FilterItems() {
                         <Table variant="unstyled" size='sm'>
                             <Thead>
                                 <Tr my=".8rem" ps="0px">
-                                    <Th ps="0px" color="gray.400">
+                                    <Th fontSize="md" ps="0px" color="white">
                                         NAME
                                     </Th>
-                                    <Th color="gray.400">CATEGORY</Th>
-                                    <Th textAlign="right" color="gray.400">COST</Th>
-                                    <Th textAlign="right" color="gray.400">UNIT PRICE</Th>
-                                    <Th textAlign="right" color="gray.400">QUANTITY</Th>
-                                    <Th textAlign="right" color="gray.400">VIEW INFO.</Th>
+                                    <Th fontSize="md" color="white">CATEGORY</Th>
+                                    <Th fontSize="md" textAlign="right" color="white">COST</Th>
+                                    <Th fontSize="md" textAlign="right" color="white">UNIT PRICE</Th>
+                                    <Th fontSize="md" textAlign="right" color="white">QUANTITY</Th>
+
+                                    <Th fontSize="md" textAlign="center" color="white">ACTIONS</Th>
+
 
 
                                 </Tr>

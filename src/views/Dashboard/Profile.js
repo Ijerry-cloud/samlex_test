@@ -60,6 +60,7 @@ import {
   FaTwitter,
   FaRegAddressCard,
   FaCity,
+  FaYoutube,
 } from "react-icons/fa";
 
 import { GiPadlock } from 'react-icons/gi';
@@ -73,7 +74,9 @@ import {
 } from 'react-icons/bs';
 import {
   MdEmail,
-  MdLocationOn
+  MdLocationOn,
+  MdDashboardCustomize,
+  MdOutlineSummarize
 } from 'react-icons/md';
 import { IoDocumentsSharp } from "react-icons/io5";
 import { checkObject, isError } from 'modules/utilities';
@@ -113,6 +116,22 @@ function Profile() {
     sales_perm: false,
     employees_perm: false
   });
+
+  const firstNameRef = React.useRef(null);
+  const lastNameRef = React.useRef(null);
+  const genderRef = React.useRef(null);
+  const deptRef = React.useRef(null);
+  const emailRef = React.useRef(null);
+  const phoneRef = React.useRef(null);
+  const address1Ref = React.useRef(null);
+  const address2Ref = React.useRef(null);
+  const cityRef = React.useRef(null);
+  const stateRef = React.useRef(null);
+  const zipRef = React.useRef(null);
+  const countryRef = React.useRef(null);
+  const usernameRef = React.useRef(null);
+  const passwordRef = React.useRef(null);
+  const confirmPasswordRef = React.useRef(null);
   const [errors, setErrors] = React.useState({});
   const token = useSelector(getAuthToken);
   const toast = useToast();
@@ -133,7 +152,7 @@ function Profile() {
       onSuccess: (response) => {
         const data = response?.data;
         setProfile(data?.detail || {});
-        console.log(data?.others);
+        //console.log(data?.others);
         setMembers(data?.others);
 
 
@@ -146,6 +165,22 @@ function Profile() {
 
   const { isLoading, refetch } = result;
 
+  const onModalClose = () => {
+    setValues({});
+    setPermissions({
+      customer_perm: false,
+      items_perm: false,
+      item_kits_perm: false,
+      suppliers_perm: false,
+      reports_perm: false,
+      receivings_perm: false,
+      sales_perm: false,
+      employees_perm: false
+    });
+    setErrors({});
+    onClose();
+  }
+
   const mutation = useMutation(postData, {
     onSuccess: (response) => {
       toast({
@@ -155,20 +190,7 @@ function Profile() {
         duration: 3000,
         isClosable: true,
       });
-
-      setValues({});
-      setPermissions({
-        customer_perm: false,
-        items_perm: false,
-        item_kits_perm: false,
-        suppliers_perm: false,
-        reports_perm: false,
-        receivings_perm: false,
-        sales_perm: false,
-        employees_perm: false
-      });
-      setErrors({});
-
+      onModalClose();
       return;
     },
     onError: (error) => {
@@ -176,17 +198,17 @@ function Profile() {
     }
   });
 
-  const validate = () => {
+  const validate = (updatedItem) => {
     let uerrors = {}
-    uerrors.first_name = values?.first_name ? "" : FIELD_REQUIRED;
-    uerrors.last_name = values?.last_name ? "" : FIELD_REQUIRED;
-    uerrors.username = values?.username ? "" : FIELD_REQUIRED;
-    uerrors.email = values?.email ? "" : FIELD_REQUIRED;
-    uerrors.password = values?.password ? "" : FIELD_REQUIRED;
-    uerrors.confirmPassword = values?.confirmPassword ? "" : FIELD_REQUIRED;
+    uerrors.first_name = updatedItem?.first_name ? "" : FIELD_REQUIRED;
+    uerrors.last_name = updatedItem?.last_name ? "" : FIELD_REQUIRED;
+    uerrors.username = updatedItem?.username ? "" : FIELD_REQUIRED;
+    uerrors.email = updatedItem?.email ? "" : FIELD_REQUIRED;
+    uerrors.password = updatedItem?.password ? "" : FIELD_REQUIRED;
+    uerrors.confirmPassword = updatedItem?.confirmPassword ? "" : FIELD_REQUIRED;
 
-    if (!values?.first_name || !values?.last_name || !values?.username || !values?.password ||
-      !values?.confirmPassword || !values?.email) {
+    if (!updatedItem?.first_name || !updatedItem?.last_name || !updatedItem?.username || !updatedItem?.password ||
+      !updatedItem?.confirmPassword || !updatedItem?.email) {
       toast({
         title: 'Missing Information.',
         description: "Please fill all required fields.",
@@ -198,7 +220,7 @@ function Profile() {
 
     }
 
-    const email_is_valid = validator.isEmail(values?.email);
+    const email_is_valid = validator.isEmail(updatedItem?.email);
 
     if (!email_is_valid) {
       uerrors.email = "enter a valid email address";
@@ -212,7 +234,7 @@ function Profile() {
       return uerrors;
     }
 
-    if (values?.password != values?.confirmPassword) {
+    if (updatedItem?.password != updatedItem?.confirmPassword) {
       uerrors.password = "Password do not match";
       uerrors.confirmPassword = "Password do not match";
       alert('Passwords do not match');
@@ -231,7 +253,29 @@ function Profile() {
 
   const handleSubmit = () => {
 
-    let checkErrors = validate();
+    const updatedItem = {
+      first_name: firstNameRef.current.value,
+      last_name: lastNameRef.current.value,
+      gender: genderRef.current.value,
+      dept: deptRef.current.value,
+      email: emailRef.current.value,
+      phone_no: phoneRef.current.value,
+      address_1: address1Ref.current.value,
+      address_2: address2Ref.current.value,
+      city: cityRef.current.value,
+      state: stateRef.current.value,
+      zip: zipRef.current.value,
+      country: countryRef.current.value,
+      username: usernameRef.current.value,
+      password: passwordRef.current.value,
+      confirmPassword: confirmPasswordRef.current.value,
+      ...permissions
+    }
+    //console.log(updatedItem);
+
+
+
+    let checkErrors = validate(updatedItem);
     let areAllFieldsFalse = checkObject(checkErrors);
 
     if (!areAllFieldsFalse) {
@@ -243,11 +287,11 @@ function Profile() {
 
 
 
-    const data = { ...values, ...permissions };
+    //const data = { ...values, ...permissions };
 
     mutation.mutate({
       url: GET_CREATE_USERS,
-      payload_data: data,
+      payload_data: updatedItem,
       token: token,
       authenticate: true
     });
@@ -277,7 +321,7 @@ function Profile() {
       <Drawer
         isOpen={isOpen}
         placement='right'
-        onClose={onClose}
+        onClose={onModalClose}
         finalFocusRef={btnRef}
       >
         <DrawerOverlay />
@@ -296,7 +340,7 @@ function Profile() {
                 Basic Information
               </Text>
               <FormControl id="">
-                <FormLabel fontSize='sm'>First Name:</FormLabel>
+                <FormLabel fontSize='sm'>First Name:*</FormLabel>
                 <InputGroup borderColor="#E0E1E7">
                   <InputLeftElement
                     pointerEvents="none"
@@ -305,11 +349,12 @@ function Profile() {
                   <Input
                     isInvalid={isError(errors?.first_name)}
                     errorBorderColor='red.300'
+                    ref={firstNameRef}
                     name={'first_name'}
-                    onChange={handleChange}
+                    //onChange={handleChange}
                     type="text"
                     size="sm"
-                    value={values?.first_name || ''}
+                    //value={values?.first_name || ''}
                     borderRadius='15px'
                     borderColor="rgba(255, 255, 255, 0.2)"
                     _placeholder={{ opacity: 0.2, color: 'white' }}
@@ -317,7 +362,7 @@ function Profile() {
                 </InputGroup>
               </FormControl>
               <FormControl id="">
-                <FormLabel fontSize='sm'>Last Name:</FormLabel>
+                <FormLabel fontSize='sm'>Last Name:*</FormLabel>
                 <InputGroup borderColor="#E0E1E7">
                   <InputLeftElement
                     pointerEvents="none"
@@ -326,11 +371,12 @@ function Profile() {
                   <Input
                     isInvalid={isError(errors?.last_name)}
                     errorBorderColor='red.300'
+                    ref={lastNameRef}
                     name={'last_name'}
-                    onChange={handleChange}
+                    //onChange={handleChange}
                     type="text"
                     size="sm"
-                    value={values?.last_name || ''}
+                    //value={values?.last_name || ''}
                     borderRadius='15px'
                     borderColor="rgba(255, 255, 255, 0.2)"
                     _placeholder={{ opacity: 0.2, color: 'white' }}
@@ -339,9 +385,11 @@ function Profile() {
               </FormControl>
               <FormControl id="">
                 <FormLabel fontSize='sm'>Gender:</FormLabel>
-                <Select name={"gender"}
-                  onChange={handleChange}
-                  value={values?.gender || ''}
+                <Select
+                  ref={genderRef}
+                  name={"gender"}
+                  //onChange={handleChange}
+                  //value={values?.gender || ''}
                   placeholder='Select option'
                   borderRadius='15px'
                   size="sm">
@@ -351,9 +399,11 @@ function Profile() {
               </FormControl>
               <FormControl id="">
                 <FormLabel fontSize='sm'>Department:</FormLabel>
-                <Select name={"dept"}
-                  onChange={handleChange}
-                  value={values?.dept || ''}
+                <Select
+                  ref={deptRef}
+                  name={"dept"}
+                  //onChange={handleChange}
+                  //value={values?.dept || ''}
                   borderRadius='15px'
 
                   placeholder='Select option'
@@ -375,11 +425,12 @@ function Profile() {
                   <Input
                     isInvalid={isError(errors?.email)}
                     errorBorderColor='red.300'
+                    ref={emailRef}
                     name={'email'}
-                    onChange={handleChange}
+                    //onChange={handleChange}
                     type="text"
                     size="sm"
-                    value={values?.email || ''}
+                    //value={values?.email || ''}
                     borderRadius='15px'
                     borderColor="rgba(255, 255, 255, 0.2)"
                     _placeholder={{ opacity: 0.2, color: 'white' }}
@@ -396,11 +447,12 @@ function Profile() {
                   <Input
                     isInvalid={isError(errors?.phone_no)}
                     errorBorderColor='red.300'
+                    ref={phoneRef}
                     name={'phone_no'}
-                    onChange={handleChange}
+                    //onChange={handleChange}
                     type="text"
                     size="sm"
-                    value={values?.phone_no || ''}
+                    //value={values?.phone_no || ''}
                     borderRadius='15px'
                     borderColor="rgba(255, 255, 255, 0.2)"
                     _placeholder={{ opacity: 0.2, color: 'white' }}
@@ -417,11 +469,12 @@ function Profile() {
                   <Input
                     isInvalid={isError(errors?.address_1)}
                     errorBorderColor='red.300'
+                    ref={address1Ref}
                     name={'address_1'}
-                    onChange={handleChange}
+                    //onChange={handleChange}
                     type="text"
                     size="sm"
-                    value={values?.address_1 || ''}
+                    //value={values?.address_1 || ''}
                     borderRadius='15px'
                     borderColor="rgba(255, 255, 255, 0.2)"
                     _placeholder={{ opacity: 0.2, color: 'white' }}
@@ -438,11 +491,12 @@ function Profile() {
                   <Input
                     isInvalid={isError(errors?.address_2)}
                     errorBorderColor='red.300'
+                    ref={address2Ref}
                     name={'address_2'}
-                    onChange={handleChange}
+                    //onChange={handleChange}
                     type="text"
                     size="sm"
-                    value={values?.address_2 || ''}
+                    //value={values?.address_2 || ''}
                     borderRadius='15px'
                     borderColor="rgba(255, 255, 255, 0.2)"
                     _placeholder={{ opacity: 0.2, color: 'white' }}
@@ -459,11 +513,12 @@ function Profile() {
                   <Input
                     isInvalid={isError(errors?.city)}
                     errorBorderColor='red.300'
+                    ref={cityRef}
                     name={'city'}
-                    onChange={handleChange}
+                    //onChange={handleChange}
                     type="text"
                     size="sm"
-                    value={values?.city || ''}
+                    //value={values?.city || ''}
                     borderRadius='15px'
                     borderColor="rgba(255, 255, 255, 0.2)"
                     _placeholder={{ opacity: 0.2, color: 'white' }}
@@ -480,11 +535,12 @@ function Profile() {
                   <Input
                     isInvalid={isError(errors?.state)}
                     errorBorderColor='red.300'
+                    ref={stateRef}
                     name={'state'}
-                    onChange={handleChange}
+                    //onChange={handleChange}
                     type="text"
                     size="sm"
-                    value={values?.state || ''}
+                    //value={values?.state || ''}
                     borderRadius='15px'
                     borderColor="rgba(255, 255, 255, 0.2)"
                     _placeholder={{ opacity: 0.2, color: 'white' }}
@@ -501,11 +557,12 @@ function Profile() {
                   <Input
                     isInvalid={isError(errors?.zip)}
                     errorBorderColor='red.300'
+                    ref={zipRef}
                     name={'zip'}
-                    onChange={handleChange}
+                    //onChange={handleChange}
                     type="text"
                     size="sm"
-                    value={values?.zip || ''}
+                    //value={values?.zip || ''}
                     borderRadius='15px'
                     borderColor="rgba(255, 255, 255, 0.2)"
                     _placeholder={{ opacity: 0.2, color: 'white' }}
@@ -522,11 +579,12 @@ function Profile() {
                   <Input
                     isInvalid={isError(errors?.country)}
                     errorBorderColor='red.300'
+                    ref={countryRef}
                     name={'country'}
-                    onChange={handleChange}
+                    //onChange={handleChange}
                     type="text"
                     size="sm"
-                    value={values?.country || ''}
+                    //value={values?.country || ''}
                     borderRadius='15px'
                     borderColor="rgba(255, 255, 255, 0.2)"
                     _placeholder={{ opacity: 0.2, color: 'white' }}
@@ -539,7 +597,7 @@ function Profile() {
                 Login Info
               </Text>
               <FormControl id="">
-                <FormLabel fontSize='sm'>Username:</FormLabel>
+                <FormLabel fontSize='sm'>Username:*</FormLabel>
                 <InputGroup borderColor="#E0E1E7">
                   <InputLeftElement
                     pointerEvents="none"
@@ -548,11 +606,12 @@ function Profile() {
                   <Input
                     isInvalid={isError(errors?.username)}
                     errorBorderColor='red.300'
+                    ref={usernameRef}
                     name={'username'}
-                    onChange={handleChange}
+                    //onChange={handleChange}
                     type="text"
                     size="sm"
-                    value={values?.username || ''}
+                    //value={values?.username || ''}
                     borderRadius='15px'
                     borderColor="rgba(255, 255, 255, 0.2)"
                     _placeholder={{ opacity: 0.2, color: 'white' }}
@@ -560,7 +619,7 @@ function Profile() {
                 </InputGroup>
               </FormControl>
               <FormControl id="">
-                <FormLabel fontSize='sm'>Password:</FormLabel>
+                <FormLabel fontSize='sm'>Password:*</FormLabel>
                 <InputGroup borderColor="#E0E1E7">
                   <InputLeftElement
                     pointerEvents="none"
@@ -569,11 +628,12 @@ function Profile() {
                   <Input
                     isInvalid={isError(errors?.password)}
                     errorBorderColor='red.300'
+                    ref={passwordRef}
                     name={'password'}
-                    onChange={handleChange}
+                    //onChange={handleChange}
                     type="password"
                     size="sm"
-                    value={values?.password || ''}
+                    //value={values?.password || ''}
                     borderRadius='15px'
                     borderColor="rgba(255, 255, 255, 0.2)"
                     _placeholder={{ opacity: 0.2, color: 'white' }}
@@ -581,7 +641,7 @@ function Profile() {
                 </InputGroup>
               </FormControl>
               <FormControl id="">
-                <FormLabel fontSize='sm'>Password again:</FormLabel>
+                <FormLabel fontSize='sm'>Password again:*</FormLabel>
                 <InputGroup borderColor="#E0E1E7">
                   <InputLeftElement
                     pointerEvents="none"
@@ -592,13 +652,14 @@ function Profile() {
                     isInvalid={isError(errors?.confirmPassword)}
                     errorBorderColor='red.300'
                     placeholder={'confirm password'}
+                    ref={confirmPasswordRef}
                     name={'confirmPassword'}
                     size="sm"
-                    value={values?.confirmPassword || ''}
+                    //value={values?.confirmPassword || ''}
                     borderRadius='15px'
                     borderColor="rgba(255, 255, 255, 0.2)"
                     _placeholder={{ opacity: 0.2, color: 'white' }}
-                    onChange={handleChange}
+                  //onChange={handleChange}
                   />
                 </InputGroup>
               </FormControl>
@@ -609,7 +670,7 @@ function Profile() {
               </Text>
               <Grid templateColumns='repeat(2, 1fr)' gap={6}>
                 <FormControl id="">
-                  <FormLabel fontSize='xs'>Customers(add, update, delete, search)</FormLabel>
+                  <FormLabel fontSize='xs'>Customers(add, update, delete, search):</FormLabel>
 
                   <Switch
                     isChecked={permissions?.customer_perm}
@@ -620,7 +681,7 @@ function Profile() {
                   />
                 </FormControl>
                 <FormControl id="">
-                  <FormLabel fontSize='xs'>Items(add, update, delete, search)</FormLabel>
+                  <FormLabel fontSize='xs'>Items(add, update, delete, search):</FormLabel>
                   <Switch
                     isChecked={permissions?.items_perm}
                     onChange={handleSwitchChange}
@@ -632,7 +693,7 @@ function Profile() {
               </Grid>
               <Grid templateColumns='repeat(2, 1fr)' gap={6}>
                 <FormControl id="">
-                  <FormLabel fontSize='xs'>Item Kits(add, update, delete, search).</FormLabel>
+                  <FormLabel fontSize='xs'>Item Kits(add, update, delete, search):</FormLabel>
                   <Switch
                     isChecked={permissions?.item_kits_perm}
                     onChange={handleSwitchChange}
@@ -642,7 +703,7 @@ function Profile() {
                   />
                 </FormControl>
                 <FormControl id="">
-                  <FormLabel fontSize='xs'>Suppliers(add, update, delete, search)</FormLabel>
+                  <FormLabel fontSize='xs'>Suppliers(add, update, delete, search):</FormLabel>
                   <Switch
                     isChecked={permissions?.suppliers_perm}
                     onChange={handleSwitchChange}
@@ -654,7 +715,7 @@ function Profile() {
               </Grid>
               <Grid templateColumns='repeat(2, 1fr)' gap={6}>
                 <FormControl id="">
-                  <FormLabel fontSize='xs'>Reports(add, update, delete, search)</FormLabel>
+                  <FormLabel fontSize='xs'>Reports(add, update, delete, search):</FormLabel>
                   <Switch
                     isChecked={permissions?.reports_perm}
                     onChange={handleSwitchChange}
@@ -664,7 +725,7 @@ function Profile() {
                   />
                 </FormControl>
                 <FormControl id="">
-                  <FormLabel fontSize='xs'>Receivings(add, update, delete, search)</FormLabel>
+                  <FormLabel fontSize='xs'>Receivings(add, update, delete, search):</FormLabel>
                   <Switch
                     isChecked={permissions?.receivings_perm}
                     onChange={handleSwitchChange}
@@ -676,7 +737,7 @@ function Profile() {
               </Grid>
               <Grid templateColumns='repeat(2, 1fr)' gap={6}>
                 <FormControl id="">
-                  <FormLabel fontSize='xs'>Sales(add, update, delete, search)</FormLabel>
+                  <FormLabel fontSize='xs'>Sales(add, update, delete, search):</FormLabel>
                   <Switch
                     isChecked={permissions?.sales_perm}
                     onChange={handleSwitchChange}
@@ -686,7 +747,7 @@ function Profile() {
                   />
                 </FormControl>
                 <FormControl id="">
-                  <FormLabel fontSize='xs'>Employees(add, update, delete, search)</FormLabel>
+                  <FormLabel fontSize='xs'>Employees(add, update, delete, search):</FormLabel>
                   <Switch
                     isChecked={permissions?.employees_perm}
                     onChange={handleSwitchChange}
@@ -701,10 +762,10 @@ function Profile() {
           </DrawerBody>
 
           <DrawerFooter>
-            <Button variant='outline' mr={3} onClick={onClose}>
+            <Button variant='ghost' mr={3} onClick={onModalClose} size="sm">
               Cancel
             </Button>
-            <Button colorScheme='blue' onClick={handleSubmit}>Save</Button>
+            <Button colorScheme='blue' onClick={handleSubmit} size="sm" isLoading={mutation.isLoading}>Save</Button>
           </DrawerFooter>
         </DrawerContent>
       </Drawer>
@@ -724,7 +785,7 @@ function Profile() {
             h="300px"
             borderRadius="25px"
             border="2px solid"
-            borderColor="white"
+            borderColor="#2A2C40"
             bgPosition="50%"
             bgRepeat="no-repeat"
             position="relative"
@@ -806,37 +867,40 @@ function Profile() {
                     </Text>
                   </Flex>
                 </Button>
-                <Button p="0px" bg="transparent" _hover={{ bg: "none" }}>
-                  <Flex
-                    align="center"
-                    w={{ lg: "135px" }}
-                    borderRadius="15px"
-                    justifyContent="center"
-                    py="10px"
-                    mx={{ lg: "1rem" }}
-                    cursor="pointer"
-                  >
-                    <Icon as={IoDocumentsSharp} me="6px" />
-                    <Text fontSize="xs" color={"black"} fontWeight="bold">
-                      TEAMS
-                    </Text>
-                  </Flex>
-                </Button>
-                <Button p="0px" bg="transparent" _hover={{ bg: "none" }}>
-                  <Flex
-                    align="center"
-                    w={{ lg: "135px" }}
-                    borderRadius="15px"
-                    justifyContent="center"
-                    py="10px"
-                    cursor="pointer"
-                  >
-                    <Icon as={FaPenFancy} me="6px" />
-                    <Text fontSize="xs" color={"black"} fontWeight="bold">
-                      PROJECTS
-                    </Text>
-                  </Flex>
-                </Button>
+                {profile?.dept === "admin" &&
+                  <>
+                    <Button p="0px" bg="transparent" _hover={{ bg: "none" }} onClick={() => { history.push('/admin/dashboard'); }}>
+                      <Flex
+                        align="center"
+                        w={{ lg: "135px" }}
+                        borderRadius="15px"
+                        justifyContent="center"
+                        py="10px"
+                        mx={{ lg: "1rem" }}
+                        cursor="pointer"
+                      >
+                        <Icon as={MdDashboardCustomize} me="6px" />
+                        <Text fontSize="xs" color={"black"} fontWeight="bold">
+                          Dashboard
+                        </Text>
+                      </Flex>
+                    </Button>
+                    <Button p="0px" bg="transparent" _hover={{ bg: "none" }} onClick={() => { history.push('/admin/StoreConfig'); }} >
+                      <Flex
+                        align="center"
+                        w={{ lg: "135px" }}
+                        borderRadius="15px"
+                        justifyContent="center"
+                        py="10px"
+                        cursor="pointer"
+                      >
+                        <Icon as={MdOutlineSummarize} me="6px" />
+                        <Text fontSize="xs" color={"black"} fontWeight="bold">
+                          Store Config
+                        </Text>
+                      </Flex>
+                    </Button></>}
+
               </Flex>
             </Flex>
           </Box>
@@ -845,46 +909,37 @@ function Profile() {
           <Card p="16px">
             <CardHeader p="12px 5px" mb="12px">
               <Text fontSize="lg" color={textColor} fontWeight="bold">
-                Platform Settings
+                Inventory Intros and How To's
               </Text>
             </CardHeader>
             <CardBody px="5px">
               <Flex direction="column">
                 <Text fontSize="sm" color="gray.500" fontWeight="600" mb="20px">
-                  ACCOUNT
+                  General
                 </Text>
                 <Flex align="center" mb="20px">
-                  <Switch colorScheme="blue" me="10px" />
-                  <Text
-                    noOfLines={1}
-                    fontSize="md"
-                    color="gray.500"
-                    fontWeight="400"
-                  >
-                    Email me when someone follows me
-                  </Text>
+                  <FaYoutube color="white" />
+                  <Link href='https://youtube.com' isExternal color="gray.500" mx="10px">
+                    Items(Add, Edit, Preview, Delete)
+                  </Link>
                 </Flex>
                 <Flex align="center" mb="20px">
-                  <Switch colorScheme="blue" me="10px" />
-                  <Text
-                    noOfLines={1}
-                    fontSize="md"
-                    color="gray.500"
-                    fontWeight="400"
-                  >
-                    Email me when someone answers on my post
-                  </Text>
+                  <FaYoutube color="white" />
+                  <Link href='https://youtube.com' isExternal color="gray.500" mx="10px">
+                    Sales(Add, Preview, Delete)
+                  </Link>
                 </Flex>
                 <Flex align="center" mb="20px">
-                  <Switch colorScheme="blue" me="10px" />
-                  <Text
-                    noOfLines={1}
-                    fontSize="md"
-                    color="gray.500"
-                    fontWeight="400"
-                  >
-                    Email me when someone mentions me
-                  </Text>
+                  <FaYoutube color="white" />
+                  <Link href='https://youtube.com' isExternal color="gray.500" mx="10px">
+                    Customers(Add, Preview, Delete)
+                  </Link>
+                </Flex>
+                <Flex align="center" mb="20px">
+                  <FaYoutube color="white" />
+                  <Link href='https://youtube.com' isExternal color="gray.500" mx="10px">
+                    Suppliers(Add, Preview, Delete)
+                  </Link>
                 </Flex>
                 <Text
                   fontSize="sm"
@@ -892,40 +947,19 @@ function Profile() {
                   fontWeight="600"
                   m="6px 0px 20px 0px"
                 >
-                  APPLICATION
+                  ADMINISTRATION
                 </Text>
                 <Flex align="center" mb="20px">
-                  <Switch colorScheme="blue" me="10px" />
-                  <Text
-                    noOfLines={1}
-                    fontSize="md"
-                    color="gray.500"
-                    fontWeight="400"
-                  >
-                    New launches and projects
-                  </Text>
+                  <FaYoutube color="white" />
+                  <Link href='https://youtube.com' isExternal color="gray.500" mx="10px">
+                    Dashboard(Charts, Graphs)
+                  </Link>
                 </Flex>
                 <Flex align="center" mb="20px">
-                  <Switch colorScheme="blue" me="10px" />
-                  <Text
-                    noOfLines={1}
-                    fontSize="md"
-                    color="gray.500"
-                    fontWeight="400"
-                  >
-                    Monthly product changes
-                  </Text>
-                </Flex>
-                <Flex align="center" mb="20px">
-                  <Switch colorScheme="blue" me="10px" />
-                  <Text
-                    noOfLines={1}
-                    fontSize="md"
-                    color="gray.500"
-                    fontWeight="400"
-                  >
-                    Subscribe to newsletter
-                  </Text>
+                  <FaYoutube color="white" />
+                  <Link href='https://youtube.com' isExternal color="gray.500" mx="10px">
+                    Store Configuration and settings
+                  </Link>
                 </Flex>
               </Flex>
             </CardBody>
@@ -1223,7 +1257,7 @@ function Profile() {
                     </Flex>
                   </Flex>
                 </Flex>
-                <Button
+                {profile?.dept === "admin" && <Button
                   p="0px"
                   bg="transparent"
                   color="gray.500"
@@ -1242,7 +1276,8 @@ function Profile() {
                       Create a New Employee
                     </Text>
                   </Flex>
-                </Button>
+                </Button>}
+
               </Grid>
             </CardBody>
           </Card>

@@ -195,7 +195,7 @@ export default function StoreConfig() {
             return;
         }
 
-        console.log(updatedConfig);
+        //console.log(updatedConfig);
 
         mutation.mutate(
             {
@@ -511,7 +511,7 @@ export default function StoreConfig() {
                                     </InputGroup>
                                 </FormControl>
                                 <FormControl id="">
-                                    <FormLabel fontSize="sm" fontWeight='bold' color="#27AE60"> Print Receipt after Sale:*</FormLabel>
+                                    <FormLabel fontSize="sm" fontWeight='bold' color="#27AE60"> Print Receipt after Sale:</FormLabel>
                                     <Switch
                                         ref={printRef}
                                         defaultChecked={values?.print_receipt}
@@ -596,7 +596,7 @@ export default function StoreConfig() {
 
                     </Flex>
                     <Box display="flex" justifyContent="center" mt={4}>
-                        <Button colorScheme='blue' size="sm" isLoading={mutation?.isLoading} onClick={handleEditSubmit}>Save settings</Button>
+                        <Button colorScheme='blue' size="sm" isLoading={mutation?.isLoading} onClick={handleEditSubmit}>Save</Button>
                     </Box>
                 </Flex>
 

@@ -222,7 +222,7 @@ const DeleteModal = (props) => {
                 <Button variant='ghost' mr={3} onClick={props.onClose}>
                     Close
                 </Button>
-                <Button colorScheme='red' isLoading={props.loading} onClick={props.handleDeleteSubmit}>Yes</Button>
+                <Button size="sm" colorScheme='red' isLoading={props.mutation.isLoading} onClick={props.handleDeleteSubmit}>Yes</Button>
             </ModalFooter>
         </ModalContent>
 
@@ -267,7 +267,7 @@ export default function Dashboard() {
         {
             retry: false,
             onSuccess: (response) => {
-                console.log(response?.data);
+                //console.log(response?.data);
                 const data = response?.data;
                 setCount(data?.count || 0);
                 setSales(data?.results || []);
@@ -283,6 +283,7 @@ export default function Dashboard() {
 
     const mutation = useMutation(postData, {
         onSuccess: (response) => {
+            const id = response?.data?.id;
             toast({
                 title: 'Success',
                 description: 'sales deleted',
@@ -291,15 +292,23 @@ export default function Dashboard() {
                 isClosable: true,
             });
 
-            setLoading(false);
+            setSales((sales) => {
+                const updated = sales.filter(sale => sale.id !== id);
+                //console.log(new_items);
+                //console.log(id);
+                return updated
+            })
+            setCount((count) => count - 1)
+
+            //setLoading(false);
             onModalClose();
-            refetch();
+            //refetch();
 
             return;
         },
         onError: (error) => {
             handleApiError(error);
-            setLoading(false);
+            //setLoading(false);
             onModalClose();
         }
     });
@@ -313,7 +322,7 @@ export default function Dashboard() {
 
     const handleDeleteSubmit = () => {
         const data = { ...sale }
-        setLoading(true);
+        //setLoading(true);
 
         mutation.mutate({
             url: DELETE_SALE,
@@ -347,7 +356,7 @@ export default function Dashboard() {
                 <ModalOverlay />
                 {modalType === "view" ? <ViewModal sale={sale} onClose={onModalClose} /> :
                     <DeleteModal sale={sale} onClose={onModalClose} handleDeleteSubmit={handleDeleteSubmit}
-                        loading={loading} />}
+                        mutation={mutation} />}
             </Modal>
             <Flex flexDirection="column" pt={{ base: "120px", md: "75px" }}>
                 <Grid
@@ -357,13 +366,20 @@ export default function Dashboard() {
                     <Card p="16px" overflowX={{ sm: "scroll", xl: "hidden" }}>
                         <CardHeader p="12px 0px 28px 0px">
                             <Flex direction="column">
-                                <Text
+                            <Text
                                     fontSize="lg"
                                     color={textColor}
                                     fontWeight="bold"
-                                    pb=".5rem"
                                 >
-                                    SALES RECORD
+                                    <Text as="span" bgColor="#8E44AD" p={2}>
+                                        MY SALES RECORD
+                                    </Text>
+                                    <Text as="span" bgColor="#27AE60" p={2}>
+                                        {`(Page ${page} of ${pageCount})`}
+                                    </Text>
+                                    <Text as="span" bgColor="#F39C12" p={2}>
+                                        {`(${count} item(s) found)`}
+                                    </Text>
                                 </Text>
                             </Flex>
                         </CardHeader>

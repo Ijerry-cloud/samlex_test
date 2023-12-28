@@ -71,7 +71,7 @@ import { useSelector } from 'react-redux';
 import { useQuery, useMutation } from 'react-query';
 import { checkObject, isError } from 'modules/utilities';
 import { handleApiError } from "modules/utilities/responseHandlers";
-import { FIELD_REQUIRED } from 'constants/formErrorMessages';
+import { FIELD_REQUIRED, AMOUNT_GREATER_THAN_ZERO, AMOUNT_GREATER_THAN_OR_EQUALS_ZERO } from 'constants/formErrorMessages';
 import { getAuthToken } from 'modules/auth/redux/authSelector';
 import { GET_CREATE_ITEM, UPDATE_ITEM, DELETE_ITEM, GET_CREATE_CATEGORIES, GET_CREATE_SUPPLIERS } from 'config/serverUrls';
 import { fetchData, postData } from 'modules/utilities/util_query';
@@ -180,7 +180,7 @@ const EditModal = ({ handleChange, handleSwitchChange, handleEditSubmit, onClose
                                 }
                             }}
                             placeholder="Start typing name..."
-                            loadOptions={loadSuppliers}
+                            loadOpticost priceons={loadSuppliers}
                             isClearable={true}
                             cacheOptions
                             value={supplierInput}
@@ -332,7 +332,7 @@ const EditModal = ({ handleChange, handleSwitchChange, handleEditSubmit, onClose
                         />
                     </FormControl>
                     <FormControl id="">
-                        <FormLabel fontSize="sm" fontWeight='bold'>Item S/N?:</FormLabel>
+                        <FormLabel fontSize="sm" fontWeight='bold'>Item S/N:</FormLabel>
                         <Switch
                             ref={hasSerialNoRef}
                             defaultChecked={item?.has_serial_no}
@@ -345,10 +345,10 @@ const EditModal = ({ handleChange, handleSwitchChange, handleEditSubmit, onClose
             </ModalBody>
 
             <ModalFooter>
-                <Button colorScheme='red' mr={3} onClick={onClose}>
+                <Button size="sm" colorScheme='red' mr={3} onClick={onClose}>
                     Close
                 </Button>
-                <Button isLoading={mutation.isLoading} onClick={handleEditSubmit} colorScheme='blue'>Submit</Button>
+                <Button size="sm" isLoading={mutation.isLoading} onClick={handleEditSubmit} colorScheme='blue'>Save</Button>
             </ModalFooter>
         </ModalContent>
     )
@@ -371,10 +371,10 @@ const DeleteModal = ({ onClose, item, handleDeleteSubmit, deleteMutation }) => (
         </ModalBody>
 
         <ModalFooter>
-            <Button variant='ghost' mr={3} onClick={onClose}>
+            <Button size="sm" variant='ghost' mr={3} onClick={onClose}>
                 Close
             </Button>
-            <Button colorScheme='red' isLoading={deleteMutation.isLoading} onClick={handleDeleteSubmit}>Yes</Button>
+            <Button size="sm" colorScheme='red' isLoading={deleteMutation.isLoading} onClick={handleDeleteSubmit}>Yes</Button>
         </ModalFooter>
     </ModalContent>
 
@@ -420,7 +420,7 @@ const TrackingModal = ({ onClose, item }) => (
         </ModalBody>
 
         <ModalFooter>
-            <Button colorScheme="red" mr={3} onClick={onClose}>
+            <Button size="sm" colorScheme="red" mr={3} onClick={onClose}>
                 Close
             </Button>
         </ModalFooter>
@@ -550,7 +550,7 @@ export default function Dashboard() {
                 duration: 3000,
                 isClosable: true,
             });
-           
+
             setItems((items) => {
                 const updated_items = items.map((item) => {
                     if (item.id === data.id) {
@@ -560,7 +560,7 @@ export default function Dashboard() {
                         return item
                     }
                 })
-                console.log(updated_items);
+                //console.log(updated_items);
                 return updated_items
             });
             onModalClose();
@@ -586,10 +586,11 @@ export default function Dashboard() {
 
             setItems((items) => {
                 const new_items = items.filter(item => item.id !== id);
-                console.log(new_items);
-                console.log(id);
+                //console.log(new_items);
+                //console.log(id);
                 return new_items
             })
+            setCount((count) => count - 1)
             onModalClose();
 
             return;
@@ -624,12 +625,24 @@ export default function Dashboard() {
         uerrors.name = updatedItem?.name ? "" : FIELD_REQUIRED;
         uerrors.cost_price = updatedItem?.cost_price ? "" : FIELD_REQUIRED;
         uerrors.unit_price = updatedItem?.unit_price ? "" : FIELD_REQUIRED;
-        uerrors.amount_to_add = updatedItem?.amount_to_add ? "" : FIELD_REQUIRED;
+        uerrors.amount_to_add = updatedItem?.amount_to_add >= 0 ? "" : AMOUNT_GREATER_THAN_OR_EQUALS_ZERO;
 
-        if (!updatedItem?.name || !updatedItem?.cost_price || !updatedItem?.unit_price || !updatedItem?.amount_to_add) {
+        if (!updatedItem?.name || !updatedItem?.cost_price || !updatedItem?.unit_price) {
             toast({
                 title: 'Missing Information.',
                 description: "Please fill all required fields.",
+                status: 'warning',
+                duration: 3000,
+                isClosable: true,
+            });
+            return uerrors;
+
+        }
+
+        if (!updatedItem?.amount_to_add || updatedItem?.amount_to_add < 0) {
+            toast({
+                title: 'Error.',
+                description: "Enter an amount greater than or equal to 0.",
                 status: 'warning',
                 duration: 3000,
                 isClosable: true,
@@ -658,7 +671,8 @@ export default function Dashboard() {
             tax2_percent: tax2Ref.current.value,
             allow_alt: allowAltRef.current.checked,
             has_serial_no: hasSerialNoRef.current.checked
-          };
+        };
+        //console.log(updatedItem);
 
         let checkErrors = validate(updatedItem);
         let areAllFieldsFalse = checkObject(checkErrors);
@@ -732,9 +746,9 @@ export default function Dashboard() {
                         supplierInput={supplierInput} setSupplierInput={setSupplierInput}
                         quantityRef={quantityRef} amountToAddRef={amountToAddRef} reorderLevelRef={reorderLevelRef} tax1Ref={tax1Ref}
                         tax2Ref={tax2Ref} allowAltRef={allowAltRef} hasSerialNoRef={hasSerialNoRef}
-                        categoryRef={categoryRef} supplierRef={supplierRef} mutation={mutation}/> : modalType === "delete" ?
+                        categoryRef={categoryRef} supplierRef={supplierRef} mutation={mutation} /> : modalType === "delete" ?
                         <DeleteModal onClose={onModalClose} item={item} handleDeleteSubmit={handleDeleteSubmit}
-                        deleteMutation={deleteMutation} /> :
+                            deleteMutation={deleteMutation} /> :
                         <TrackingModal onClose={onModalClose} item={item} />}
 
             </Modal>
@@ -750,25 +764,32 @@ export default function Dashboard() {
                                     fontSize="lg"
                                     color={textColor}
                                     fontWeight="bold"
-                                    pb=".5rem"
                                 >
-                                    ITEM PURCHASE INVETORY
+                                    <Text as="span" bgColor="#8E44AD" p={2}>
+                                        ITEM INVENTORY LIST
+                                    </Text>
+                                    <Text as="span" bgColor="#27AE60" p={2}>
+                                        {`(Page ${page} of ${pageCount})`}
+                                    </Text>
+                                    <Text as="span" bgColor="#F39C12" p={2}>
+                                        {`(${count} item(s) found)`}
+                                    </Text>
                                 </Text>
                             </Flex>
                         </CardHeader>
                         <Table variant="unstyled" size='sm'>
                             <Thead>
                                 <Tr my=".8rem" ps="0px">
-                                    <Th ps="0px" color="gray.400">
+                                    <Th fontSize="md" ps="0px" color="white">
                                         NAME
                                     </Th>
-                                    <Th color="gray.400">CATEGORY</Th>
-                                    <Th textAlign="right" color="gray.400">COST</Th>
-                                    <Th textAlign="right" color="gray.400">UNIT PRICE</Th>
-                                    <Th textAlign="right" color="gray.400">QUANTITY</Th>
-                                    <Center>
-                                        <Th color="gray.400">ACTIONS</Th>
-                                    </Center>
+                                    <Th fontSize="md" color="white">CATEGORY</Th>
+                                    <Th fontSize="md" textAlign="right" color="white">COST</Th>
+                                    <Th fontSize="md" textAlign="right" color="white">UNIT PRICE</Th>
+                                    <Th fontSize="md" textAlign="right" color="white">QUANTITY</Th>
+                                  
+                                        <Th fontSize="md" textAlign="center" color="white">ACTIONS</Th>
+                                  
 
 
                                 </Tr>

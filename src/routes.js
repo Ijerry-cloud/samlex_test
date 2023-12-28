@@ -25,16 +25,23 @@ import {
   RocketIcon,
 } from "components/Icons/Icons";
 
-import { MdOutlineSummarize, MdAddCircle, MdViewList, MdFilterList, MdPersonAdd, MdDashboardCustomize} from "react-icons/md";
+import { MdOutlineSummarize, MdAddCircle, MdViewList, MdFilterList, MdPersonAdd, MdDashboardCustomize, MdAssignmentAdd} from "react-icons/md";
 import { AiOutlineUsergroupAdd } from "react-icons/ai";
+import { BsFillHouseAddFill } from "react-icons/bs";
+import { RiCustomerService2Fill } from "react-icons/ri";
+import { FcDataConfiguration } from "react-icons/fc";
 import { IoIosCalendar } from 'react-icons/io';
-import { FaTruck, FaCalendarCheck, FaUsers, FaFileInvoice } from "react-icons/fa";
+import { FaTruck, FaCalendarCheck, FaCalendarAlt, FaUsers, FaFileInvoice, FaLayerGroup, FaEdit } from "react-icons/fa";
 import { GiArchiveResearch } from 'react-icons/gi';
 import UserMgt from "views/Management/UserMgt";
 import EmployeeMgt from "views/Management/EmployeeMgt";
 import StoreConfig from "views/Management/StoreConfig";
 import Settings from "views/Management/Settings";
 import { List } from "@chakra-ui/react";
+import { getAuthUser } from "modules/auth/redux/authSelector";
+import { useSelector } from 'react-redux';
+
+
 
 var dashRoutes = [
   {
@@ -55,7 +62,8 @@ var dashRoutes = [
     component: ListCustomers,
     layout: "/admin",
     isProtected: true,
-    isVisible: true
+    isVisible: true,
+    permission: "customer_perm"
   },
   {
     path: "/suppliers",
@@ -65,7 +73,8 @@ var dashRoutes = [
     component: ListSuppliers,
     layout: "/admin",
     isProtected: true,
-    isVisible: true
+    isVisible: true,
+    permission: "suppliers_perm"
   },
   {
     name: "Sales",
@@ -74,11 +83,12 @@ var dashRoutes = [
     state: "pageCollapse",
     isProtected: true,
     isVisible: true,
+    permission: "sales_perm",
     views: [
       {
         path: "/add-item",
         name: "Add Sales",
-        icon: <MdAddCircle color="inherit" />,
+        icon: <MdAssignmentAdd color="inherit" />,
         icon_color: "#FF6464",
         component: AddItem,
         layout: "/admin",
@@ -87,7 +97,7 @@ var dashRoutes = [
       },
       {
         path: "/list-items",
-        name: "View Transactions",
+        name: "My Sales",
         icon: <MdViewList color="inherit" />,
         icon_color: "#1E8449",
         component: ListItems,
@@ -98,17 +108,18 @@ var dashRoutes = [
     ],
   },
   {
-    name: "Purchases",
+    name: "Items",
     category: "purchases",
     collapse: true,
     state: "pageCollapse",
     isProtected: true,
     isVisible: true,
+    permission: "items_perm",
     views: [
       {
         path: "/add-Purchases",
-        name: "Add Purchases",
-        icon: <MdAddCircle color="inherit" />,
+        name: "Add Item",
+        icon: <BsFillHouseAddFill color="inherit" />,
         icon_color: "#3498DB",
         component: AddPurchases,
         layout: "/admin",
@@ -117,8 +128,8 @@ var dashRoutes = [
       },
       {
         path: "/list-Purchases",
-        name: "List Purchases",
-        icon: <MdViewList color="inherit" />,
+        name: "List Items",
+        icon: <FaLayerGroup color="inherit" />,
         icon_color: "#1E8449",
         component: ListPurchases,
         layout: "/admin",
@@ -127,8 +138,8 @@ var dashRoutes = [
       },
       {
         path: "/filter-Purchases",
-        name: "Filter Purchases",
-        icon: <MdFilterList color="inherit" />,
+        name: "Edit Items",
+        icon: <FaEdit color="inherit" />,
         icon_color: "#FFD700",
         component: FilterPurchases,
         layout: "/admin",
@@ -144,6 +155,7 @@ var dashRoutes = [
     state: "pageCollapse",
     isProtected: true,
     isVisible: true,
+    permission: "reports_perm",
     views: [
       {
         path: "/filter-items",
@@ -158,7 +170,7 @@ var dashRoutes = [
       {
         path: "/daily-reports",
         name: "Daily Report",
-        icon: <FaCalendarCheck color="inherit" />,
+        icon: <FaCalendarAlt color="inherit" />,
         icon_color: "#8E44AD",
         component: DailyReports,
         layout: "/admin",
@@ -188,7 +200,7 @@ var dashRoutes = [
       {
         path: "/employee-reports-summary",
         name: "Employee Summary",
-        icon: <AiOutlineUsergroupAdd color="inherit" />,
+        icon: <RiCustomerService2Fill color="inherit" />,
         icon_color: "#3498DB",
         component: EmployeeSummary,
         layout: "/admin",
@@ -199,36 +211,21 @@ var dashRoutes = [
     ],
   },
   {
-    path: "/settings",
-    name: "Settings",
-    icon: <MdOutlineSummarize color="inherit" />,
-    component: Settings,
-    layout: "/admin",
-    isProtected: true,
-    isVisible: false
-  },
-  {
-    path: "/userMgt",
-    name: "User Management",
-    icon: <MdOutlineSummarize color="inherit" />,
-    component: UserMgt,
-    layout: "/admin",
-    isProtected: true,
-    isVisible: false
-  },
-  {
     path: "/EmployeeMgt",
     name: "Employee Management",
-    icon: <MdOutlineSummarize color="inherit" />,
+    icon: <RiCustomerService2Fill color="inherit" />,
+    icon_color: "#F39C12",
     component: EmployeeMgt,
     layout: "/admin",
     isProtected: true,
-    isVisible: false
+    isVisible: false,
+    permission: "employees_perm",
   },
   {
     path: "/StoreConfig",
     name: "Store Config",
-    icon: <MdOutlineSummarize color="inherit" />,
+    icon: <FcDataConfiguration color="inherit" />,
+    icon_color: "#FFD700",
     component: StoreConfig,
     layout: "/admin",
     isProtected: true,
@@ -243,6 +240,7 @@ var dashRoutes = [
         path: "/profile",
         name: "Profile",
         icon: <PersonIcon color="inherit" />,
+        icon_color: "green",
         secondaryNavbar: true,
         component: Profile,
         layout: "/admin",
@@ -252,6 +250,7 @@ var dashRoutes = [
         path: "/signin",
         name: "Sign In",
         icon: <DocumentIcon color="inherit" />,
+        icon_color: "#F5AB00",
         component: SignIn,
         secondaryNavbar: false,
         layout: "/auth",
@@ -260,6 +259,7 @@ var dashRoutes = [
         path: "/signup",
         name: "Sign Up",
         icon: <RocketIcon color="inherit" />,
+        icon_color: "#F39C12",
         secondaryNavbar: false,
         component: SignUp,
         layout: "/auth",

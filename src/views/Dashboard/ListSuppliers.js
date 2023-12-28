@@ -9,6 +9,7 @@ import {
     HStack,
     Icon,
     SimpleGrid,
+    Stack,
     Stat,
     StatLabel,
     StatNumber,
@@ -19,6 +20,7 @@ import {
     ModalFooter,
     ModalBody,
     ModalCloseButton,
+    Spacer,
     Table,
     Tbody,
     Text,
@@ -56,7 +58,7 @@ import {
     MdEmail
 } from 'react-icons/md';
 import { BsPerson, BsPersonAdd, BsFillTelephoneFill, BsFillFlagFill } from 'react-icons/bs';
-import { FaRegAddressCard, FaCity, FaBuilding, FaCreditCard } from 'react-icons/fa';
+import { FaRegAddressCard, FaCity, FaBuilding, FaCreditCard, FaPhone } from 'react-icons/fa';
 import { fetchData, postData } from 'modules/utilities/util_query';
 import { useQuery, useMutation } from 'react-query';
 import { checkObject, isError } from 'modules/utilities';
@@ -69,7 +71,10 @@ import { useSelector } from 'react-redux';
 
 
 
-const EditModal = ({ handleEditSubmit, onClose, values, handleChange, errors, loading }) => (
+const EditModal = ({ handleEditSubmit, onClose, values, handleChange, errors, loading, mutation,
+    editCompanyNameRef,
+    editFirstNameRef, editLastNameRef, editEmailRef, editPhoneRef, editAddress1Ref, editAccountRef,
+    editAddress2Ref, editCityRef, editStateRef, editZipRef, editCountryRef, editCommentsRef }) => (
     <>
         <ModalHeader>Edit Supplier Information</ModalHeader>
         <ModalCloseButton />
@@ -85,11 +90,12 @@ const EditModal = ({ handleEditSubmit, onClose, values, handleChange, errors, lo
                         <Input
                             isInvalid={isError(errors?.company_name)}
                             errorBorderColor='red.300'
+                            ref={editCompanyNameRef}
                             name={'company_name'}
-                            onChange={handleChange}
+                            //onChange={handleChange}
                             type="text"
                             size="sm"
-                            value={values?.company_name || ''}
+                            defaultValue={values?.company_name || ''}
                             borderRadius='15px'
                             borderColor="rgba(255, 255, 255, 0.2)"
                             _placeholder={{ opacity: 0.2, color: 'white' }}
@@ -108,11 +114,12 @@ const EditModal = ({ handleEditSubmit, onClose, values, handleChange, errors, lo
                         <Input
                             isInvalid={isError(errors?.first_name)}
                             errorBorderColor='red.300'
+                            ref={editFirstNameRef}
                             name={'first_name'}
-                            onChange={handleChange}
+                            //onChange={handleChange}
                             type="text"
                             size="sm"
-                            value={values?.first_name || ''}
+                            defaultValue={values?.first_name || ''}
                             borderRadius='15px'
                             borderColor="rgba(255, 255, 255, 0.2)"
                             _placeholder={{ opacity: 0.2, color: 'white' }}
@@ -136,11 +143,12 @@ const EditModal = ({ handleEditSubmit, onClose, values, handleChange, errors, lo
                         <Input
                             isInvalid={isError(errors?.last_name)}
                             errorBorderColor='red.300'
+                            ref={editLastNameRef}
                             name={'last_name'}
-                            onChange={handleChange}
+                            //onChange={handleChange}
                             type="text"
                             size="sm"
-                            value={values?.last_name || ''}
+                            defaultValue={values?.last_name || ''}
                             borderRadius='15px'
                             borderColor="rgba(255, 255, 255, 0.2)"
                             _placeholder={{ opacity: 0.2, color: 'white' }}
@@ -160,11 +168,12 @@ const EditModal = ({ handleEditSubmit, onClose, values, handleChange, errors, lo
                         <Input
                             isInvalid={isError(errors?.email)}
                             errorBorderColor='red.300'
+                            ref={editEmailRef}
                             name={'email'}
-                            onChange={handleChange}
+                            //onChange={handleChange}
                             type="text"
                             size="sm"
-                            value={values?.email || ''}
+                            defaultValue={values?.email || ''}
                             borderRadius='15px'
                             borderColor="rgba(255, 255, 255, 0.2)"
                             _placeholder={{ opacity: 0.2, color: 'white' }}
@@ -182,11 +191,12 @@ const EditModal = ({ handleEditSubmit, onClose, values, handleChange, errors, lo
                         <Input
                             isInvalid={isError(errors?.phone_no)}
                             errorBorderColor='red.300'
+                            ref={editPhoneRef}
                             name={'phone_no'}
-                            onChange={handleChange}
+                            //onChange={handleChange}
                             type="text"
                             size="sm"
-                            value={values?.phone_no || ''}
+                            defaultValue={values?.phone_no || ''}
                             borderRadius='15px'
                             borderColor="rgba(255, 255, 255, 0.2)"
                             _placeholder={{ opacity: 0.2, color: 'white' }}
@@ -203,11 +213,12 @@ const EditModal = ({ handleEditSubmit, onClose, values, handleChange, errors, lo
                         <Input
                             isInvalid={isError(errors?.address_1)}
                             errorBorderColor='red.300'
+                            ref={editAddress1Ref}
                             name={'address_1'}
-                            onChange={handleChange}
+                            //onChange={handleChange}
                             type="text"
                             size="sm"
-                            value={values?.address_1 || ''}
+                            defaultValue={values?.address_1 || ''}
                             borderRadius='15px'
                             borderColor="rgba(255, 255, 255, 0.2)"
                             _placeholder={{ opacity: 0.2, color: 'white' }}
@@ -225,11 +236,12 @@ const EditModal = ({ handleEditSubmit, onClose, values, handleChange, errors, lo
                         <Input
                             isInvalid={isError(errors?.address_2)}
                             errorBorderColor='red.300'
+                            ref={editAddress2Ref}
                             name={'address_2'}
-                            onChange={handleChange}
+                            //onChange={handleChange}
                             type="text"
                             size="sm"
-                            value={values?.address_2 || ''}
+                            defaultValue={values?.address_2 || ''}
                             borderRadius='15px'
                             borderColor="rgba(255, 255, 255, 0.2)"
                             _placeholder={{ opacity: 0.2, color: 'white' }}
@@ -246,11 +258,12 @@ const EditModal = ({ handleEditSubmit, onClose, values, handleChange, errors, lo
                         <Input
                             isInvalid={isError(errors?.city)}
                             errorBorderColor='red.300'
+                            ref={editCityRef}
                             name={'city'}
-                            onChange={handleChange}
+                            //onChange={handleChange}
                             type="text"
                             size="sm"
-                            value={values?.city || ''}
+                            defaultValue={values?.city || ''}
                             borderRadius='15px'
                             borderColor="rgba(255, 255, 255, 0.2)"
                             _placeholder={{ opacity: 0.2, color: 'white' }}
@@ -268,11 +281,12 @@ const EditModal = ({ handleEditSubmit, onClose, values, handleChange, errors, lo
                         <Input
                             isInvalid={isError(errors?.state)}
                             errorBorderColor='red.300'
+                            ref={editStateRef}
                             name={'state'}
-                            onChange={handleChange}
+                            //onChange={handleChange}
                             type="text"
                             size="sm"
-                            value={values?.state || ''}
+                            defaultValue={values?.state || ''}
                             borderRadius='15px'
                             borderColor="rgba(255, 255, 255, 0.2)"
                             _placeholder={{ opacity: 0.2, color: 'white' }}
@@ -289,11 +303,12 @@ const EditModal = ({ handleEditSubmit, onClose, values, handleChange, errors, lo
                         <Input
                             isInvalid={isError(errors?.zip)}
                             errorBorderColor='red.300'
+                            ref={editZipRef}
                             name={'zip'}
-                            onChange={handleChange}
+                            //onChange={handleChange}
                             type="text"
                             size="sm"
-                            value={values?.zip || ''}
+                            defaultValue={values?.zip || ''}
                             borderRadius='15px'
                             borderColor="rgba(255, 255, 255, 0.2)"
                             _placeholder={{ opacity: 0.2, color: 'white' }}
@@ -311,11 +326,12 @@ const EditModal = ({ handleEditSubmit, onClose, values, handleChange, errors, lo
                         <Input
                             isInvalid={isError(errors?.country)}
                             errorBorderColor='red.300'
+                            ref={editCountryRef}
                             name={'country'}
-                            onChange={handleChange}
+                            //onChange={handleChange}
                             type="text"
                             size="sm"
-                            value={values?.country || ''}
+                            defaultValue={values?.country || ''}
                             borderRadius='15px'
                             borderColor="rgba(255, 255, 255, 0.2)"
                             _placeholder={{ opacity: 0.2, color: 'white' }}
@@ -332,11 +348,12 @@ const EditModal = ({ handleEditSubmit, onClose, values, handleChange, errors, lo
                         <Input
                             isInvalid={isError(errors?.account)}
                             errorBorderColor='red.300'
+                            ref={editAccountRef}
                             name={'account'}
-                            onChange={handleChange}
+                            //onChange={handleChange}
                             type="text"
                             size="sm"
-                            value={values?.account || ''}
+                            defaultValue={values?.account || ''}
                             borderRadius='15px'
                             borderColor="rgba(255, 255, 255, 0.2)"
                             _placeholder={{ opacity: 0.2, color: 'white' }}
@@ -350,9 +367,10 @@ const EditModal = ({ handleEditSubmit, onClose, values, handleChange, errors, lo
                 <Textarea
                     isInvalid={isError(errors?.comments)}
                     errorBorderColor='red.300'
+                    ref={editCommentsRef}
                     name={'comments'}
-                    onChange={handleChange}
-                    value={values?.comments || ''}
+                    //onChange={handleChange}
+                    defaultValue={values?.comments || ''}
                     placeholder="message"
                     borderRadius='15px'
                     borderColor="rgba(255, 255, 255, 0.2)"
@@ -364,10 +382,10 @@ const EditModal = ({ handleEditSubmit, onClose, values, handleChange, errors, lo
         </ModalBody>
 
         <ModalFooter>
-            <Button colorScheme='red' mr={3} onClick={onClose}>
+            <Button colorScheme='red' mr={3} onClick={onClose} size="sm">
                 Close
             </Button>
-            <Button isLoading={loading} onClick={handleEditSubmit} colorScheme="blue">Edit Supplier</Button>
+            <Button isLoading={mutation.isLoading} onClick={handleEditSubmit} colorScheme="blue" size="sm">Save</Button>
         </ModalFooter>
 
     </>
@@ -375,7 +393,9 @@ const EditModal = ({ handleEditSubmit, onClose, values, handleChange, errors, lo
 
 );
 
-const AddModal = ({ handleSubmit, onClose, values, handleChange, errors, loading }) => (
+const AddModal = ({ handleSubmit, onClose, values, handleChange, errors, mutation,
+    companyNameRef, firstNameRef, lastNameRef, emailRef, phoneRef, address1Ref, address2Ref,
+    cityRef, stateRef, zipRef, countryRef, commentsRef, accountRef }) => (
     <>
         <ModalHeader>Supplier Information</ModalHeader>
         <ModalCloseButton />
@@ -393,11 +413,12 @@ const AddModal = ({ handleSubmit, onClose, values, handleChange, errors, loading
                         <Input
                             isInvalid={isError(errors?.company_name)}
                             errorBorderColor='red.300'
+                            ref={companyNameRef}
                             name={'company_name'}
-                            onChange={handleChange}
+                            //onChange={handleChange}
                             type="text"
                             size="sm"
-                            value={values?.company_name || ''}
+                            //value={values?.company_name || ''}
                             borderRadius='15px'
                             borderColor="rgba(255, 255, 255, 0.2)"
                             _placeholder={{ opacity: 0.2, color: 'white' }}
@@ -416,11 +437,12 @@ const AddModal = ({ handleSubmit, onClose, values, handleChange, errors, loading
                         <Input
                             isInvalid={isError(errors?.first_name)}
                             errorBorderColor='red.300'
+                            ref={firstNameRef}
                             name={'first_name'}
-                            onChange={handleChange}
+                            //onChange={handleChange}
                             type="text"
                             size="sm"
-                            value={values?.first_name || ''}
+                            //value={values?.first_name || ''}
                             borderRadius='15px'
                             borderColor="rgba(255, 255, 255, 0.2)"
                             _placeholder={{ opacity: 0.2, color: 'white' }}
@@ -438,11 +460,12 @@ const AddModal = ({ handleSubmit, onClose, values, handleChange, errors, loading
                         <Input
                             isInvalid={isError(errors?.last_name)}
                             errorBorderColor='red.300'
+                            ref={lastNameRef}
                             name={'last_name'}
-                            onChange={handleChange}
+                            //onChange={handleChange}
                             type="text"
                             size="sm"
-                            value={values?.last_name || ''}
+                            //value={values?.last_name || ''}
                             borderRadius='15px'
                             borderColor="rgba(255, 255, 255, 0.2)"
                             _placeholder={{ opacity: 0.2, color: 'white' }}
@@ -460,11 +483,12 @@ const AddModal = ({ handleSubmit, onClose, values, handleChange, errors, loading
                         <Input
                             isInvalid={isError(errors?.email)}
                             errorBorderColor='red.300'
+                            ref={emailRef}
                             name={'email'}
-                            onChange={handleChange}
+                            //onChange={handleChange}
                             type="text"
                             size="sm"
-                            value={values?.email || ''}
+                            //value={values?.email || ''}
                             borderRadius='15px'
                             borderColor="rgba(255, 255, 255, 0.2)"
                             _placeholder={{ opacity: 0.2, color: 'white' }}
@@ -482,11 +506,12 @@ const AddModal = ({ handleSubmit, onClose, values, handleChange, errors, loading
                         <Input
                             isInvalid={isError(errors?.phone_no)}
                             errorBorderColor='red.300'
+                            ref={phoneRef}
                             name={'phone_no'}
-                            onChange={handleChange}
+                            //onChange={handleChange}
                             type="text"
                             size="sm"
-                            value={values?.phone_no || ''}
+                            //value={values?.phone_no || ''}
                             borderRadius='15px'
                             borderColor="rgba(255, 255, 255, 0.2)"
                             _placeholder={{ opacity: 0.2, color: 'white' }}
@@ -504,11 +529,12 @@ const AddModal = ({ handleSubmit, onClose, values, handleChange, errors, loading
                         <Input
                             isInvalid={isError(errors?.address_1)}
                             errorBorderColor='red.300'
+                            ref={address1Ref}
                             name={'address_1'}
-                            onChange={handleChange}
+                            //onChange={handleChange}
                             type="text"
                             size="sm"
-                            value={values?.address_1 || ''}
+                            //value={values?.address_1 || ''}
                             borderRadius='15px'
                             borderColor="rgba(255, 255, 255, 0.2)"
                             _placeholder={{ opacity: 0.2, color: 'white' }}
@@ -526,11 +552,12 @@ const AddModal = ({ handleSubmit, onClose, values, handleChange, errors, loading
                         <Input
                             isInvalid={isError(errors?.address_2)}
                             errorBorderColor='red.300'
+                            ref={address2Ref}
                             name={'address_2'}
-                            onChange={handleChange}
+                            //onChange={handleChange}
                             type="text"
                             size="sm"
-                            value={values?.address_2 || ''}
+                            //value={values?.address_2 || ''}
                             borderRadius='15px'
                             borderColor="rgba(255, 255, 255, 0.2)"
                             _placeholder={{ opacity: 0.2, color: 'white' }}
@@ -548,11 +575,12 @@ const AddModal = ({ handleSubmit, onClose, values, handleChange, errors, loading
                         <Input
                             isInvalid={isError(errors?.city)}
                             errorBorderColor='red.300'
+                            ref={cityRef}
                             name={'city'}
-                            onChange={handleChange}
+                            //onChange={handleChange}
                             type="text"
                             size="sm"
-                            value={values?.city || ''}
+                            //value={values?.city || ''}
                             borderRadius='15px'
                             borderColor="rgba(255, 255, 255, 0.2)"
                             _placeholder={{ opacity: 0.2, color: 'white' }}
@@ -571,11 +599,12 @@ const AddModal = ({ handleSubmit, onClose, values, handleChange, errors, loading
                         <Input
                             isInvalid={isError(errors?.state)}
                             errorBorderColor='red.300'
+                            ref={stateRef}
                             name={'state'}
-                            onChange={handleChange}
+                            //onChange={handleChange}
                             type="text"
                             size="sm"
-                            value={values?.state || ''}
+                            //value={values?.state || ''}
                             borderRadius='15px'
                             borderColor="rgba(255, 255, 255, 0.2)"
                             _placeholder={{ opacity: 0.2, color: 'white' }}
@@ -593,11 +622,12 @@ const AddModal = ({ handleSubmit, onClose, values, handleChange, errors, loading
                         <Input
                             isInvalid={isError(errors?.zip)}
                             errorBorderColor='red.300'
+                            ref={zipRef}
                             name={'zip'}
-                            onChange={handleChange}
+                            //onChange={handleChange}
                             type="text"
                             size="sm"
-                            value={values?.zip || ''}
+                            //value={values?.zip || ''}
                             borderRadius='15px'
                             borderColor="rgba(255, 255, 255, 0.2)"
                             _placeholder={{ opacity: 0.2, color: 'white' }}
@@ -615,11 +645,12 @@ const AddModal = ({ handleSubmit, onClose, values, handleChange, errors, loading
                         <Input
                             isInvalid={isError(errors?.country)}
                             errorBorderColor='red.300'
+                            ref={countryRef}
                             name={'country'}
-                            onChange={handleChange}
+                            //onChange={handleChange}
                             type="text"
                             size="sm"
-                            value={values?.country || ''}
+                            //value={values?.country || ''}
                             borderRadius='15px'
                             borderColor="rgba(255, 255, 255, 0.2)"
                             _placeholder={{ opacity: 0.2, color: 'white' }}
@@ -637,11 +668,12 @@ const AddModal = ({ handleSubmit, onClose, values, handleChange, errors, loading
                         <Input
                             isInvalid={isError(errors?.account)}
                             errorBorderColor='red.300'
-                            name={'country'}
-                            onChange={handleChange}
+                            ref={accountRef}
+                            name={'account'}
+                            //onChange={handleChange}
                             type="text"
                             size="sm"
-                            value={values?.account || ''}
+                            //value={values?.account || ''}
                             borderRadius='15px'
                             borderColor="rgba(255, 255, 255, 0.2)"
                             _placeholder={{ opacity: 0.2, color: 'white' }}
@@ -655,9 +687,10 @@ const AddModal = ({ handleSubmit, onClose, values, handleChange, errors, loading
                 <Textarea
                     isInvalid={isError(errors?.comments)}
                     errorBorderColor='red.300'
+                    ref={commentsRef}
                     name={'comments'}
-                    onChange={handleChange}
-                    value={values?.comments || ''}
+                    //onChange={handleChange}
+                    //value={values?.comments || ''}
                     borderRadius='15px'
                     borderColor="rgba(255, 255, 255, 0.2)"
                     _placeholder={{ opacity: 0.2, color: 'white' }}
@@ -669,17 +702,17 @@ const AddModal = ({ handleSubmit, onClose, values, handleChange, errors, loading
         </ModalBody>
 
         <ModalFooter>
-            <Button colorScheme='red' mr={3} onClick={onClose}>
+            <Button colorScheme='red' mr={3} onClick={onClose} size="sm">
                 Close
             </Button>
-            <Button isLoading={loading} onClick={handleSubmit} colorScheme="blue">Add Supplier</Button>
+            <Button isLoading={mutation.isLoading} onClick={handleSubmit} colorScheme="blue" size="sm">Save</Button>
         </ModalFooter>
     </>
 
 
 );
 
-const DeleteModal = ({ onClose, values, handleDeleteSubmit, loading }) => (
+const DeleteModal = ({ onClose, values, handleDeleteSubmit, deleteMutation }) => (
     <>
         <ModalHeader>Delete Supplier Information</ModalHeader>
         <ModalCloseButton />
@@ -691,10 +724,10 @@ const DeleteModal = ({ onClose, values, handleDeleteSubmit, loading }) => (
         </ModalBody>
 
         <ModalFooter>
-            <Button variant='ghost' mr={3} onClick={onClose}>
+            <Button variant='ghost' mr={3} onClick={onClose} size="sm">
                 Close
             </Button>
-            <Button isLoading={loading} colorScheme='red' onClick={handleDeleteSubmit}>Yes</Button>
+            <Button isLoading={deleteMutation.isLoading} colorScheme='red' onClick={handleDeleteSubmit} size="sm">Yes</Button>
         </ModalFooter>
     </>
 
@@ -712,6 +745,34 @@ export default function Dashboard() {
     const [loading, setLoading] = useState(false);
 
     const token = useSelector(getAuthToken);
+
+    const companyNameRef = React.useRef(null);
+    const firstNameRef = React.useRef(null);
+    const lastNameRef = React.useRef(null);
+    const emailRef = React.useRef(null);
+    const phoneRef = React.useRef(null);
+    const address1Ref = React.useRef(null);
+    const address2Ref = React.useRef(null);
+    const cityRef = React.useRef(null);
+    const stateRef = React.useRef(null);
+    const zipRef = React.useRef(null);
+    const countryRef = React.useRef(null);
+    const accountRef = React.useRef(null);
+    const commentsRef = React.useRef(null);
+
+    const editCompanyNameRef = React.useRef(null);
+    const editFirstNameRef = React.useRef(null);
+    const editLastNameRef = React.useRef(null);
+    const editEmailRef = React.useRef(null);
+    const editPhoneRef = React.useRef(null);
+    const editAddress1Ref = React.useRef(null);
+    const editAddress2Ref = React.useRef(null);
+    const editCityRef = React.useRef(null);
+    const editStateRef = React.useRef(null);
+    const editZipRef = React.useRef(null);
+    const editCountryRef = React.useRef(null);
+    const editAccountRef = React.useRef(null);
+    const editCommentsRef = React.useRef(null);
 
 
     // Chakra Color Mode
@@ -747,7 +808,7 @@ export default function Dashboard() {
                 setCount(data?.count || 0);
                 setSuppliers(data?.results || []);
                 setPageCount(data?.last_page || 1);
-                console.log(data?.results);
+                //console.log(data?.results);
             },
             onError: (error) => {
                 handleApiError(error);
@@ -761,6 +822,7 @@ export default function Dashboard() {
 
     const mutation = useMutation(postData, {
         onSuccess: (response) => {
+            const data = response?.data?.detail;
             toast({
                 title: 'Success',
                 description: "Action succesful",
@@ -768,27 +830,67 @@ export default function Dashboard() {
                 duration: 3000,
                 isClosable: true,
             });
-            setValues({});
-            setErrors({});
-            setLoading(false);
+            //setValues({});
+            //setErrors({});
+            //setLoading(false);
+            setSuppliers((suppliers) => {
+                const updated = suppliers.map((supplier) => {
+                    if (supplier.id === data.id) {
+                        return data;
+                    }
+                    else {
+                        return supplier
+                    }
+                })
+                //console.log(updated_items);
+                return updated
+            });
             onModalClose();
-            refetch();
+            //refetch();
 
             return;
         },
         onError: (error) => {
             handleApiError(error);
-            setLoading(false);
+            //setLoading(false);
         }
     });
 
-    const validate = () => {
-        let uerrors = {}
-        uerrors.company_name = values?.company_name ? "" : FIELD_REQUIRED;
-        uerrors.first_name = values?.first_name ? "" : FIELD_REQUIRED;
-        uerrors.last_name = values?.last_name ? "" : FIELD_REQUIRED;
+    const deleteMutation = useMutation(postData, {
+        onSuccess: (response) => {
+            const id = response?.data?.id;
+            toast({
+                title: 'Success',
+                description: 'Supplier deleted successfully',
+                status: 'success',
+                duration: 3000,
+                isClosable: true,
+            });
 
-        if (!values?.first_name || !values?.last_name || !values?.company_name) {
+            setSuppliers((suppliers) => {
+                const updated = suppliers.filter(supplier => supplier.id !== id);
+                //console.log(new_items);
+                //console.log(id);
+                return updated
+            })
+            setCount((count) => count -1 )
+            onModalClose();
+
+            return;
+        },
+        onError: (error) => {
+            handleApiError(error);
+            //onModalClose();
+        }
+    });
+
+    const validate = (updatedItem) => {
+        let uerrors = {}
+        uerrors.company_name = updatedItem?.company_name ? "" : FIELD_REQUIRED;
+        uerrors.first_name = updatedItem?.first_name ? "" : FIELD_REQUIRED;
+        uerrors.last_name = updatedItem?.last_name ? "" : FIELD_REQUIRED;
+
+        if (!updatedItem?.first_name || !updatedItem?.last_name || !updatedItem?.company_name) {
             toast({
                 title: 'Missing Information.',
                 description: "Please fill all required fields.",
@@ -800,8 +902,8 @@ export default function Dashboard() {
 
         }
 
-        if (values?.email) {
-            const email_is_valid = validator.isEmail(values.email);
+        if (updatedItem?.email) {
+            const email_is_valid = validator.isEmail(updatedItem.email);
 
             if (!email_is_valid) {
                 uerrors.email = "enter a valid email address";
@@ -825,10 +927,25 @@ export default function Dashboard() {
 
     const handleSubmit = () => {
 
-        let checkErrors = validate();
+        const updatedItem = {
+            company_name: companyNameRef.current.value,
+            first_name: firstNameRef.current.value,
+            last_name: lastNameRef.current.value,
+            email: emailRef.current.value,
+            phone_no: phoneRef.current.value,
+            address_1: address1Ref.current.value,
+            address_2: address2Ref.current.value,
+            city: cityRef.current.value,
+            state: stateRef.current.value,
+            zip: zipRef.current.value,
+            country: countryRef.current.value,
+            comments: commentsRef.current.value
+        }
+
+        let checkErrors = validate(updatedItem);
         let areAllFieldsFalse = checkObject(checkErrors);
 
-        console.log(checkErrors);
+
         if (!areAllFieldsFalse) {
             // if there are errors
             // set to state and terminate
@@ -836,12 +953,12 @@ export default function Dashboard() {
             return;
         }
 
-        const data = values;
-        setLoading(true);
+        //const data = values;
+        //setLoading(true);
         mutation.mutate(
             {
                 url: GET_CREATE_SUPPLIERS,
-                payload_data: data,
+                payload_data: updatedItem,
                 token: token,
                 authenticate: true
             }
@@ -860,11 +977,27 @@ export default function Dashboard() {
     }
 
     const handleEditSubmit = () => {
+        const updatedItem = {
+            uuid: values?.uuid,
+            company_name: editCompanyNameRef.current.value,
+            first_name: editFirstNameRef.current.value,
+            last_name: editLastNameRef.current.value,
+            email: editEmailRef.current.value,
+            phone_no: editPhoneRef.current.value,
+            address_1: editAddress1Ref.current.value,
+            address_2: editAddress2Ref.current.value,
+            city: editCityRef.current.value,
+            state: editStateRef.current.value,
+            zip: editZipRef.current.value,
+            country: editCountryRef.current.value,
+            account: editAccountRef.current.value,
+            comments: editCommentsRef.current.value
+        }
 
-        let checkErrors = validate();
+        let checkErrors = validate(updatedItem);
         let areAllFieldsFalse = checkObject(checkErrors);
 
-        console.log(checkErrors);
+
         if (!areAllFieldsFalse) {
             // if there are errors
             // set to state and terminate
@@ -872,12 +1005,12 @@ export default function Dashboard() {
             return;
         }
 
-        const data = values;
-        setLoading(true);
+        //const data = values;
+        //setLoading(true);
         mutation.mutate(
             {
                 url: UPDATE_SUPPLIERS,
-                payload_data: data,
+                payload_data: updatedItem,
                 token: token,
                 authenticate: true
             }
@@ -889,8 +1022,8 @@ export default function Dashboard() {
 
     const handleDeleteSubmit = () => {
         const data = values;
-        setLoading(true);
-        mutation.mutate({
+        //setLoading(true);
+        deleteMutation.mutate({
             url: DELETE_SUPPLIER,
             payload_data: data,
             token: token,
@@ -931,12 +1064,19 @@ export default function Dashboard() {
 
                     {modalType === "add" ?
                         <AddModal onClose={onModalClose} handleSubmit={handleSubmit} values={values}
-                            handleChange={handleChange} errors={errors} loading={loading} /> :
+                            handleChange={handleChange} errors={errors} loading={loading} companyNameRef={companyNameRef}
+                            firstNameRef={firstNameRef} lastNameRef={lastNameRef} emailRef={emailRef} phoneRef={phoneRef}
+                            address1Ref={address1Ref} address2Ref={address2Ref} cityRef={cityRef} stateRef={stateRef}
+                            zipRef={zipRef} countryRef={countryRef} commentsRef={commentsRef} mutation={mutation}
+                            accountRef={accountRef} /> :
                         modalType === "edit" ?
                             <EditModal onClose={onModalClose} handleEditSubmit={handleEditSubmit} values={values} errors={errors}
-                                handleChange={handleChange} loading={loading} /> :
-                            <DeleteModal onClose={onModalClose} values={values} handleDeleteSubmit={handleDeleteSubmit}
-                                loading={loading} />}
+                                handleChange={handleChange} loading={loading} mutation={mutation} editCompanyNameRef={editCompanyNameRef}
+                                editFirstNameRef={editFirstNameRef} editLastNameRef={editLastNameRef} editEmailRef={editEmailRef} editPhoneRef={editPhoneRef}
+                                editAddress1Ref={editAddress1Ref} editAddress2Ref={editAddress2Ref} editCityRef={editCityRef} editAccountRef={editAccountRef}
+                                editStateRef={editStateRef} editZipRef={editZipRef} editCountryRef={editCountryRef} editCommentsRef={editCommentsRef} /> :
+                            <DeleteModal onClose={onModalClose} values={values} handleDeleteSubmit={handleDeleteSubmit} mutation={mutation}
+                                loading={loading} deleteMutation={deleteMutation}/>}
 
 
                 </ModalContent>
@@ -944,104 +1084,89 @@ export default function Dashboard() {
             </Modal>
             <Flex flexDirection="column" pt={{ base: "120px", md: "75px" }}>
                 <SimpleGrid columns={{ sm: 1, md: 2, xl: 4 }} spacing="24px">
-                    <Card minH="83px" w="100%">
-                        <CardBody>
-                            <Flex flexDirection="row" align="center" justify="center" w="100%">
-                                <Stat me="auto">
-                                    <StatLabel
-                                        fontSize="sm"
-                                        color="gray.400"
-                                        fontWeight="bold"
-                                        pb=".1rem"
-                                    >
-                                        Full Name
-                                    </StatLabel>
-                                    <Flex>
-                                        <StatNumber fontSize="lg" color={textColor}>
-                                            {(suppliers[0]?.first_name + " " + suppliers[0]?.last_name) || ""}
-                                        </StatNumber>
-                                    </Flex>
-                                </Stat>
-                                <IconBox as="box" h={"45px"} w={"45px"}>
-                                    <PersonIcon h={"24px"} w={"24px"} color="#fff" />
-                                </IconBox>
-                            </Flex>
-                        </CardBody>
-                    </Card>
-                    <Card minH="83px" w="100%">
-                        <CardBody>
-                            <Flex flexDirection="row" align="center" justify="center" w="100%">
-                                <Stat me="auto">
-                                    <StatLabel
-                                        fontSize="sm"
-                                        color="gray.400"
-                                        fontWeight="bold"
-                                        pb=".1rem"
-                                    >
-                                        Phone Number
-                                    </StatLabel>
-                                    <Flex>
-                                        <StatNumber fontSize="lg" color={textColor}>
-                                            {suppliers[0]?.phone_no || ""}
-                                        </StatNumber>
-                                    </Flex>
-                                </Stat>
-                                <IconBox as="box" h={"45px"} w={"45px"}>
+                <Card color="white" bgColor="#171923" >
+                        <Box>
+                            <Stack spacing='0'>
+                                <Box>
+                                    <IconBox as="box" h={"45px"} w={"45px"}>
 
-                                    <Icon h={"35px"} w={"35px"} as={TbPhone} color='#fff' />
-                                </IconBox>
-                            </Flex>
-                        </CardBody>
-                    </Card>
-                    <Card minH="83px" w="100%">
-                        <CardBody>
-                            <Flex flexDirection="row" align="center" justify="center" w="100%">
-                                <Stat me="auto">
-                                    <StatLabel
-                                        fontSize="sm"
-                                        color="gray.400"
-                                        fontWeight="bold"
-                                        pb=".1rem"
-                                    >
-                                        Name of Company
-                                    </StatLabel>
-                                    <Flex>
-                                        <StatNumber fontSize="lg" color={textColor}>
-                                            {suppliers[0]?.company_name || ""}
-                                        </StatNumber>
-                                    </Flex>
-                                </Stat>
-                                <IconBox as="box" h={"45px"} w={"45px"}>
-                                    <Icon h={"35px"} w={"35px"} as={FaBuilding} color='#fff' />
+                                        <Icon h={"30px"} w={"30px"} as={FaBuilding} color='#fff' />
+                                    </IconBox>
 
-                                </IconBox>
-                            </Flex>
-                        </CardBody>
+                                    <Text fontSize='sm' fontWeight="bold" mt={2}>
+                                    Name of Company
+                                    </Text>
+                                </Box>
+                                <Box>
+                                    <Text pt='2' fontSize='md' as='i'>
+                                    {suppliers[0]?.company_name || ""}
+                                    </Text>
+                                </Box>
+                            </Stack>
+                        </Box>
                     </Card>
-                    <Card minH="83px" w="100%">
-                        <CardBody>
-                            <Flex flexDirection="row" align="center" justify="center" w="100%">
-                                <Stat me="auto">
-                                    <StatLabel
-                                        fontSize="sm"
-                                        color="gray.400"
-                                        fontWeight="bold"
-                                        pb=".1rem"
-                                    >
-                                        State
-                                    </StatLabel>
-                                    <Flex>
-                                        <StatNumber fontSize="lg" color={textColor}>
-                                            {suppliers[0]?.state || ""}
-                                        </StatNumber>
-                                    </Flex>
-                                </Stat>
-                                <IconBox as="box" h={"45px"} w={"45px"}>
-                                    <Icon h={"35px"} w={"35px"} as={MdLocationOn} color='#fff' />
+                    <Card color="white" bgColor="#171923" >
+                        <Box>
+                            <Stack spacing='0'>
+                                <Box>
+                                    <IconBox as="box" h={"45px"} w={"45px"}>
 
-                                </IconBox>
-                            </Flex>
-                        </CardBody>
+                                        <Icon h={"30px"} w={"30px"} as={PersonIcon} color='#fff' />
+                                    </IconBox>
+
+                                    <Text fontSize='sm' fontWeight="bold" mt={2}>
+                                    Full Name
+                                    </Text>
+                                </Box>
+                                <Box>
+                                    <Text pt='2' fontSize='md' as='i'>
+                                    {(suppliers[0]?.first_name + " " + suppliers[0]?.last_name) || ""}
+                                    </Text>
+                                </Box>
+                            </Stack>
+                        </Box>
+                    </Card>
+                    <Card color="white" bgColor="#171923" >
+                        <Box>
+                            <Stack spacing='0'>
+                                <Box>
+                                    <IconBox as="box" h={"45px"} w={"45px"}>
+
+                                        <Icon h={"30px"} w={"30px"} as={FaPhone} color='#fff' />
+                                    </IconBox>
+
+                                    <Text fontSize='sm' fontWeight="bold" mt={2}>
+                                    Phone Number
+                                    </Text>
+                                </Box>
+                                <Box>
+                                    <Text pt='2' fontSize='md' as='i'>
+                                    {suppliers[0]?.phone_no || "Supplier Mobile"}
+                                    </Text>
+                                </Box>
+                            </Stack>
+                        </Box>
+                    </Card>
+                    <Card color="white" bgColor="#171923" >
+                        <Box>
+                            <Stack spacing='0'>
+                                <Box>
+                                    <IconBox as="box" h={"45px"} w={"45px"}>
+
+                                        <Icon h={"30px"} w={"30px"} as={MdEmail} color='#fff' />
+                                    </IconBox>
+
+                                    <Text fontSize='sm' fontWeight="bold" mt={2}>
+                                    Email
+                                    </Text>
+                                </Box>
+                                <Box>
+                                    <Text pt='2' fontSize='md' as='i'>
+                                    {suppliers[0]?.email || "Supplier Email"}
+                                    </Text>
+                                </Box>
+                            </Stack>
+                        </Box>
                     </Card>
 
                 </SimpleGrid>
@@ -1049,43 +1174,51 @@ export default function Dashboard() {
                     my="26px"
                     mb={{ lg: "16px" }}
                 >
-                    <Card p="16px" overflowX={{ sm: "scroll", xl: "hidden" }}>
+                    <Card p="16px" overflowX={{ sm: "scroll", xl: "hidden" }} bgColor="gray.900">
                         <CardHeader p="12px 0px 28px 0px">
-                            <Flex direction="column">
+                            <Flex w='100%' alignItems='center' gap='2' >
                                 <Text
                                     fontSize="lg"
                                     color={textColor}
                                     fontWeight="bold"
-                                    pb=".5rem"
                                 >
-                                    SUPPLIERS LISTINGS (2023)
+                                    <Text as="span" bgColor="#8E44AD" p={2}>
+                                        SUPPLIERS LISTINGS
+                                    </Text>
+                                    <Text as="span" bgColor="#27AE60" p={2}>
+                                        {`(Page${page} of ${pageCount})`}
+                                    </Text>
+                                    <Text as="span" bgColor="#F39C12" p={2}>
+                                        {`(${count} suppllier(s) found)`}
+                                    </Text>
                                 </Text>
-                                <Flex align="center">
-                                    <ButtonGroup spacing='2' padding='2'>
-                                        <Button leftIcon={<BsPersonAdd />} variant='solid' backgroundColor='#4285f4' color='white'
-                                            onClick={() => {
-                                                setModalType('add');
-                                                onOpen();
-                                            }}>
-                                            New Supplier
-                                        </Button>
-                                    </ButtonGroup>
-                                </Flex>
+                                <Spacer />
+                                <Button
+                                    leftIcon={<BsPersonAdd />}
+                                    variant='solid'
+                                    backgroundColor='#4285f4'
+                                    color='white'
+                                    size="sm"
+                                    onClick={() => {
+                                        setModalType('add');
+                                        onOpen();
+                                    }}
+                                >
+                                    New
+                                </Button>
+
                             </Flex>
                         </CardHeader>
-                        <Table variant="unstyled" size='sm'>
+                        <Table color={textColor} size='sm'>
                             <Thead>
-                                <Tr my=".8rem" ps="0px">
-                                    <Th color="gray.400">COMPANY NAME</Th>
-                                    <Th color="gray.400">NAME</Th>
-                                    <Th color="gray.400"> PHONE NUMBER </Th>
-                                    <Th color="gray.400">EMAIL ADDRESS</Th>
-                                    <Th color="gray.400">PRICE PURCHASED (TOTAL)</Th>
-                                    <Center>
-                                        <Th color="gray.400">ACTIONS</Th>
-                                    </Center>
+                                <Tr my=".8rem" borderBottom="4px" borderColor="#232333">
+                                    <Th color="white">COMPANY NAME</Th>
+                                    <Th color="white">FIRST NAME</Th>
+                                    <Th color="white">LAST NAME</Th>
+                                    <Th color="white"> PHONE NUMBER </Th>
+                                    <Th color="white">EMAIL ADDRESS</Th>
 
-
+                                    <Th textAlign="center" color="white">ACTIONS</Th>
                                 </Tr>
                             </Thead>
                             <Tbody>
@@ -1097,7 +1230,7 @@ export default function Dashboard() {
                                             first_name={row.first_name}
                                             phone_no={row.phone_no}
                                             email={row.email}
-                                            total_purchased={row.total_purchased}
+                                            last_name={row.last_name}
                                             onEditClick={() => {
                                                 setValues(row);
                                                 setModalType('edit');

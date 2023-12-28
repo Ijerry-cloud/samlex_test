@@ -34,8 +34,8 @@
 
 
 //dashboard
-//login and out
-//logo
+//login and out effects- they should be deleted from local or server side after a duration
+
 
 //sales
 //incase i set print to false. set all parameters back to their default state
@@ -61,15 +61,25 @@
 // items should be added
 //details should show added items
 // remove edit buttons from the llist view 
-// styling
+// styling 
 //
 
 //apply windows.scroll(0, 0) to every page u navigate to. when im on the lower section of dashboard for instance and i click the side menu bar to navigate to the add item page, it takes me to the lower section of add page as well
 //enable downloading of csv sheets
 
-
+// in profiles section, the list of employees in ones department can become too long. consider reducing to maybe 3 or 4
 //all forms on all pages should carry ":" after the form label and "*" on required fields
 //the footer "made with love by connect academy" should be firmly fixed to the bottom. on pages like filter, its coming up
 
 //remember the side menu bar for mobile screens should also have the routes hidden for permissions that are not granted to that particular user
+
+//adjust side and side responsive
+//in all oages make unauthenticated not to send request and not to render
+//check auth in all views
+
+//remove user mgt page and routes to it
+//style sideresponsive bar
+//remove settings page for setiing and changing passwords
+
+
 

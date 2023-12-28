@@ -25,6 +25,8 @@ import PropTypes from "prop-types";
 import React from "react";
 import { NavLink, useLocation } from "react-router-dom";
 import avatar4 from "../../assets/img/samlex3.png";
+import { getAuthUser } from "modules/auth/redux/authSelector";
+import { useSelector } from 'react-redux';
 
 // FUNCTIONS
 
@@ -39,6 +41,9 @@ function Sidebar(props) {
   const activeRoute = (routeName) => {
     return location.pathname === routeName ? "active" : "";
   };
+
+  const authUser = useSelector(getAuthUser);
+
   // this function creates the links and collapses that appear in the sidebar (left menu)
   const createLinks = (routes) => {
     const { sidebarVariant } = props;
@@ -58,6 +63,17 @@ function Sidebar(props) {
     }
 
     return routes.map((prop, key) => {
+      if (prop.permission) {
+        if (!authUser?.user?.[prop.permission]){
+          return null;
+        }       
+      } 
+      if (prop.name === "Store Config" || prop.name === "Dashboard"){
+        if (authUser?.user?.dept !== "admin") {
+          return null;
+        }
+      }
+      
       if (prop.redirect) {
         return null;
       }

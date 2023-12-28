@@ -176,7 +176,7 @@ function SignIn() {
               </Container>
               <FormControl>
                 <FormLabel ms="4px" fontSize="md" fontWeight="normal" color="white">
-                  Email
+                  Email:*
                 </FormLabel>
                 <Box mb="24px" ms="4px">
                 <InputGroup >
@@ -206,7 +206,7 @@ function SignIn() {
                 </Box>
 
                 <FormLabel ms="4px" fontSize="md" fontWeight="normal" color="white">
-                  Password
+                  Password:*
                 </FormLabel>
                 <Box mb="24px" ms="4px">
                 <InputGroup>
@@ -241,7 +241,7 @@ function SignIn() {
                   type="submit"
                   borderRadius="40px"
                   onClick={handleSubmit}
-                  bg="#ffb400"
+                  bgGradient='linear(to-l, #F7D305, #F75216)'
                   mt="14px"
                   fontSize="md"
                   color="white"
@@ -249,7 +249,7 @@ function SignIn() {
                   w="100%"
                   h="45"
                   _hover={{
-                    bg: "#f3bc38",
+                    bgGradient:'linear(to-l, #FF0080, #7928CA)',
                   }}
                   isLoading={mutation.isLoading}
                 >

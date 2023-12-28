@@ -440,10 +440,10 @@ function AddItem() {
     const [errors, setErrors] = React.useState({});
     const [selectedOptions, setSelectedOptions] = useState([]);
     const [customer, setCustomer] = useState();
-    const [paidCash, setPaidCash] = useState();
+    const [paidCash, setPaidCash] = useState(0);
     const [mode, setMode] = useState(null);
     const [paymentType, setPaymentType] = useState(null);
-    const [comments, setComments] = useState(null);
+    const [comments, setComments] = useState('');
     const [discount, setDiscount] = useState("0");
     const history = useHistory();
 
@@ -457,8 +457,10 @@ function AddItem() {
     const token = useSelector(getAuthToken);
     const authUser = useSelector(getAuthUser);
 
+    //console.log(authUser);
+
     const sumParameter = (arr, parameter) => {
-        return arr.reduce((total, obj) => total + obj[parameter], 0);
+        return arr.reduce((total, obj) => total + Number(obj[parameter]), 0);
     };
 
     const sumTotal = (arr) => {
@@ -555,7 +557,8 @@ function AddItem() {
                 value: obj.value,
                 colorScheme: obj.colorScheme,
                 cost_price: obj.cost_price,
-                quantity: obj.quantity
+                quantity: obj.quantity,
+                id: obj.id
             }
         });
         setSelectedOptions(allSelected);
@@ -595,8 +598,8 @@ function AddItem() {
             uerrors.selectedOptions = "Select at least one sales item."
         }
 
-        if (!paidCash || paidCash <= 0) {
-            uerrors.paidCash = "Enter a valid amount tendered (greater than 0)";
+        if (!paidCash || paidCash <= 0 || paidCash > 99999999.99) {
+            uerrors.paidCash = "Enter amount between 0 and 99999999.99";
         }
 
         if (!discount || discount < 0) {

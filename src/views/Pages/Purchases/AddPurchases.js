@@ -48,7 +48,7 @@ import { handleApiError } from "modules/utilities/responseHandlers";
 import { getAuthToken } from 'modules/auth/redux/authSelector';
 import { useSelector } from 'react-redux';
 import { UPLOAD_ITEM_CSV, GET_CREATE_ITEM, GET_CREATE_SUPPLIERS, GET_CREATE_CATEGORIES } from 'config/serverUrls';
-import { FIELD_REQUIRED } from 'constants/formErrorMessages';
+import { FIELD_REQUIRED, AMOUNT_GREATER_THAN_ZERO } from 'constants/formErrorMessages';
 import { AsyncSelect } from "chakra-react-select";
 import "theme/asyncSelect.css";
 
@@ -88,7 +88,7 @@ function AddItem() {
                 token
             }]
         });
-        console.log(response.data);
+        //console.log(response.data);
         return response.data;
     }
 
@@ -145,13 +145,25 @@ function AddItem() {
         uerrors.name = item?.name ? "" : FIELD_REQUIRED;
         uerrors.cost_price = item?.cost_price ? "" : FIELD_REQUIRED;
         uerrors.unit_price = item?.unit_price ? "" : FIELD_REQUIRED;
-        uerrors.quantity = item?.quantity ? "" : FIELD_REQUIRED;
+        uerrors.quantity = item?.quantity > 0 ? "" : AMOUNT_GREATER_THAN_ZERO;
 
 
-        if (!item?.name || !item?.cost_price || !item?.unit_price || !item?.quantity) {
+        if (!item?.name || !item?.cost_price || !item?.unit_price) {
             toast({
                 title: 'Missing Information.',
                 description: "Please fill all required fields.",
+                status: 'warning',
+                duration: 3000,
+                isClosable: true,
+            });
+            return uerrors;
+
+        }
+
+        if (!item?.quantity || item?.quantity <= 0) {
+            toast({
+                title: 'Error.',
+                description: "Enter an amount greater than 0.",
                 status: 'warning',
                 duration: 3000,
                 isClosable: true,
@@ -185,7 +197,7 @@ function AddItem() {
             setErrors(checkErrors);
             return;
         }
-        console.log(item);
+        //console.log(item);
         const data = { ...item };
 
         //data.unit_price = parseFloat(data?.unit_price);
@@ -290,13 +302,13 @@ function AddItem() {
                     </ModalBody>
 
                     <ModalFooter>
-                        <Button colorScheme='red' mr={3} onClick={() => {
+                        <Button size="sm" colorScheme='red' mr={3} onClick={() => {
                             setSelectedFile(null);
                             onClose();
                         }}>
                             cancel
                         </Button>
-                        <Button colorScheme="blue" onClick={handleFileUpload}>Submit</Button>
+                        <Button colorScheme="blue" size="sm" isLoading={mutation.isLoading} onClick={handleFileUpload}>Submit</Button>
                     </ModalFooter>
                 </ModalContent>
 
@@ -316,7 +328,7 @@ function AddItem() {
 
                         borderRadius="15px"
                         p="40px"
-                        mx={{ base: "100px" }}
+                        mx={{ base: "10px" }}
                         bg={bgColor}
                         color={textColor}
                         boxShadow="0 20px 27px 0 rgb(0 0 0 / 5%)"
@@ -345,7 +357,7 @@ function AddItem() {
                         <Grid templateColumns="repeat(2, 1fr)" gap={4}>
 
                             <FormControl id="">
-                                <FormLabel fontSize="sm" fontWeight='bold'>Name of Item</FormLabel>
+                                <FormLabel fontSize="sm" fontWeight='bold'>Name of Item:*</FormLabel>
                                 <InputGroup borderColor="#E0E1E7">
                                     <InputLeftElement
                                         pointerEvents="none"
@@ -445,7 +457,7 @@ function AddItem() {
                         </Grid>
                         <Grid templateColumns='repeat(4, 1fr)' gap={2} mt={4}>
                             <FormControl id="">
-                                <FormLabel fontSize="sm" fontWeight='bold'>Cost Price</FormLabel>
+                                <FormLabel fontSize="sm" fontWeight='bold'>Cost Price:*</FormLabel>
                                 <InputGroup borderColor="#E0E1E7">
                                     <InputLeftElement
                                         pointerEvents="none"
@@ -467,7 +479,7 @@ function AddItem() {
                                 </InputGroup>
                             </FormControl>
                             <FormControl id="">
-                                <FormLabel fontSize="sm" fontWeight='bold'>Unit Price</FormLabel>
+                                <FormLabel fontSize="sm" fontWeight='bold'>Unit Price:*</FormLabel>
                                 <InputGroup borderColor="#E0E1E7">
                                     <InputLeftElement
                                         pointerEvents="none"
@@ -489,7 +501,7 @@ function AddItem() {
                                 </InputGroup>
                             </FormControl>
                             <FormControl id="">
-                                <FormLabel fontSize="sm" fontWeight='bold'>Qty</FormLabel>
+                                <FormLabel fontSize="sm" fontWeight='bold'>Qty:*</FormLabel>
                                 <InputGroup borderColor="#E0E1E7">
                                     <InputLeftElement
                                         pointerEvents="none"
@@ -511,7 +523,7 @@ function AddItem() {
                                 </InputGroup>
                             </FormControl>
                             <FormControl id="">
-                                <FormLabel fontSize="sm" fontWeight='bold'>Reorder Level</FormLabel>
+                                <FormLabel fontSize="sm" fontWeight='bold'>Reorder Level:</FormLabel>
                                 <InputGroup borderColor="#E0E1E7">
                                     <InputLeftElement
                                         pointerEvents="none"
@@ -533,7 +545,7 @@ function AddItem() {
                                 </InputGroup>
                             </FormControl>
                             <FormControl id="">
-                                <FormLabel fontSize="sm" fontWeight='bold'>Tax1</FormLabel>
+                                <FormLabel fontSize="sm" fontWeight='bold'>Tax1:</FormLabel>
                                 <InputGroup borderColor="#E0E1E7">
                                     <InputLeftElement
                                         pointerEvents="none"
@@ -555,7 +567,7 @@ function AddItem() {
                                 </InputGroup>
                             </FormControl>
                             <FormControl id="">
-                                <FormLabel fontSize="sm" fontWeight='bold'>Tax2</FormLabel>
+                                <FormLabel fontSize="sm" fontWeight='bold'>Tax2:</FormLabel>
                                 <InputGroup borderColor="#E0E1E7">
                                     <InputLeftElement
                                         pointerEvents="none"
@@ -578,7 +590,7 @@ function AddItem() {
                             </FormControl>
 
                             <FormControl id="">
-                                <FormLabel fontSize="sm" fontWeight='bold'>Allow Alt.</FormLabel>
+                                <FormLabel fontSize="sm" fontWeight='bold'>Allow Alt:</FormLabel>
                                 <Switch
                                     isChecked={item?.allow_alt}
                                     onChange={handleSwitchChange}
@@ -588,7 +600,7 @@ function AddItem() {
                                 />
                             </FormControl>
                             <FormControl id="">
-                                <FormLabel fontSize="sm" fontWeight='bold'>Item S/N?</FormLabel>
+                                <FormLabel fontSize="sm" fontWeight='bold'>Item S/N:</FormLabel>
                                 <Switch
                                     isChecked={item?.has_serial_no}
                                     onChange={handleSwitchChange}
@@ -600,7 +612,7 @@ function AddItem() {
                         </Grid>
                         <Box display="flex" justifyContent="flex-end">
 
-                            <Button isLoading={loading} colorScheme='blue' onClick={handleSubmit}>Add Item</Button>
+                            <Button isLoading={loading} size="sm" colorScheme='blue' onClick={handleSubmit}>Add Item</Button>
 
                         </Box>
 

@@ -89,6 +89,7 @@ function ItemSummary() {
     const [errors, setErrors] = useState({});
 
     const [list, setList] = useState(null);
+    const [csv, setCsv] = useState(false);
     const [count, setCount] = useState(0);
     const [pageCount, setPageCount] = useState(1);
     const [page, setPage] = useState(1);
@@ -97,7 +98,7 @@ function ItemSummary() {
     const toast = useToast();
 
     const payload_data = {};
-    const url = `${GET_ITEM_INVENTORY}?min=${min}&max=${max}&itemIds=${items.map(obj => obj.id).join(',')}&page=${page}`;
+    const url = `${GET_ITEM_INVENTORY}?min=${min}&max=${max}&itemIds=${items.map(obj => obj.id).join(',')}&page=${page}&csv=${csv}`;
 
     const { isLoading, refetch, isSuccess, isFetching, remove } = useQuery(['item-report',
         {
@@ -112,11 +113,26 @@ function ItemSummary() {
             enabled: enabled,
             retry: false,
             onSuccess: (response) => {
-                console.log(response?.data);
-                const data = response?.data;
-                setCount(data?.count || 0);
-                setList(data?.results || []);
-                setPageCount(data?.last_page || 1);
+
+                if (csv) {
+
+
+                    const blob = new Blob([response.data], { type: 'text/csv' });
+
+                    const link = document.createElement('a');
+                    link.href = window.URL.createObjectURL(blob);
+                    link.download = "ItemInventoryReport.csv";
+                    document.body.appendChild(link);
+                    link.click();
+                    document.body.removeChild(link);
+                }
+                //console.log(response?.data);
+                else {
+                    const data = response?.data;
+                    setCount(data?.count || 0);
+                    setList(data?.results || []);
+                    setPageCount(data?.last_page || 1);
+                }
 
             },
             onError: (error) => {
@@ -127,7 +143,7 @@ function ItemSummary() {
 
 
     const loadItems = async (inputValue) => {
-        console.log('waiting');
+        //console.log('waiting');
         let response = await fetchData({
             queryKey: ['all items', {
                 url: GET_CREATE_ITEM + `?name=${inputValue}`,
@@ -141,6 +157,11 @@ function ItemSummary() {
 
 
         return options;
+    }
+
+    const handleSwitchChange = () => {
+        setCsv((csv) => !csv)
+        return;
     }
 
 
@@ -224,10 +245,10 @@ function ItemSummary() {
                                             ITEM INVENTORY
                                         </Text>
                                         <Text as="span" bgColor="#27AE60" p={2}>
-                                        {`(minimum ${min} -- maximum ${max})`}
+                                            {`(minimum ${min} -- maximum ${max})`}
                                         </Text>
                                         <Text as="span" bgColor="#F39C12" p={2}>
-                                        {`(${count} record(s) found)`}
+                                            {`(${count} record(s) found)`}
                                         </Text>
                                     </Text>
                                     <Spacer />
@@ -325,25 +346,25 @@ function ItemSummary() {
                             ITEM INVENTORY
                         </Text>
                         <FormControl >
-                                <FormLabel fontSize="sm" fontWeight="bold">
-                                    Item Names:
-                                </FormLabel>
-                                <AsyncSelect
-                                    isMulti
-                                    name="employee_name"
-                                    size="sm"
-                                    onChange={(items) => {
-                                        setItems(items);
-                                    }}
-                                    placeholder="Start typing name..."
-                                    loadOptions={loadItems}
-                                    cacheOptions
-                                    value={items}
-                                    className="chakra-react-select"
-                                    classNamePrefix="chakra-react-select"
-                                />
+                            <FormLabel fontSize="sm" fontWeight="bold">
+                                Item Names:
+                            </FormLabel>
+                            <AsyncSelect
+                                isMulti
+                                name="employee_name"
+                                size="sm"
+                                onChange={(items) => {
+                                    setItems(items);
+                                }}
+                                placeholder="Start typing name..."
+                                loadOptions={loadItems}
+                                cacheOptions
+                                value={items}
+                                className="chakra-react-select"
+                                classNamePrefix="chakra-react-select"
+                            />
 
-                            </FormControl>
+                        </FormControl>
                         <Grid templateColumns='repeat(3, 1fr)' gap={2} mt={4}>
                             <FormControl>
                                 <FormLabel fontSize="sm" fontWeight="bold">
@@ -380,8 +401,11 @@ function ItemSummary() {
                                 />
                             </FormControl>
                             <FormControl id="">
-                                <FormLabel fontSize="sm" fontWeight='bold'>Export to PDF</FormLabel>
+                                <FormLabel fontSize="sm" fontWeight='bold'>Export to CSV:</FormLabel>
                                 <Switch
+                                    isChecked={csv}
+                                    onChange={handleSwitchChange}
+                                    name={"exportCsv"}
                                     size="md"
                                     colorScheme="blue"
                                 />

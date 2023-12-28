@@ -106,7 +106,7 @@ import { getAuthToken } from "modules/auth/redux/authSelector";
 import { handleApiError } from "modules/utilities/responseHandlers";
 
 
-const DeleteModal = ({ onClose, values, handleDeleteSubmit }) => (
+const DeleteModal = ({ onClose, values, handleDeleteSubmit, deleteMutation }) => (
     <ModalContent bgColor="#232333" color="white" boxShadow="rgba(0, 0, 0, 0.1) 0px 0px 0px 1px,rgba(0, 0, 0, 0.2) 0px 5px 10px,rgba(0, 0, 0, 0.4) 0px 15px 40px">
         <ModalHeader>Delete Customer Information</ModalHeader>
         <ModalCloseButton />
@@ -118,16 +118,19 @@ const DeleteModal = ({ onClose, values, handleDeleteSubmit }) => (
         </ModalBody>
 
         <ModalFooter>
-            <Button variant='ghost' mr={3} onClick={onClose}>
+            <Button variant='ghost' mr={3} onClick={onClose} size="sm">
                 Close
             </Button>
-            <Button colorScheme='red' onClick={handleDeleteSubmit} >Yes</Button>
+            <Button isLoading={deleteMutation.isLoading} size="sm" colorScheme='red' onClick={handleDeleteSubmit} >Yes</Button>
         </ModalFooter>
     </ModalContent>
 
 );
 
-const EditDrawer = ({ handleChange, handleSubmit, isOpen, btnRef, onClose, handleSwitchChange, values, errors }) => (
+const EditDrawer = ({ handleChange, handleSubmit, isOpen, btnRef, onClose, handleSwitchChange, values, errors,
+    editFirstNameRef, editLastNameRef, editGenderRef, editDeptRef, editEmailRef, editPhoneRef,
+    editAddress1Ref, editAddress2Ref, editCityRef, editStateRef, editZipRef, editCountryRef,
+    editUsernameRef, editPasswordRef, editConfirmPasswordRef, mutation }) => (
     <Drawer
         isOpen={isOpen}
         placement='right'
@@ -150,7 +153,7 @@ const EditDrawer = ({ handleChange, handleSubmit, isOpen, btnRef, onClose, handl
                         Basic Information
                     </Text>
                     <FormControl id="">
-                        <FormLabel fontSize='sm'>First Name:</FormLabel>
+                        <FormLabel fontSize='sm'>First Name:*</FormLabel>
                         <InputGroup borderColor="#E0E1E7">
 
                             <InputLeftElement
@@ -161,11 +164,12 @@ const EditDrawer = ({ handleChange, handleSubmit, isOpen, btnRef, onClose, handl
                             <Input
                                 isInvalid={isError(errors?.first_name)}
                                 errorBorderColor='red.300'
+                                ref={editFirstNameRef}
                                 name={'first_name'}
-                                onChange={handleChange}
+                                //onChange={handleChange}
                                 type="text"
                                 size="sm"
-                                value={values?.first_name || ''}
+                                defaultValue={values?.first_name || ''}
                                 borderRadius='15px'
                                 borderColor="rgba(255, 255, 255, 0.2)"
                                 _placeholder={{ opacity: 0.2, color: 'white' }}
@@ -175,7 +179,7 @@ const EditDrawer = ({ handleChange, handleSubmit, isOpen, btnRef, onClose, handl
                         </InputGroup>
                     </FormControl>
                     <FormControl id="">
-                        <FormLabel fontSize='sm'>Last Name:</FormLabel>
+                        <FormLabel fontSize='sm'>Last Name:*</FormLabel>
                         <InputGroup borderColor="#E0E1E7">
                             <InputLeftElement
                                 pointerEvents="none"
@@ -184,11 +188,12 @@ const EditDrawer = ({ handleChange, handleSubmit, isOpen, btnRef, onClose, handl
                             <Input
                                 isInvalid={isError(errors?.last_name)}
                                 errorBorderColor='red.300'
+                                ref={editLastNameRef}
                                 name={'last_name'}
-                                onChange={handleChange}
+                                //onChange={handleChange}
                                 type="text"
                                 size="sm"
-                                value={values?.last_name || ''}
+                                defaultValue={values?.last_name || ''}
                                 borderRadius='15px'
                                 borderColor="rgba(255, 255, 255, 0.2)"
                                 _placeholder={{ opacity: 0.2, color: 'white' }}
@@ -197,8 +202,11 @@ const EditDrawer = ({ handleChange, handleSubmit, isOpen, btnRef, onClose, handl
                     </FormControl>
                     <FormControl id="">
                         <FormLabel fontSize='sm'>Gender:</FormLabel>
-                        <Select name={"gender"} onChange={handleChange}
-                            value={values?.gender || ''}
+                        <Select
+                            ref={editGenderRef}
+                            name={"gender"}
+                            //onChange={handleChange}
+                            defaultValue={values?.gender || ''}
                             borderRadius='15px'
                             placeholder='Select option'
                             size="sm">
@@ -208,9 +216,11 @@ const EditDrawer = ({ handleChange, handleSubmit, isOpen, btnRef, onClose, handl
                     </FormControl>
                     <FormControl id="">
                         <FormLabel fontSize='sm'>Department:</FormLabel>
-                        <Select name={"dept"}
-                            onChange={handleChange}
-                            value={values?.dept || ''}
+                        <Select
+                            ref={editDeptRef}
+                            name={"dept"}
+                            //onChange={handleChange}
+                            defaultValue={values?.dept || ''}
                             placeholder='Select option'
                             borderRadius='15px'
                             size="sm">
@@ -230,11 +240,12 @@ const EditDrawer = ({ handleChange, handleSubmit, isOpen, btnRef, onClose, handl
                             <Input
                                 isInvalid={isError(errors?.email)}
                                 errorBorderColor='red.300'
+                                ref={editEmailRef}
                                 name={'email'}
-                                onChange={handleChange}
+                                //onChange={handleChange}
                                 type="text"
                                 size="sm"
-                                value={values?.email || ''}
+                                defaultValue={values?.email || ''}
                                 borderRadius='15px'
                                 borderColor="rgba(255, 255, 255, 0.2)"
                                 _placeholder={{ opacity: 0.2, color: 'white' }}
@@ -251,11 +262,12 @@ const EditDrawer = ({ handleChange, handleSubmit, isOpen, btnRef, onClose, handl
                             <Input
                                 isInvalid={isError(errors?.phone_no)}
                                 errorBorderColor='red.300'
+                                ref={editPhoneRef}
                                 name={'phone_no'}
-                                onChange={handleChange}
+                                //onChange={handleChange}
                                 type="text"
                                 size="sm"
-                                value={values?.phone_no || ''}
+                                defaultValue={values?.phone_no || ''}
                                 borderRadius='15px'
                                 borderColor="rgba(255, 255, 255, 0.2)"
                                 _placeholder={{ opacity: 0.2, color: 'white' }}
@@ -272,11 +284,12 @@ const EditDrawer = ({ handleChange, handleSubmit, isOpen, btnRef, onClose, handl
                             <Input
                                 isInvalid={isError(errors?.address_1)}
                                 errorBorderColor='red.300'
+                                ref={editAddress1Ref}
                                 name={'address_1'}
-                                onChange={handleChange}
+                                //onChange={handleChange}
                                 type="text"
                                 size="sm"
-                                value={values?.address_1 || ''}
+                                defaultValue={values?.address_1 || ''}
                                 borderRadius='15px'
                                 borderColor="rgba(255, 255, 255, 0.2)"
                                 _placeholder={{ opacity: 0.2, color: 'white' }}
@@ -293,11 +306,12 @@ const EditDrawer = ({ handleChange, handleSubmit, isOpen, btnRef, onClose, handl
                             <Input
                                 isInvalid={isError(errors?.address_2)}
                                 errorBorderColor='red.300'
+                                ref={editAddress2Ref}
                                 name={'address_2'}
-                                onChange={handleChange}
+                                //onChange={handleChange}
                                 type="text"
                                 size="sm"
-                                value={values?.address_2 || ''}
+                                defaultValue={values?.address_2 || ''}
                                 borderRadius='15px'
                                 borderColor="rgba(255, 255, 255, 0.2)"
                                 _placeholder={{ opacity: 0.2, color: 'white' }}
@@ -314,11 +328,12 @@ const EditDrawer = ({ handleChange, handleSubmit, isOpen, btnRef, onClose, handl
                             <Input
                                 isInvalid={isError(errors?.city)}
                                 errorBorderColor='red.300'
+                                ref={editCityRef}
                                 name={'city'}
-                                onChange={handleChange}
+                                //onChange={handleChange}
                                 type="text"
                                 size="sm"
-                                value={values?.city || ''}
+                                defaultValue={values?.city || ''}
                                 borderRadius='15px'
                                 borderColor="rgba(255, 255, 255, 0.2)"
                                 _placeholder={{ opacity: 0.2, color: 'white' }}
@@ -335,11 +350,12 @@ const EditDrawer = ({ handleChange, handleSubmit, isOpen, btnRef, onClose, handl
                             <Input
                                 isInvalid={isError(errors?.state)}
                                 errorBorderColor='red.300'
+                                ref={editStateRef}
                                 name={'state'}
-                                onChange={handleChange}
+                                //onChange={handleChange}
                                 type="text"
                                 size="sm"
-                                value={values?.state || ''}
+                                defaultValue={values?.state || ''}
                                 borderRadius='15px'
                                 borderColor="rgba(255, 255, 255, 0.2)"
                                 _placeholder={{ opacity: 0.2, color: 'white' }}
@@ -356,11 +372,12 @@ const EditDrawer = ({ handleChange, handleSubmit, isOpen, btnRef, onClose, handl
                             <Input
                                 isInvalid={isError(errors?.zip)}
                                 errorBorderColor='red.300'
+                                ref={editZipRef}
                                 name={'zip'}
-                                onChange={handleChange}
+                                //onChange={handleChange}
                                 type="text"
                                 size="sm"
-                                value={values?.zip || ''}
+                                defaultValue={values?.zip || ''}
                                 borderRadius='15px'
                                 borderColor="rgba(255, 255, 255, 0.2)"
                                 _placeholder={{ opacity: 0.2, color: 'white' }}
@@ -377,11 +394,12 @@ const EditDrawer = ({ handleChange, handleSubmit, isOpen, btnRef, onClose, handl
                             <Input
                                 isInvalid={isError(errors?.country)}
                                 errorBorderColor='red.300'
+                                ref={editCountryRef}
                                 name={'country'}
-                                onChange={handleChange}
+                                //onChange={handleChange}
                                 type="text"
                                 size="sm"
-                                value={values?.country || ''}
+                                defaultValue={values?.country || ''}
                                 borderRadius='15px'
                                 borderColor="rgba(255, 255, 255, 0.2)"
                                 _placeholder={{ opacity: 0.2, color: 'white' }}
@@ -404,11 +422,12 @@ const EditDrawer = ({ handleChange, handleSubmit, isOpen, btnRef, onClose, handl
                             <Input
                                 isInvalid={isError(errors?.password)}
                                 errorBorderColor='red.300'
+                                ref={editPasswordRef}
                                 name={'password'}
-                                onChange={handleChange}
+                                //onChange={handleChange}
                                 type="password"
                                 size="sm"
-                                value={values?.password || ''}
+                                defaultValue={values?.password || ''}
                                 borderRadius='15px'
                                 borderColor="rgba(255, 255, 255, 0.2)"
                                 _placeholder={{ opacity: 0.2, color: 'white' }}
@@ -425,11 +444,12 @@ const EditDrawer = ({ handleChange, handleSubmit, isOpen, btnRef, onClose, handl
                             <Input
                                 isInvalid={isError(errors?.confirmPassword)}
                                 errorBorderColor='red.300'
+                                ref={editConfirmPasswordRef}
                                 name={'confirmPassword'}
-                                onChange={handleChange}
+                                //onChange={handleChange}
                                 type='password'
                                 size="sm"
-                                value={values?.confirmPassword || ''}
+                                defaultValue={values?.confirmPassword || ''}
                                 borderRadius='15px'
                                 borderColor="rgba(255, 255, 255, 0.2)"
                                 _placeholder={{ opacity: 0.2, color: 'white' }}
@@ -444,7 +464,7 @@ const EditDrawer = ({ handleChange, handleSubmit, isOpen, btnRef, onClose, handl
                     </Text>
                     <Grid templateColumns='repeat(2, 1fr)' gap={6}>
                         <FormControl id="">
-                            <FormLabel fontSize='xs'>Customers(add, update, delete, search)</FormLabel>
+                            <FormLabel fontSize='xs'>Customers(add, update, delete, search):</FormLabel>
                             <Switch
                                 isChecked={values?.customer_perm}
                                 onChange={handleSwitchChange}
@@ -454,7 +474,7 @@ const EditDrawer = ({ handleChange, handleSubmit, isOpen, btnRef, onClose, handl
                             />
                         </FormControl>
                         <FormControl id="">
-                            <FormLabel fontSize='xs'>Items(add, update, delete, search)</FormLabel>
+                            <FormLabel fontSize='xs'>Items(add, update, delete, search):</FormLabel>
                             <Switch
                                 isChecked={values?.items_perm}
                                 onChange={handleSwitchChange}
@@ -466,7 +486,7 @@ const EditDrawer = ({ handleChange, handleSubmit, isOpen, btnRef, onClose, handl
                     </Grid>
                     <Grid templateColumns='repeat(2, 1fr)' gap={6}>
                         <FormControl id="">
-                            <FormLabel fontSize='xs'>Item Kits(add, update, delete, search).</FormLabel>
+                            <FormLabel fontSize='xs'>Item Kits(add, update, delete, search):</FormLabel>
                             <Switch
                                 isChecked={values?.item_kits_perm}
                                 onChange={handleSwitchChange}
@@ -476,7 +496,7 @@ const EditDrawer = ({ handleChange, handleSubmit, isOpen, btnRef, onClose, handl
                             />
                         </FormControl>
                         <FormControl id="">
-                            <FormLabel fontSize='xs'>Suppliers(add, update, delete, search)</FormLabel>
+                            <FormLabel fontSize='xs'>Suppliers(add, update, delete, search):</FormLabel>
                             <Switch
                                 isChecked={values?.suppliers_perm}
                                 onChange={handleSwitchChange}
@@ -488,7 +508,7 @@ const EditDrawer = ({ handleChange, handleSubmit, isOpen, btnRef, onClose, handl
                     </Grid>
                     <Grid templateColumns='repeat(2, 1fr)' gap={6}>
                         <FormControl id="">
-                            <FormLabel fontSize='xs'>Reports(add, update, delete, search)</FormLabel>
+                            <FormLabel fontSize='xs'>Reports(add, update, delete, search):</FormLabel>
                             <Switch
                                 isChecked={values?.reports_perm}
                                 onChange={handleSwitchChange}
@@ -498,7 +518,7 @@ const EditDrawer = ({ handleChange, handleSubmit, isOpen, btnRef, onClose, handl
                             />
                         </FormControl>
                         <FormControl id="">
-                            <FormLabel fontSize='xs'>Receivings(add, update, delete, search)</FormLabel>
+                            <FormLabel fontSize='xs'>Receivings(add, update, delete, search):</FormLabel>
                             <Switch
                                 isChecked={values?.receivings_perm}
                                 onChange={handleSwitchChange}
@@ -510,7 +530,7 @@ const EditDrawer = ({ handleChange, handleSubmit, isOpen, btnRef, onClose, handl
                     </Grid>
                     <Grid templateColumns='repeat(2, 1fr)' gap={6}>
                         <FormControl id="">
-                            <FormLabel fontSize='xs'>Sales(add, update, delete, search)</FormLabel>
+                            <FormLabel fontSize='xs'>Sales(add, update, delete, search):</FormLabel>
                             <Switch
                                 isChecked={values?.sales_perm}
                                 onChange={handleSwitchChange}
@@ -520,7 +540,7 @@ const EditDrawer = ({ handleChange, handleSubmit, isOpen, btnRef, onClose, handl
                             />
                         </FormControl>
                         <FormControl id="">
-                            <FormLabel fontSize='xs'>Employees(add, update, delete, search)</FormLabel>
+                            <FormLabel fontSize='xs'>Employees(add, update, delete, search):</FormLabel>
                             <Switch
                                 isChecked={values?.employees_perm}
                                 onChange={handleSwitchChange}
@@ -535,10 +555,10 @@ const EditDrawer = ({ handleChange, handleSubmit, isOpen, btnRef, onClose, handl
             </DrawerBody>
 
             <DrawerFooter>
-                <Button variant='outline' mr={3} onClick={onClose}>
+                <Button variant='ghost' mr={3} onClick={onClose} size="sm">
                     Cancel
                 </Button>
-                <Button colorScheme='blue' onClick={handleSubmit}>Save</Button>
+                <Button isLoading={mutation.isLoading} colorScheme='blue' onClick={handleSubmit} size="sm">Save</Button>
             </DrawerFooter>
         </DrawerContent>
     </Drawer>
@@ -546,9 +566,9 @@ const EditDrawer = ({ handleChange, handleSubmit, isOpen, btnRef, onClose, handl
 
 export default function EmployeeMgt() {
     const token = useSelector(getAuthToken);
-    const [userCount, setUserCount] = useState(0);
     const [users, setUsers] = useState([]);
     const [page, setPage] = useState(1);
+    const [count, setCount] = useState(0);
     const [pageCount, setPageCount] = useState(1);
 
 
@@ -572,6 +592,24 @@ export default function EmployeeMgt() {
     const [modalType, setModalType] = useState('');
     const btnRef = React.useRef()
 
+    const editFirstNameRef = React.useRef(null);
+    const editLastNameRef = React.useRef(null);
+    const editGenderRef = React.useRef(null);
+    const editDeptRef = React.useRef(null);
+    const editEmailRef = React.useRef(null);
+    const editPhoneRef = React.useRef(null);
+    const editAddress1Ref = React.useRef(null);
+    const editAddress2Ref = React.useRef(null);
+    const editCityRef = React.useRef(null);
+    const editStateRef = React.useRef(null);
+    const editZipRef = React.useRef(null);
+    const editCountryRef = React.useRef(null);
+    const editUsernameRef = React.useRef(null);
+    const editPasswordRef = React.useRef(null);
+    const editConfirmPasswordRef = React.useRef(null);
+
+
+
     // call the api that loads this data only once
     let payload_data = {
     };
@@ -588,10 +626,10 @@ export default function EmployeeMgt() {
             retry: false,
             onSuccess: (response) => {
                 const data = response?.data;
-                setUserCount(data?.count || 0);
+                setCount(data?.count || 0);
                 setUsers(data?.results || []);
                 setPageCount(data?.last_page || 1);
-                console.log(data?.results);
+                //console.log(data?.results);
             },
             onError: (error) => {
                 handleApiError(error);
@@ -601,23 +639,70 @@ export default function EmployeeMgt() {
 
     const { isLoading, refetch } = result;
 
+    const onModalClose = () => {
+        setValues({});
+        setErrors({});
+        onClose();
+    }
+
     const mutation = useMutation(postData, {
         onSuccess: (response) => {
+            const data = response?.data?.detail;
             toast({
                 title: 'Success',
-                description: "Action applied succesfully",
+                description: "User edited succesfully",
                 status: 'success',
                 duration: 3000,
                 isClosable: true,
             });
-            setValues({});
-            onClose();
-            refetch();
+            setUsers((users) => {
+                const updated = users.map((user) => {
+                    if (user.id === data.id) {
+                        return data;
+                    }
+                    else {
+                        return user
+                    }
+                })
+                //console.log(updated_items);
+                return updated
+            });
+            onModalClose();
+            //refetch();
 
             return;
         },
         onError: (error) => {
             handleApiError(error);
+        }
+    });
+
+    const deleteMutation = useMutation(postData, {
+        onSuccess: (response) => {
+            const id = response?.data?.id;
+            toast({
+                title: 'Success',
+                description: 'User deleted successfully',
+                status: 'success',
+                duration: 3000,
+                isClosable: true,
+            });
+
+            setUsers((users) => {
+                const updated = users.filter(user => user.id !== id);
+                //console.log(new_items);
+                //console.log(id);
+                return updated
+            })
+            setCount((count) => count - 1)
+            onModalClose();
+
+            return;
+        },
+
+        onError: (error) => {
+            handleApiError(error);
+            //onModalClose();
         }
     });
 
@@ -634,18 +719,18 @@ export default function EmployeeMgt() {
 
     const handleSwitchChange = (event) => {
         setValues({ ...values, [event.target.name]: !values[event.target.name] });
-        console.log(values);
+        //console.log(values);
     }
 
-    const validate = () => {
+    const validate = (updatedItem) => {
         let uerrors = {}
-        uerrors.first_name = values?.first_name ? "" : FIELD_REQUIRED;
-        uerrors.last_name = values?.last_name ? "" : FIELD_REQUIRED;
-        uerrors.username = values?.username ? "" : FIELD_REQUIRED;
-        uerrors.email = values?.email ? "" : FIELD_REQUIRED;
+        uerrors.first_name = updatedItem?.first_name ? "" : FIELD_REQUIRED;
+        uerrors.last_name = updatedItem?.last_name ? "" : FIELD_REQUIRED;
+        uerrors.username = updatedItem?.username ? "" : FIELD_REQUIRED;
+        uerrors.email = updatedItem?.email ? "" : FIELD_REQUIRED;
 
 
-        if (!values?.first_name || !values?.last_name || !values?.username || !values?.email) {
+        if (!updatedItem?.first_name || !updatedItem?.last_name || !updatedItem?.username || !updatedItem?.email) {
             toast({
                 title: 'Missing Information.',
                 description: "Please fill all required fields.",
@@ -657,7 +742,7 @@ export default function EmployeeMgt() {
 
         }
 
-        const email_is_valid = validator.isEmail(values?.email);
+        const email_is_valid = validator.isEmail(updatedItem?.email);
 
         if (!email_is_valid) {
             uerrors.email = "enter a valid email address";
@@ -670,13 +755,13 @@ export default function EmployeeMgt() {
             });
             return uerrors;
         }
-
+        console.log(updatedItem)
         // if either new or confirmed passwprd field is filled, then both should be filled
-        if (values?.password || values?.confirmPassword) {
-            if (!values?.password || !values?.confirmPassword) {
-                console.log("there was an error2")
-                uerrors.password = values?.password ? "" : FIELD_REQUIRED;
-                uerrors.confirmPassword = values?.confirmPassword ? "" : FIELD_REQUIRED;
+        if (editPasswordRef.current.value || editConfirmPasswordRef.current.value) {
+            if (!editPasswordRef.current.value || !editConfirmPasswordRef.current.value) {
+                //console.log("there was an error2")
+                uerrors.password = editPasswordRef.current.value ? "" : FIELD_REQUIRED;
+                uerrors.confirmPassword = editConfirmPasswordRef.current.value ? "" : FIELD_REQUIRED;
                 toast({
                     title: 'Missing Information.',
                     description: "Please fill both password fields.",
@@ -690,8 +775,8 @@ export default function EmployeeMgt() {
             }
         }
         // consequently, both fields should either be blank or should be the same value
-        if (values?.password != values?.confirmPassword) {
-            console.log("there was an error3")
+        if (editPasswordRef.current.value != editConfirmPasswordRef.current.value) {
+            //console.log("there was an error3")
             uerrors.password = "Password do not match";
             uerrors.confirmPassword = "Password do not match";
             alert('Passwords do not match');
@@ -702,7 +787,38 @@ export default function EmployeeMgt() {
 
     const handleSubmit = () => {
 
-        let checkErrors = validate();
+        const updatedItem = {
+            first_name: editFirstNameRef.current.value,
+            last_name: editLastNameRef.current.value,
+            gender: editGenderRef.current.value,
+            dept: editDeptRef.current.value,
+            email: editEmailRef.current.value,
+            phone_no: editPhoneRef.current.value,
+            address_1: editAddress1Ref.current.value,
+            address_2: editAddress2Ref.current.value,
+            city: editCityRef.current.value,
+            state: editStateRef.current.value,
+            zip: editZipRef.current.value,
+            country: editCountryRef.current.value,
+            username: values?.username,
+            //password: editPasswordRef.current.value,
+            //confirmPassword: editConfirmPasswordRef.current.value,
+
+            customer_perm: values?.customer_perm,
+            items_perm: values?.items_perm,
+            item_kits_perm: values?.item_kits_perm,
+            suppliers_perm: values?.suppliers_perm,
+            reports_perm: values?.reports_perm,
+            receivings_perm: values?.receivings_perm,
+            sales_perm: values?.sales_perm,
+            employees_perm: values?.employees_perm
+        }
+
+        const user_password = {
+            password: editPasswordRef.current.value
+        };
+
+        let checkErrors = validate(updatedItem);
         let areAllFieldsFalse = checkObject(checkErrors);
 
         if (!areAllFieldsFalse) {
@@ -714,38 +830,10 @@ export default function EmployeeMgt() {
         }
 
 
-
-        const user_data = {
-            first_name: values?.first_name,
-            last_name: values?.last_name,
-            gender: values?.gender,
-            dept: values?.dept,
-            email: values?.email,
-            phone_no: values?.phone_no,
-            address_1: values?.address_1,
-            address_2: values?.address_2,
-            city: values?.city,
-            state: values?.state,
-            zip: values?.zip,
-            country: values?.country,
-            username: values?.username,
-            customer_perm: values?.customer_perm,
-            items_perm: values?.items_perm,
-            item_kits_perm: values?.item_kits_perm,
-            suppliers_perm: values?.suppliers_perm,
-            reports_perm: values?.reports_perm,
-            receivings_perm: values?.receivings_perm,
-            sales_perm: values?.sales_perm,
-            employees_perm: values?.employees_perm
-        };
-        const user_password = {
-            password: values?.password ? values?.password : ""
-        };
-
         const data = {};
-        data.user_data = user_data;
+        data.user_data = updatedItem;
         data.user_password = user_password;
-        console.log(data);
+        //console.log(data);
 
 
         mutation.mutate({
@@ -764,9 +852,9 @@ export default function EmployeeMgt() {
 
     const handleDeleteSubmit = () => {
         const data = values;
-        console.log(data);
+        //console.log(data);
 
-        mutation.mutate({
+        deleteMutation.mutate({
             url: DELETE_USER,
             payload_data: data,
             token: token,
@@ -800,15 +888,16 @@ export default function EmployeeMgt() {
             {modalType === "edit" ?
                 <EditDrawer handleChange={handleChange} isOpen={isOpen} btnRef={btnRef}
                     handleSubmit={handleSubmit} values={values} errors={errors} handleSwitchChange={handleSwitchChange}
-                    onClose={() => {
-                        setValues({});
-                        setErrors({});
-                        onClose();
-                    }}
+                    editFirstNameRef={editFirstNameRef} editLastNameRef={editLastNameRef} editGenderRef={editGenderRef}
+                    editDeptRef={editDeptRef} editEmailRef={editEmailRef} editPhoneRef={editPhoneRef} editAddress1Ref={editAddress1Ref}
+                    editAddress2Ref={editAddress2Ref} editCityRef={editCityRef} editStateRef={editStateRef} editZipRef={editZipRef}
+                    editCountryRef={editCountryRef} editUsernameRef={editUsernameRef} editPasswordRef={editPasswordRef}
+                    editConfirmPasswordRef={editConfirmPasswordRef} mutation={mutation}
+                    onClose={onModalClose}
                 /> :
                 <Modal isOpen={isOpen} onClose={onClose}>
                     <ModalOverlay />
-                    <DeleteModal onClose={onClose} values={values} handleDeleteSubmit={handleDeleteSubmit} />
+                    <DeleteModal onClose={onClose} values={values} handleDeleteSubmit={handleDeleteSubmit} deleteMutation={deleteMutation} />
                 </Modal>
             }
             <Flex flexDirection="column" pt={{ base: "120px", md: "75px" }}>
@@ -821,24 +910,31 @@ export default function EmployeeMgt() {
                             <Flex direction="column">
                                 <Text
                                     fontSize="lg"
-                                    color={"white"}
+                                    color="white"
                                     fontWeight="bold"
-                                    pb=".5rem"
                                 >
-                                    LIST OF EMPLOYEES (2023)
+                                    <Text as="span" bgColor="#8E44AD" p={2}>
+                                        LIST OF EMPLOYEES
+                                    </Text>
+                                    <Text as="span" bgColor="#27AE60" p={2}>
+                                        {`(Page${page} of ${pageCount})`}
+                                    </Text>
+                                    <Text as="span" bgColor="#F39C12" p={2}>
+                                        {`(${count} suppllier(s) found)`}
+                                    </Text>
                                 </Text>
                             </Flex>
                         </CardHeader>
-                        <Table variant="unstyled" size='md'>
+                        <Table variant="unstyled" size='sm'>
                             <Thead>
-                                <Tr my=".8rem" ps="0px">
-                                    <Th color="gray.400" >FIRST NAME</Th>
-                                    <Th color="gray.400">LAST NAME</Th>
-                                    <Th color="gray.400"> PHONE NUMBER </Th>
-                                    <Th color="gray.400">EMAIL ADDRESS</Th>
-                                    <Center>
-                                        <Th color="gray.400">ACTIONS</Th>
-                                    </Center>
+                                <Tr fontSize="md" my=".8rem" ps="0px">
+                                    <Th fontSize="md" color="white" >USERNAME</Th>
+                                    <Th fontSize="md" color="white" >FIRST NAME</Th>
+                                    <Th fontSize="md" color="white"> DEPARTMENT </Th>
+                                    <Th fontSize="md" color="white">EMAIL ADDRESS</Th>
+
+                                    <Th fontSize="md" textAlign="center" color="white">ACTIONS</Th>
+
 
 
                                 </Tr>
@@ -848,9 +944,10 @@ export default function EmployeeMgt() {
                                     return (
                                         <DashboardTableRow11
                                             key={index}
+                                            username={user.username}
                                             firstName={user.first_name}
                                             lastName={user.last_name}
-                                            phoneNo={user.first_name}
+                                            dept={user.dept}
                                             emailAddress={user.email}
                                             gender={user.gender}
                                             onEditClick={() => {

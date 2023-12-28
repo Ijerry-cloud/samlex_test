@@ -89,7 +89,7 @@ function DailyReport() {
     });
     const [errors, setErrors] = useState({});
 
-
+    const [csv, setCsv] = useState(false);
     const [days, setDays] = useState(null);
     const [count, setCount] = useState(0);
     const [pageCount, setPageCount] = useState(1);
@@ -99,7 +99,7 @@ function DailyReport() {
     const toast = useToast();
 
     const payload_data = {};
-    const url = `${GET_DAILY_REPORT}?startDate=${date?.startDate}&endDate=${date?.endDate}&page=${page}`;
+    const url = `${GET_DAILY_REPORT}?startDate=${date?.startDate}&endDate=${date?.endDate}&page=${page}&csv=${csv}`;
 
     const { isLoading, refetch, isSuccess, isFetching, remove } = useQuery(['daily-report',
         {
@@ -114,11 +114,25 @@ function DailyReport() {
             enabled: enabled,
             retry: false,
             onSuccess: (response) => {
-                console.log(response?.data);
-                const data = response?.data;
-                setCount(data?.count || 0);
-                setDays(data?.results || []);
-                setPageCount(data?.last_page || 1);
+                if (csv) {
+
+
+                    const blob = new Blob([response.data], { type: 'text/csv' });
+
+                    const link = document.createElement('a');
+                    link.href = window.URL.createObjectURL(blob);
+                    link.download = "DailySummary.csv";
+                    document.body.appendChild(link);
+                    link.click();
+                    document.body.removeChild(link);
+                }
+                //console.log(response?.data);
+                else {
+                    const data = response?.data;
+                    setCount(data?.count || 0);
+                    setDays(data?.results || []);
+                    setPageCount(data?.last_page || 1);
+                }
 
             },
             onError: (error) => {
@@ -144,6 +158,11 @@ function DailyReport() {
             setDate({ ...date, [name]: value });
             return;
         }
+    }
+
+    const handleSwitchChange = () => {
+        setCsv((csv) => !csv)
+        return;
     }
 
 
@@ -232,10 +251,10 @@ function DailyReport() {
                                             DAILY REPORT
                                         </Text>
                                         <Text as="span" bgColor="#27AE60" p={2}>
-                                        {`(${date.startDate} to ${date.endDate})`}
+                                            {`(${date.startDate} to ${date.endDate})`}
                                         </Text>
                                         <Text as="span" bgColor="#F39C12" p={2}>
-                                        {`(${count} record(s) found)`}
+                                            {`(${count} record(s) found)`}
                                         </Text>
                                     </Text>
                                     <Spacer />
@@ -376,8 +395,11 @@ function DailyReport() {
                                 />
                             </FormControl>
                             <FormControl id="">
-                                <FormLabel fontSize="sm" fontWeight='bold'>Export to PDF</FormLabel>
+                                <FormLabel fontSize="sm" fontWeight='bold'>Export to CSV:</FormLabel>
                                 <Switch
+                                    isChecked={csv}
+                                    onChange={handleSwitchChange}
+                                    name={"exportCsv"}
                                     size="md"
                                     colorScheme="blue"
                                 />

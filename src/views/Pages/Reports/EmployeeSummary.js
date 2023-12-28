@@ -93,6 +93,7 @@ function EmployeeSummary() {
     const [employees, setEmployees] = useState([]);
 
     const [list, setList] = useState(null);
+    const [csv, setCsv] = useState(false);
     const [count, setCount] = useState(0);
     const [pageCount, setPageCount] = useState(1);
     const [page, setPage] = useState(1);
@@ -101,7 +102,7 @@ function EmployeeSummary() {
     const toast = useToast();
 
     const payload_data = {};
-    const url = `${GET_EMPLOYEE_SUMMARY_REPORT}?startDate=${date?.startDate}&endDate=${date?.endDate}&employeeIds=${employees.map(obj => obj.value).join(',')}&page=${page}`;
+    const url = `${GET_EMPLOYEE_SUMMARY_REPORT}?startDate=${date?.startDate}&endDate=${date?.endDate}&employeeIds=${employees.map(obj => obj.value).join(',')}&page=${page}&csv=${csv}`;
 
     const { isLoading, refetch, isSuccess, isFetching, remove } = useQuery(['employee-report',
         {
@@ -116,11 +117,28 @@ function EmployeeSummary() {
             enabled: enabled,
             retry: false,
             onSuccess: (response) => {
-                console.log(response?.data);
-                const data = response?.data;
-                setCount(data?.count || 0);
-                setList(data?.results || []);
-                setPageCount(data?.last_page || 1);
+                if (csv) {
+
+
+                    const blob = new Blob([response.data], { type: 'text/csv' });
+
+                    const link = document.createElement('a');
+                    link.href = window.URL.createObjectURL(blob);
+                    link.download = "EmployeeSummary.csv";
+                    document.body.appendChild(link);
+                    link.click();
+                    document.body.removeChild(link);
+                }
+
+                else {
+                    const data = response?.data;
+                    setCount(data?.count || 0);
+                    setList(data?.results || []);
+                    setPageCount(data?.last_page || 1);
+
+                }
+                //console.log(response?.data);
+
 
             },
             onError: (error) => {
@@ -163,6 +181,11 @@ function EmployeeSummary() {
             setDate({ ...date, [name]: value });
             return;
         }
+    }
+
+    const handleSwitchChange = () => {
+        setCsv((csv) => !csv)
+        return;
     }
 
 
@@ -251,10 +274,10 @@ function EmployeeSummary() {
                                             EMPLOYEE SUMMARY REPORT
                                         </Text>
                                         <Text as="span" bgColor="#27AE60" p={2}>
-                                        {`(${date.startDate} to ${date.endDate})`}
+                                            {`(${date.startDate} to ${date.endDate})`}
                                         </Text>
                                         <Text as="span" bgColor="#F39C12" p={2}>
-                                        {`(${count} record(s) found)`}
+                                            {`(${count} record(s) found)`}
                                         </Text>
                                     </Text>
                                     <Spacer />
@@ -357,25 +380,25 @@ function EmployeeSummary() {
                             EMPLOYEE SUMMARY REPORT
                         </Text>
                         <FormControl >
-                                <FormLabel fontSize="sm" fontWeight="bold">
-                                    Employee Names:
-                                </FormLabel>
-                                <AsyncSelect
-                                    isMulti
-                                    name="employee_name"
-                                    size="sm"
-                                    onChange={(employee) => {
-                                        setEmployees(employee);
-                                    }}
-                                    placeholder="Start typing name..."
-                                    loadOptions={loadEmployees}
-                                    cacheOptions
-                                    value={employees}
-                                    className="chakra-react-select"
-                                    classNamePrefix="chakra-react-select"
-                                />
+                            <FormLabel fontSize="sm" fontWeight="bold">
+                                Employee Names:
+                            </FormLabel>
+                            <AsyncSelect
+                                isMulti
+                                name="employee_name"
+                                size="sm"
+                                onChange={(employee) => {
+                                    setEmployees(employee);
+                                }}
+                                placeholder="Start typing name..."
+                                loadOptions={loadEmployees}
+                                cacheOptions
+                                value={employees}
+                                className="chakra-react-select"
+                                classNamePrefix="chakra-react-select"
+                            />
 
-                            </FormControl>
+                        </FormControl>
                         <Grid templateColumns='repeat(3, 1fr)' gap={2} mt={4}>
                             <FormControl>
                                 <FormLabel fontSize="sm" fontWeight="bold">
@@ -412,8 +435,11 @@ function EmployeeSummary() {
                                 />
                             </FormControl>
                             <FormControl id="">
-                                <FormLabel fontSize="sm" fontWeight='bold'>Export to PDF</FormLabel>
+                                <FormLabel fontSize="sm" fontWeight='bold'>Export to CSV:</FormLabel>
                                 <Switch
+                                    isChecked={csv}
+                                    onChange={handleSwitchChange}
+                                    name={"exportCsv"}
                                     size="md"
                                     colorScheme="blue"
                                 />

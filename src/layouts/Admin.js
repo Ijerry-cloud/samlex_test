@@ -84,11 +84,28 @@ export default function Dashboard(props) {
 
   const isLoggedIn = useSelector(isAuthenticated);
   const authUser = useSelector(getAuthUser);
-
+  const defaultRoute = authUser?.user?.dept === "admin" ? "/admin/dashboard" : "/admin/profile";
 
   
   const getRoutes = (routes) => {
     return routes.map((prop, key) => {
+
+      if (prop.permission) {
+        if (!authUser?.user?.[prop.permission]){
+          return null;
+        }
+        
+      } 
+
+
+
+
+      if (prop.name === "Store Config" || prop.name === "Dashboard"){
+        if (authUser?.user?.dept !== "admin") {
+          return null;
+        }
+      }
+
       if (prop.collapse) {
         return getRoutes(prop.views);
       }
@@ -134,11 +151,12 @@ export default function Dashboard(props) {
           base: "100%",
           xl: "calc(100% - 275px)",
         }}
+        mb={4}
       >
         <Portal>
           <AdminNavbar
             onOpen={onOpen}
-            logoText={"SpoutPay"}
+            logoText={"Samlex"}
             brandText={getActiveRoute(routes)}
             secondary={getActiveNavbar(routes)}
             fixed={fixed}
@@ -151,7 +169,7 @@ export default function Dashboard(props) {
             <PanelContainer>
               <Switch>
                 {getRoutes(routes)}
-                <Redirect from="/admin" to="/admin/dashboard" />
+                <Redirect from="/admin" to={defaultRoute}/>
               </Switch>
             </PanelContainer>
           </PanelContent>
