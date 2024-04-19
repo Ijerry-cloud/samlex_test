@@ -54,7 +54,7 @@ import { AiOutlineNumber, AiOutlineMacCommand } from 'react-icons/ai';
 import { dashboardTableData5 } from "variables/general";
 import { SalesOverviewData } from "variables/general2";
 import { useToast } from '@chakra-ui/react';
-import avatar4 from "assets/img/samlex2.png";
+import avatar4 from "assets/img/j_white.png";
 import { GET_CREATE_SALES, DELETE_SALE } from "config/serverUrls";
 import { useQuery, useMutation } from 'react-query';
 import { fetchData, postData } from 'modules/utilities/util_query';
@@ -84,7 +84,7 @@ const ViewModal = (props) => {
                             </Container>
                             <Container alignSelf='center' >
                                 <Text fontSize="lg" fontWeight="bold">
-                                    SAMLEX ELECTRONICS
+                                Jerry Cloud Dev
                                 </Text>
                                 <Text fontSize="lg" fontWeight="bold">
                                     COMPANY LTD

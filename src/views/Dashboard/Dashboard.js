@@ -369,7 +369,7 @@ export default function Dashboard() {
                       fontWeight="bold"
                       mb="1rem"
                     >
-                      Items(by Name)
+                      Items
                     </StatLabel>
                     <Flex>
                       <StatNumber fontSize="2xl" fontWeight="normal" color="white">

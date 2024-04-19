@@ -43,8 +43,8 @@ import avatar3 from "assets/img/avatars/avatar3.png";
 import avatar4 from "assets/img/avatars/avatar4.png";
 import avatar5 from "assets/img/avatars/avatar5.png";
 import avatar6 from "assets/img/avatars/avatar6.png";
-import avatar7 from "assets/img/avatars/male.jpg";
-import avatar8 from "assets/img/avatars/female.png";
+import avatar7 from "assets/img/avatars/male1.jpg";
+import avatar8 from "assets/img/avatars/female1.jpg";
 import image from "assets/img/image.jpg";
 import consultancyImage from "assets/img/consultancyImage.jpg";
 import black_owned_tech from "assets/img/black_owned_tech.jpg";
@@ -974,7 +974,7 @@ function Profile() {
               <Flex direction="column">
                 <Text fontSize="md" color="gray.500" fontWeight="400" mb="30px">
                   Hi, I’m {profile?.first_name + " " + profile?.last_name}. I'm currently working at
-                  Samlex Electronics Company and under the {profile?.dept} department.
+                  Jerry Cloud Dev Company and under the {profile?.dept} department.
                 </Text>
                 <Flex align="center" mb="18px">
                   <Text
@@ -1073,7 +1073,7 @@ function Profile() {
           <Card p="16px">
             <CardHeader p="12px 5px" mb="12px">
               <Text fontSize="lg" color={textColor} fontWeight="bold">
-                Also under Sales
+                Also in same Dept.
               </Text>
             </CardHeader>
             <CardBody px="5px">
@@ -1104,7 +1104,7 @@ function Profile() {
                         color="#4285f4"
                         alignSelf="center"
                       >
-                        (Atali Branch)
+                        (Cloud Branch)
                       </Text>
                     </Flex>
                   );

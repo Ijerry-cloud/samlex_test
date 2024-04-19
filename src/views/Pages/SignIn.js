@@ -35,7 +35,7 @@ import { LOGIN_URL } from 'config/serverUrls';
 import toast from 'react-hot-toast';
 import { handleApiError, handleApiSuccess } from 'modules/utilities/responseHandlers';
 import { login } from 'modules/auth/redux/authSlice';
-import LogoImg from "assets/img/samlex2.png";
+import LogoImg from "assets/img/j_white.png";
 import validator from 'validator';
 
 import BgSignUp from "assets/img/BgSignUp.png";
@@ -79,6 +79,7 @@ function SignIn() {
 
   const mutation = useMutation(postData, {
     onSuccess: (response) => {
+      console.log('response is', response);
       const userObj = response?.data;
       toast.success("You Signed in Successfully");
       dispatch(login(userObj));
@@ -137,7 +138,7 @@ function SignIn() {
 
       <Box>
         <Box
-          w='100%' h='100vh' p={4} color='white' backgroundImage="url('/samlex_office.jpg')"
+          w='100%' h='100vh' p={4} color='white' backgroundImage="url('/office.jpg')"
           backgroundPosition="center"
           backgroundRepeat="no-repeat"
           backgroundSize="cover"
@@ -169,13 +170,15 @@ function SignIn() {
               <Container maxW='md' centerContent>
                 <Image
                   src={LogoImg}
-                  w="125px"
-                  h="78px"
+                  w="70px"
+                  h="48px"
                 // borderRadius="15px"
                 />
+                <Text as='b' fontSize="xl" color="white">Jay-Shops</Text>
               </Container>
+              
               <FormControl>
-                <FormLabel ms="4px" fontSize="md" fontWeight="normal" color="white">
+                <FormLabel ms="4px" fontSize="md" fontWeight="bold" color="white">
                   Email:*
                 </FormLabel>
                 <Box mb="24px" ms="4px">
@@ -191,7 +194,7 @@ function SignIn() {
                     fontSize="md"
                     borderRadius="40px"
                     type="text"
-                    placeholder="Enter your email address"
+                    placeholder='...Type "adminer@adminer.com"'
                     _placeholder={{ opacity: 0.7, color: 'inherit' }}
                     name="email"
                     onChange={handleChange}
@@ -205,7 +208,7 @@ function SignIn() {
                 {isError(errors?.email) && <Text color='white' bgColor='red' fontSize='sm' as='i'>{errors?.email}</Text>}
                 </Box>
 
-                <FormLabel ms="4px" fontSize="md" fontWeight="normal" color="white">
+                <FormLabel ms="4px" fontSize="md" fontWeight="bold" color="white">
                   Password:*
                 </FormLabel>
                 <Box mb="24px" ms="4px">
@@ -223,7 +226,7 @@ function SignIn() {
 
                     borderRadius="40px"
                     type="password"
-                    placeholder="Enter your password"
+                    placeholder='...Type "adminer123"'
                     _placeholder={{ opacity: 0.7, color: 'inherit' }}
                     size="lg"
                     onChange={handleChange}

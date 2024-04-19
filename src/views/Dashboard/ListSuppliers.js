@@ -68,6 +68,9 @@ import { GET_CREATE_SUPPLIERS, UPDATE_SUPPLIERS, DELETE_SUPPLIER } from 'config/
 import { FIELD_REQUIRED } from 'constants/formErrorMessages';
 import { getAuthToken } from 'modules/auth/redux/authSelector';
 import { useSelector } from 'react-redux';
+import { logout } from "modules/auth/redux/authSlice";
+import { useDispatch } from "react-redux";
+//import { getAuthUser } from "modules/auth/redux/authSelector";
 
 
 
@@ -393,7 +396,7 @@ const EditModal = ({ handleEditSubmit, onClose, values, handleChange, errors, lo
 
 );
 
-const AddModal = ({ handleSubmit, onClose, values, handleChange, errors, mutation,
+const AddModal = ({ handleSubmit, onClose, values, handleChange, errors, addMutation,
     companyNameRef, firstNameRef, lastNameRef, emailRef, phoneRef, address1Ref, address2Ref,
     cityRef, stateRef, zipRef, countryRef, commentsRef, accountRef }) => (
     <>
@@ -705,7 +708,7 @@ const AddModal = ({ handleSubmit, onClose, values, handleChange, errors, mutatio
             <Button colorScheme='red' mr={3} onClick={onClose} size="sm">
                 Close
             </Button>
-            <Button isLoading={mutation.isLoading} onClick={handleSubmit} colorScheme="blue" size="sm">Save</Button>
+            <Button isLoading={addMutation.isLoading} onClick={handleSubmit} colorScheme="blue" size="sm">Save</Button>
         </ModalFooter>
     </>
 
@@ -737,7 +740,8 @@ const DeleteModal = ({ onClose, values, handleDeleteSubmit, deleteMutation }) =>
 export default function Dashboard() {
     const [values, setValues] = React.useState({});
     const [errors, setErrors] = React.useState({});
-
+    //const authUser = useSelector(getAuthUser);
+    const dispatch = useDispatch();
     const [suppliers, setSuppliers] = React.useState([]);
     const [count, setCount] = React.useState(0);
     const [pageCount, setPageCount] = useState(1);
@@ -851,6 +855,39 @@ export default function Dashboard() {
             return;
         },
         onError: (error) => {
+            //console.log("error soon")
+            
+            //dispatch(logout());
+            handleApiError(error);
+            //return;
+            //setLoading(false);
+        }
+    });
+
+    const addMutation = useMutation(postData, {
+        onSuccess: (response) => {
+            const data = response?.data?.detail;
+            toast({
+                title: 'Success',
+                description: "Action succesful",
+                status: 'success',
+                duration: 3000,
+                isClosable: true,
+            });
+            //setValues({});
+            //setErrors({});
+            //setLoading(false);
+            setSuppliers((suppliers) => {
+                const updated = [...suppliers, data];
+                //console.log(updated_items);
+                return updated
+            });
+            onModalClose();
+            //refetch();
+
+            return;
+        },
+        onError: (error) => {
             handleApiError(error);
             //setLoading(false);
         }
@@ -955,7 +992,7 @@ export default function Dashboard() {
 
         //const data = values;
         //setLoading(true);
-        mutation.mutate(
+        addMutation.mutate(
             {
                 url: GET_CREATE_SUPPLIERS,
                 payload_data: updatedItem,
@@ -1067,7 +1104,7 @@ export default function Dashboard() {
                             handleChange={handleChange} errors={errors} loading={loading} companyNameRef={companyNameRef}
                             firstNameRef={firstNameRef} lastNameRef={lastNameRef} emailRef={emailRef} phoneRef={phoneRef}
                             address1Ref={address1Ref} address2Ref={address2Ref} cityRef={cityRef} stateRef={stateRef}
-                            zipRef={zipRef} countryRef={countryRef} commentsRef={commentsRef} mutation={mutation}
+                            zipRef={zipRef} countryRef={countryRef} commentsRef={commentsRef} addMutation={addMutation}
                             accountRef={accountRef} /> :
                         modalType === "edit" ?
                             <EditModal onClose={onModalClose} handleEditSubmit={handleEditSubmit} values={values} errors={errors}
@@ -1217,8 +1254,11 @@ export default function Dashboard() {
                                     <Th color="white">LAST NAME</Th>
                                     <Th color="white"> PHONE NUMBER </Th>
                                     <Th color="white">EMAIL ADDRESS</Th>
-
+                                    
                                     <Th textAlign="center" color="white">ACTIONS</Th>
+                                    
+
+                                    
                                 </Tr>
                             </Thead>
                             <Tbody>

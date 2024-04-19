@@ -283,7 +283,7 @@ export default function StoreConfig() {
                                             borderRadius='15px'
                                             borderColor="rgba(255, 255, 255, 0.2)"
                                             _placeholder={{ opacity: 0.2, color: 'white' }}
-                                            placeholder="eg. SAMLEX ELECTRONICS COMPANY LTD"
+                                            placeholder="eg. Jerry Cloud Dev COMPANY LTD"
                                             disabled
                                         />
                                     </InputGroup>
@@ -335,7 +335,7 @@ export default function StoreConfig() {
                                             borderRadius='15px'
                                             borderColor="rgba(255, 255, 255, 0.2)"
                                             _placeholder={{ opacity: 0.2, color: 'white' }}
-                                            placeholder="eg. www.samlex.com"
+                                            placeholder="eg. www.Jerry Cloud Dev.com"
 
                                         />
                                     </InputGroup>
@@ -407,7 +407,7 @@ export default function StoreConfig() {
                                             borderRadius='15px'
                                             borderColor="rgba(255, 255, 255, 0.2)"
                                             _placeholder={{ opacity: 0.2, color: 'white' }}
-                                            placeholder="e.g samlex@samlex.com"
+                                            placeholder="e.g JerryCloudDev@JerryCloudDev.com"
                                         />
                                     </InputGroup>
                                 </FormControl>

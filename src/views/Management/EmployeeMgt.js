@@ -920,7 +920,7 @@ export default function EmployeeMgt() {
                                         {`(Page${page} of ${pageCount})`}
                                     </Text>
                                     <Text as="span" bgColor="#F39C12" p={2}>
-                                        {`(${count} suppllier(s) found)`}
+                                        {`(${count} employee(s) found)`}
                                     </Text>
                                 </Text>
                             </Flex>

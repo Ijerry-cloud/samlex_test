@@ -8,7 +8,7 @@ gulp.task("licenses", async function () {
       gap.prependText(`/*!
 
       =========================================================
-      * E-Top Transaction Monitoring Dashboard - v1.0.0
+      * Jerry Cloud Dev - v1.0.0
       =========================================================
       
       * The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
@@ -25,7 +25,7 @@ gulp.task("licenses", async function () {
       /*!
       
       =========================================================
-      * E-Top Transaction Monitoring Dashboard - v1.0.0
+      * Jerry Cloud Dev - v1.0.0
       =========================================================
       
       * The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
@@ -42,7 +42,7 @@ gulp.task("licenses", async function () {
       gap.prependText(`/*!
 
       =========================================================
-      * E-Top Transaction Monitoring Dashboard - v1.0.0
+      * Jerry Cloud Dev - v1.0.0
       =========================================================
       
       * The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.

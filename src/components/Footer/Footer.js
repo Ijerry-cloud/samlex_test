@@ -51,7 +51,7 @@ export default function Footer(props) {
         >
           {document.documentElement.dir === "rtl"
             ? " توقيت الإبداعية"
-            : "Connect Academy "}
+            : "J_chinedu"}
         </Link>
         {document.documentElement.dir === "rtl"
           ? "للحصول على ويب أفضل"
@@ -68,7 +68,7 @@ export default function Footer(props) {
             color="gray.400"
             href="#"
           >
-            {document.documentElement.dir === "rtl" ? "مدونة" : "Samlex Electronics"}
+            {document.documentElement.dir === "rtl" ? "مدونة" : "Jerry Cloud Dev"}
           </Link>
         </ListItem>
         <ListItem>

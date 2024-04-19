@@ -2,6 +2,7 @@
 import { BellIcon, SearchIcon } from "@chakra-ui/icons";
 // Chakra Imports
 import {
+  Avatar,
   Button,
   Flex,
   IconButton,
@@ -32,6 +33,8 @@ import SidebarResponsive from "components/Sidebar/SidebarResponsive";
 import routes from "routes.js";
 import { ItemContent } from "components/Menu/ItemContent";
 import avatar1 from "assets/img/avatars/avatar1.png";
+import avatar7 from "assets/img/avatars/male1.jpg";
+import avatar8 from "assets/img/avatars/female1.jpg";
 
 export default function HeaderLinks(props) {
   const { variant, children, fixed, secondary, onOpen, authUser, ...rest } = props;
@@ -123,8 +126,14 @@ export default function HeaderLinks(props) {
           me={{ sm: "2px", md: "16px" }}
           color={navbarIcon}
           variant="transparent-with-icon"
-          leftIcon={<ProfileIcon color={navbarIcon} w="22px" h="22px" me="0px" />}
+          //leftIcon={<ProfileIcon color={navbarIcon} w="22px" h="22px" me="0px" />}
         >
+          <Avatar
+          src={authUser?.user?.gender == "female" ? avatar8 : avatar7}
+          w="40px"
+          h="40px"
+          me="10px"
+        />
           <Text display={{ sm: "none", md: "flex" }}>{`Hi, ${authUser?.user?.email}`}</Text>
         </Button>
       </NavLink>

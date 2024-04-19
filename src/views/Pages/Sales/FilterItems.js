@@ -60,7 +60,7 @@ import { IoMdAddCircle } from "react-icons/io";
 import { dashboardTableData5 } from "variables/general";
 import { DashboardTableRow2 } from "components/Tables/DashboardTableRow";
 import { DashboardTableRow6 } from "components/Tables/DashboardTableRow";
-import avatar4 from "assets/img/samlex2.png";
+import avatar4 from "assets/img/j_white.png";
 import MyPaginate from "components/Pagination";
 import { useToast } from '@chakra-ui/react';
 
@@ -99,7 +99,7 @@ const ViewModal = (props) => {
                             </Container>
                             <Container alignSelf='center' >
                                 <Text fontSize="lg" fontWeight="bold">
-                                    SAMLEX ELECTRONICS
+                                Jerry Cloud Dev
                                 </Text>
                                 <Text fontSize="lg" fontWeight="bold">
                                     COMPANY LTD

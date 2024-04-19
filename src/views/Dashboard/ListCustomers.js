@@ -344,7 +344,7 @@ const EditModal = ({ handleEditSubmit, onClose, values, handleChange, errors, lo
 
 );
 
-const AddModal = ({ handleSubmit, onClose, values, handleChange, errors, loading, mutation,
+const AddModal = ({ handleSubmit, onClose, values, handleChange, errors, loading, addMutation,
     firstNameRef, lastNameRef, emailRef, phoneRef, address1Ref, address2Ref,
     cityRef, stateRef, zipRef, countryRef, commentsRef }) => (
     <>
@@ -608,7 +608,7 @@ const AddModal = ({ handleSubmit, onClose, values, handleChange, errors, loading
             <Button colorScheme='red' mr={3} onClick={onClose} size="sm">
                 Close
             </Button>
-            <Button isLoading={mutation.isLoading} onClick={handleSubmit} size="sm" colorScheme="blue">Save</Button>
+            <Button isLoading={addMutation.isLoading} onClick={handleSubmit} size="sm" colorScheme="blue">Save</Button>
         </ModalFooter>
     </>
 
@@ -676,11 +676,6 @@ export default function Dashboard() {
     const editCountryRef = React.useRef(null);
     const editCommentsRef = React.useRef(null);
 
-
-
-
-
-
     const onModalClose = () => {
         setValues({});
         setErrors({});
@@ -716,7 +711,6 @@ export default function Dashboard() {
 
     const { isLoading, refetch } = result;
 
-
     const mutation = useMutation(postData, {
         onSuccess: (response) => {
             const data = response?.data?.detail;
@@ -739,6 +733,35 @@ export default function Dashboard() {
                         return customer
                     }
                 })
+                //console.log(updated_items);
+                return updated
+            });
+            onModalClose();
+            //refetch();
+
+            return;
+        },
+        onError: (error) => {
+            handleApiError(error);
+            //setLoading(false);
+        }
+    });
+
+    const addMutation = useMutation(postData, {
+        onSuccess: (response) => {
+            const data = response?.data?.detail;
+            toast({
+                title: 'Success',
+                description: "Action succesful",
+                status: 'success',
+                duration: 3000,
+                isClosable: true,
+            });
+            //setValues({});
+            //setErrors({});
+            //setLoading(false);
+            setCustomers((customers) => {
+                const updated = [...customers, data];
                 //console.log(updated_items);
                 return updated
             });
@@ -850,7 +873,7 @@ export default function Dashboard() {
 
         //const data = values;
         //setLoading(true);
-        mutation.mutate(
+        addMutation.mutate(
             {
                 url: GET_CREATE_CUSTOMERS,
                 payload_data: updatedItem,
@@ -959,7 +982,7 @@ export default function Dashboard() {
                             handleChange={handleChange} errors={errors} loading={loading}
                             firstNameRef={firstNameRef} lastNameRef={lastNameRef} emailRef={emailRef} phoneRef={phoneRef}
                             address1Ref={address1Ref} address2Ref={address2Ref} cityRef={cityRef} stateRef={stateRef}
-                            zipRef={zipRef} countryRef={countryRef} commentsRef={commentsRef} mutation={mutation} /> :
+                            zipRef={zipRef} countryRef={countryRef} commentsRef={commentsRef} addMutation={addMutation} /> :
                         modalType === "edit" ?
                             <EditModal onClose={onModalClose} handleEditSubmit={handleEditSubmit} values={values}
                                 errors={errors} handleChange={handleChange} loading={loading} mutation={mutation}
@@ -1105,13 +1128,14 @@ export default function Dashboard() {
                                 <Tr my=".8rem" borderBottom="4px" borderColor="#232333">
                                     <Th color="white">FIRST NAME</Th>
                                     <Th color="white">LAST NAME</Th>
-                                    <Th color="white"> PHONE NUMBER </Th>
-                                    <Th color="white">EMAIL ADDRESS</Th>
+                                    <Th color="white">PHONE NUMBER</Th>
+                                    <Th color="white"> EMAIL ADDRESS </Th>
                                     <Th color="white">CITY</Th>
+                                    
                                     <Th textAlign="center" color="white">ACTIONS</Th>
+                                    
 
-
-
+                                    
                                 </Tr>
                             </Thead>
                             <Tbody>

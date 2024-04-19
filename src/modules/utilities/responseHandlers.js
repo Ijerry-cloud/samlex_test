@@ -1,4 +1,10 @@
 import toast from 'react-hot-toast';
+import { getAuthUser } from "modules/auth/redux/authSelector";
+import { useSelector } from 'react-redux';
+import { logout } from "modules/auth/redux/authSlice";
+import { useDispatch } from "react-redux";
+
+
 
 /**
  * 
@@ -10,11 +16,13 @@ import toast from 'react-hot-toast';
  * @return null
  * 
  */
-export function handleApiError(error){
-    
+export function handleApiError(error){ 
+
+
+
     let message = error?.response?.data?.detail ? error?.response?.data?.detail : error.toString();
     toast.error(message)
-    return
+
 }
 
 /**

@@ -33,7 +33,7 @@ import { FaRegCommentDots } from "react-icons/fa";
 import { TbCurrencyNaira } from "react-icons/tb";
 import { AsyncSelect } from "chakra-react-select";
 import { useToast } from '@chakra-ui/react';
-import avatar4 from "assets/img/samlex2.png";
+import avatar4 from "assets/img/j_white.png";
 import { getAuthToken } from 'modules/auth/redux/authSelector';
 import { useSelector } from 'react-redux';
 import { useMutation } from 'react-query';
@@ -77,13 +77,13 @@ const Step1 = ({ customer, selectedOptions, history,
             <Grid templateColumns='repeat(3, 1fr)' gap={6} mt={4}>
                 <FormControl >
                     <FormLabel fontSize="sm" fontWeight="bold">
-                       {" Customer's name: *  "}
+                        {" Customer's name: *  "}
                         <Button
-                        size="sm"
-                        colorScheme="blue"
-                        onClick={() => { history.push('/admin/customers'); }}>
-                        Add New
-                    </Button>
+                            size="sm"
+                            colorScheme="blue"
+                            onClick={() => { history.push('/admin/customers'); }}>
+                            Add New
+                        </Button>
                     </FormLabel>
 
                     <div>
@@ -210,11 +210,11 @@ const Step1 = ({ customer, selectedOptions, history,
                         <TableCaption color="white" placement='top' fontSize='md'>Order Summary for {customer?.label}</TableCaption>
                         <Thead>
                             <Tr>
-                                <Th fontSize="md" bgcolor="white" pl={2}>NAME</Th>
+                                <Th fontSize="md" bgcolor="black" color="white" pl={2}>NAME</Th>
 
-                                <Th fontSize="md" bgcolor="#CC7C00" color="white" isNumeric>PRICE (PER UNIT)</Th>
-                                <Th fontSize="md" bgcolor="#EA3C43" color="white" isNumeric>NUMBER</Th>
-                                <Th fontSize="md" bgcolor="#07B8C7" color="white" isNumeric>AMOUNT</Th>
+                                <Th fontSize="md" bgcolor="black" color="white" isNumeric>PRICE (PER UNIT)</Th>
+                                <Th fontSize="md" bgcolor="black" color="white" isNumeric>NUMBER</Th>
+                                <Th fontSize="md" bgcolor="black" color="white" isNumeric>AMOUNT</Th>
                             </Tr>
                         </Thead>
                         <Tbody>
@@ -234,7 +234,7 @@ const Step1 = ({ customer, selectedOptions, history,
                                             </Flex>
                                         </Td>
                                         <Td isNumeric>{option.unit_price}</Td>
-                                        <Td>
+                                        <Td isNumeric>
                                             <Input
                                                 width='50px'
                                                 fontSize="sm"
@@ -316,7 +316,7 @@ const Step2 = React.forwardRef((props, ref) => {
                                 </Container>
                                 <Container alignSelf='center' >
                                     <Text fontSize="lg" fontWeight="bold">
-                                        SAMLEX ELECTRONICS
+                                        Jerry Cloud Dev
                                     </Text>
                                     <Text fontSize="lg" fontWeight="bold">
                                         COMPANY LTD
@@ -524,16 +524,14 @@ function AddItem() {
             setReceipt({ ...response.data.data, date: dateTime });
 
             if (response.data.print) {
-                setTimeout(() => {
-                    const content = printableRef.current;
-                    const originalContents = document.body.innerHTML;
-                    document.body.style.backgroundColor = 'white';
+                const content = printableRef.current;
+                const originalContents = document.body.innerHTML;
+                document.body.style.backgroundColor = 'white';
 
-                    document.body.innerHTML = content.innerHTML;
-                    window.print();
-                    document.body.innerHTML = originalContents;
-                    location.reload();
-                }, 2000);
+                document.body.innerHTML = content.innerHTML;
+                window.print();
+                document.body.innerHTML = originalContents;
+                location.reload();
 
             }
             else {
@@ -548,20 +546,8 @@ function AddItem() {
     })
 
     const handleChange = (selectedOption) => {
-        const allSelected = selectedOption.map(obj => {
-            return {
-                label: obj.label,
-                name: obj.name,
-                number: obj.number,
-                unit_price: obj.unit_price,
-                value: obj.value,
-                colorScheme: obj.colorScheme,
-                cost_price: obj.cost_price,
-                quantity: obj.quantity,
-                id: obj.id
-            }
-        });
-        setSelectedOptions(allSelected);
+
+        setSelectedOptions(selectedOption);
     };
 
     const handleCustomerChange = (customer, { action }) => {

@@ -23,7 +23,7 @@ import { Separator } from "components/Separator/Separator";
 import { SidebarHelp } from "components/Sidebar/SidebarHelp";
 import React from "react";
 import { NavLink, useLocation } from "react-router-dom";
-import avatar4 from "../../assets/img/samlex3.png";
+import avatar4 from "../../assets/img/j_logo.png";
 import { getAuthUser } from "modules/auth/redux/authSelector";
 import { useSelector } from 'react-redux';
 
